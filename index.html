@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITALIX - Péptidos Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-green: #1B6B3D;
+            --secondary-red: #C41E3A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+        html { scroll-behavior: smooth; }
+        .product-card { transition: all 0.3s ease; cursor: pointer; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal.show { display: block; }
+        .modal-content { background-color: white; margin: 20px auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 700px; }
+    </style>
+</head>
+<body>
+    <!-- NAVEGACIÓN -->
+    <nav class="sticky top-0 z-50 bg-white shadow-xl border-b-4" style="border-color: #1B6B3D;">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <div class="text-3xl font-bold" style="color: #1B6B3D;">🏥 VITALIX México</div>
+
+                <div class="hidden lg:flex items-center gap-8">
+                    <a href="#inicio" class="text-gray-700 hover:text-green-700 font-semibold">Inicio</a>
+                    <a href="#bienestar" class="text-gray-700 hover:text-green-700 font-semibold">Bienestar</a>
+                    <a href="#peptidos" class="text-gray-700 hover:text-green-700 font-semibold">Péptidos</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <div class="relative cursor-pointer" onclick="toggleCart()">
+                        <span class="text-3xl">🛒</span>
+                        <span class="absolute -top-2 -right-2 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CARRITO -->
+    <div id="cartPanel" class="hidden fixed right-0 top-0 h-screen w-96 bg-white shadow-2xl z-40 overflow-y-auto">
+        <div class="sticky top-0 bg-white border-b-4" style="border-color: #1B6B3D;">
+            <div class="p-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold" style="color: #1B6B3D;">Tu Carrito</h2>
+                <button onclick="toggleCart()" class="text-3xl cursor-pointer">✕</button>
+            </div>
+        </div>
+
+        <div class="p-6">
+            <div id="cartItems">
+                <p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>
+            </div>
+
+            <div class="mt-8 bg-green-50 border-2 border-green-200 p-6 rounded-lg">
+                <div class="flex justify-between mb-3">
+                    <span class="text-gray-700">Subtotal:</span>
+                    <span class="font-bold" style="color: #1B6B3D;" id="subtotal">$0</span>
+                </div>
+
+                <div class="mb-4 pb-4 border-b-2 border-green-200">
+                    <p class="text-xs font-bold text-gray-700 mb-2">Envío:</p>
+                    <label class="flex items-center gap-2 mb-2 cursor-pointer">
+                        <input type="radio" name="shipping" value="200" checked onchange="updateShipping()">
+                        <span class="text-sm text-gray-700">Estándar: $200 (5-7 días)</span>
+                    </label>
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="radio" name="shipping" value="500" onchange="updateShipping()">
+                        <span class="text-sm text-gray-700 font-bold" style="color: #C41E3A;">Express: $500 (2-3 días) ⚡</span>
+                    </label>
+                </div>
+
+                <div class="flex justify-between mb-4 border-b-2 border-green-200 pb-4">
+                    <span class="text-gray-700">Envío:</span>
+                    <span class="font-bold" style="color: #1B6B3D;" id="shippingCost">$200</span>
+                </div>
+
+                <div id="discountRow" class="hidden flex justify-between mb-4 border-b-2 border-green-200 pb-4">
+                    <span class="text-gray-700">Descuento:</span>
+                    <span class="font-bold" style="color: green;" id="discountAmount">-$0</span>
+                </div>
+
+                <div class="flex justify-between text-xl">
+                    <span class="font-bold text-gray-900">Total:</span>
+                    <span class="font-bold text-2xl" style="color: #C41E3A;" id="total">$200</span>
+                </div>
+            </div>
+
+            <button onclick="goToCheckout()" class="w-full mt-6 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D;">Proceder al Pago →</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE PRODUCTO -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeModal()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span onclick="closeCheckout()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
+            <div id="checkoutBody"></div>
+        </div>
+    </div>
+
+    <!-- BANNER -->
+    <div class="bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 px-4 shadow-lg">
+        <div class="max-w-6xl mx-auto flex items-center gap-4">
+            <span class="text-2xl">⚠️</span>
+            <div>
+                <p class="font-bold">Tiempo de entrega actual: 3-7 días hábiles</p>
+                <p class="text-sm">Uso de investigación. Certificado en laboratorio y verificado. 📦</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section id="inicio" style="background: linear-gradient(135deg, #f0fdf4 0%, #fee2e2 100%);" class="py-24 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-6xl font-bold text-gray-900 mb-6">VITALIX México</h1>
+            <p class="text-2xl text-gray-700 mb-4">Péptidos Premium & Bienestar</p>
+            <p class="text-lg text-gray-600 mb-8">✓ Certificado en Laboratorio | ✓ Testado HPLC | ✓ Mejores Precios</p>
+            <a href="#bienestar" class="inline-block px-8 py-4 text-white text-lg rounded-lg font-bold" style="background-color: #1B6B3D;">Ver Catálogo →</a>
+        </div>
+    </section>
+
+    <!-- SECCIÓN BIENESTAR -->
+    <section id="bienestar" class="py-20 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="color: #1B6B3D;">Productos de Bienestar</h2>
+            <p class="text-center text-gray-600 mb-12">Uso de Investigación | Verifica los detalles antes de comprar</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" onclick="showProductDetail('tirzepatida')">
+                    <div class="text-5xl mb-3">💉</div>
+                    <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">T-Tide R-2</h3>
+                    
+                    <div class="mb-4 text-sm text-gray-500">
+                        <p>1 Mes: <span class="font-bold">$5,800 MXN</span></p>
+                    </div>
+                    
+                    <div class="mb-4 p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border-3 border-yellow-400 rounded-lg">
+                        <p class="text-xs text-gray-700 mb-1">🎉 OFERTA ESPECIAL</p>
+                        <p class="text-3xl font-bold" style="color: #C41E3A; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">$14,999 MXN</p>
+                        <p class="text-xs font-bold text-gray-700 mt-1">Paquete de 3 Meses</p>
+                        <p class="text-xs bg-red-500 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 14% 💰</p>
+                    </div>
+                    
+                    <p class="text-xs text-gray-500 mb-4">Haz clic para detalles →</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800">Ver Más</button>
+                </div>
+
+                <div class="product-card bg-gradient-to-br from-green-600 to-red-600 text-white rounded-xl shadow-2xl border-4 border-amber-400 p-6 text-center" onclick="showProductDetail('semaglutida')">
+                    <div class="text-5xl mb-3">💉</div>
+                    <h3 class="text-xl font-bold mb-2">S-Tide R-1 ⭐</h3>
+                    
+                    <div class="mb-4 text-sm text-green-100">
+                        <p>1 Mes: <span class="font-bold">$4,900 MXN</span></p>
+                    </div>
+                    
+                    <div class="mb-4 p-3 bg-white bg-opacity-20 border-3 border-yellow-300 rounded-lg">
+                        <p class="text-xs text-yellow-200 mb-1">🎉 OFERTA ESPECIAL</p>
+                        <p class="text-3xl font-bold text-yellow-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">$12,999 MXN</p>
+                        <p class="text-xs font-bold text-green-100 mt-1">Paquete de 3 Meses</p>
+                        <p class="text-xs bg-red-600 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 12% 💰</p>
+                    </div>
+                    
+                    <p class="text-xs text-green-100 mb-4">Haz clic para detalles →</p>
+                    <button class="w-full py-2 bg-white text-green-700 rounded-lg font-bold hover:bg-gray-100">Ver Más</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-purple-400 p-6 text-center" onclick="showProductDetail('rtide')">
+                    <div class="text-5xl mb-3">🎯</div>
+                    <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">R-Tide R-3</h3>
+                    
+                    <div class="mb-4 text-sm text-gray-500">
+                        <p>1 Mes: <span class="font-bold">$6,950 MXN</span></p>
+                    </div>
+                    
+                    <div class="mb-4 p-3 bg-gradient-to-r from-blue-100 to-purple-100 border-3 border-blue-400 rounded-lg">
+                        <p class="text-xs text-gray-700 mb-1">🎉 OFERTA ESPECIAL</p>
+                        <p class="text-3xl font-bold" style="color: #1B6B3D; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">$16,999 MXN</p>
+                        <p class="text-xs font-bold text-gray-700 mt-1">Paquete de 3 Meses</p>
+                        <p class="text-xs bg-blue-600 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 18% 💰</p>
+                    </div>
+                    
+                    <p class="text-xs text-gray-500 mb-4">Haz clic para detalles →</p>
+                    <button class="w-full py-2 bg-purple-700 text-white rounded-lg font-bold hover:bg-purple-800">Ver Más</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN PÉPTIDOS -->
+    <section id="peptidos" class="py-20 px-4 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-4" style="color: #1B6B3D;">Péptidos de Investigación</h2>
+            <p class="text-center text-gray-600 mb-12">Haz clic en cualquier péptido para ver detalles, especificaciones y hacer tu pedido</p>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('aod9604')">
+                    <div class="text-4xl mb-2">🔥 AOD-9604</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,451</p>
+                    <p class="text-xs text-gray-500 mb-3">Péptido Quema de Grasa</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('bpc157')">
+                    <div class="text-4xl mb-2">🩹 BPC-157</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
+                    <p class="text-xs text-gray-500 mb-3">Reparación de Tejidos</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('cjc1295')">
+                    <div class="text-4xl mb-2">💪 CJC-1295</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg SIN DAC</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
+                    <p class="text-xs text-gray-500 mb-3">Soporte de Hormona de Crecimiento</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('ghkcu')">
+                    <div class="text-4xl mb-2">✨ GHK-CU</div>
+                    <p class="text-gray-600 text-xs mb-3">100mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
+                    <p class="text-xs text-gray-500 mb-3">Regeneración de Piel</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('hghfrag')">
+                    <div class="text-4xl mb-2">🔥 HGH Fragment</div>
+                    <p class="text-gray-600 text-xs mb-3">5mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
+                    <p class="text-xs text-gray-500 mb-3">Pérdida de Grasa Selectiva</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('igf1lr3')">
+                    <div class="text-4xl mb-2">🦾 IGF-1 LR3</div>
+                    <p class="text-gray-600 text-xs mb-3">1mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
+                    <p class="text-xs text-gray-500 mb-3">Factor de Crecimiento</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('ipamorelin')">
+                    <div class="text-4xl mb-2">🚀 Ipamorelin</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,798</p>
+                    <p class="text-xs text-gray-500 mb-3">Secretagogo de GH</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('motsc')">
+                    <div class="text-4xl mb-2">⚡ MOTS-C</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
+                    <p class="text-xs text-gray-500 mb-3">Activador Mitocondrial</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('nadpep')">
+                    <div class="text-4xl mb-2">🧬 NAD+ Péptido</div>
+                    <p class="text-gray-600 text-xs mb-3">1000mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,798</p>
+                    <p class="text-xs text-gray-500 mb-3">Reparación de ADN Celular</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-red-400 p-6" onclick="showProductDetail('retatrutide')">
+                    <div class="text-4xl mb-2">🎯 Retatrutide ⚠️</div>
+                    <p class="text-gray-600 text-xs mb-3">20mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,275</p>
+                    <p class="text-xs text-gray-500 mb-3">Triple Agonista GLP-1</p>
+                    <button class="w-full py-2 bg-red-700 text-white rounded text-sm font-bold hover:bg-red-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('tb500')">
+                    <div class="text-4xl mb-2">🩸 TB-500</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
+                    <p class="text-xs text-gray-500 mb-3">Regenerador de Tejidos</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('tesamorelin')">
+                    <div class="text-4xl mb-2">🔥 Tesamorelin</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$2,585</p>
+                    <p class="text-xs text-gray-500 mb-3">Eliminador de Grasa Visceral</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+
+                <div class="product-card bg-white rounded-xl shadow-lg p-6" onclick="showProductDetail('melanotan2')">
+                    <div class="text-4xl mb-2">🌞 Melanotan II</div>
+                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
+                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$2,780</p>
+                    <p class="text-xs text-gray-500 mb-3">Investigación de Bronceado</p>
+                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-4">
+        <div class="max-w-6xl mx-auto">
+            <p class="text-center mb-4">© 2026 VITALIX - Péptidos Premium de Investigación</p>
+            <p class="text-center text-xs">Email: info@vitalix.mx | Teléfono: +52 (55) 1234 5678</p>
+            <p class="text-center text-xs mt-4 text-gray-500">Uso de Investigación | Estos productos son solo para propósitos de investigación</p>
+        </div>
+    </footer>
+
+    <script>
+        let cart = [];
+        let currentShipping = 200;
+        let discountPercent = 0;
+
+        const coupons = {
+            'BIENVENIDA10': 10,
+            'INVESTIGACION15': 15,
+            'VITALIX20': 20,
+            'PEPTIDOS25': 25,
+            'LEALTAD30': 30
+        };
+
+        const productDetails = {
+            tirzepatida: {name: 'T-Tide R-2', emoji: '💉', price: 14999, description: 'Inyectable para Control de Peso y Metabólico', benefits: ['Control de apetito', 'Pérdida de peso', 'Gestión de glucosa', 'Efectos rápidos'], dosages: ['2.5mg', '5mg', '7.5mg', '10mg', '12.5mg', '15mg'], specifications: {purity: '99.20%', assay: '30.6 mg/vial', water: '1.82%', endotoxins: 'Less than 5 EU/mg', lot: 'TR30-20260122-TR20260123', storage: 'Protected from Light, 0°C', certificateLink: 'COA_TR30_Tirzepatide_Certificate.jpg'}},
+            semaglutida: {name: 'S-Tide R-1', emoji: '💉', price: 12999, description: 'Inyectable Semanal para Apoyo Metabólico', benefits: ['Reducción de peso', 'Control de glucosa', 'Efecto duradero', 'Soporte cardiovascular'], dosages: ['0.25mg', '0.5mg', '1mg', '2mg', '2.4mg'], specifications: {purity: '99.67%', assay: '31.2 mg/vial', water: '1.62%', endotoxins: 'Less than 5 EU/mg', lot: 'SM30-20260124-SM20260126', storage: 'Protected from Light, 0°C', certificateLink: 'COA_SM30_Semaglutide_Certificate.jpg'}},
+            rtide: {name: 'R-Tide R-3', emoji: '🎯', price: 16999, description: 'Péptido Premium de Investigación - Paquete de 3 Meses', benefits: ['Regeneración celular', 'Recuperación acelerada', 'Composición corporal', 'Mejora del rendimiento']},
+            
+            aod9604: {name: 'AOD-9604', emoji: '🔥', price: 3451, description: 'Péptido para Quema de Grasa Corporal', benefits: ['Estimula lipólisis', 'Apoyo a pérdida de grasa', 'Mejora metabólica', 'Regeneración de cartílago']},
+            bpc157: {name: 'BPC-157', emoji: '🩹', price: 3104, description: 'Péptido de Reparación de Tejidos', benefits: ['Acelera reparación de tejidos', 'Recuperación muscular', 'Salud de tendones', 'Apoyo de cicatrización'], specifications: {purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: 'Less than 5 EU/mg', lot: '2026011303', storage: 'Protected from Light, 0°C', certificateLink: 'COA_BPC157_Certificate.jpg'}},
+            cjc1295: {name: 'CJC-1295', emoji: '💪', price: 3626, description: 'Soporte de Hormona de Crecimiento (SIN DAC)', benefits: ['Estimula liberación de GH', 'Crecimiento muscular', 'Apoyo a recuperación', 'Reducción de grasa']},
+            ghkcu: {name: 'GHK-CU', emoji: '✨', price: 3104, description: 'Regeneración de Piel y Anti-Envejecimiento', benefits: ['Estimula colágeno', 'Regeneración de piel', 'Reparación de tejidos', 'Soporte anti-envejecimiento']},
+            hghfrag: {name: 'HGH Fragment 176-191', emoji: '🔥', price: 3104, description: 'Péptido de Pérdida de Grasa Selectiva', benefits: ['Apoyo a quema de grasa', 'Reducción de grasa abdominal', 'Mejora metabólica', 'Recomposición corporal']},
+            igf1lr3: {name: 'IGF-1 LR3', emoji: '🦾', price: 3626, description: 'Factor de Crecimiento Insulínico', benefits: ['Crecimiento muscular', 'Síntesis proteica', 'Aceleración de recuperación', 'Recomposición corporal']},
+            ipamorelin: {name: 'Ipamorelin', emoji: '🚀', price: 3798, description: 'Secretagogo de Hormona de Crecimiento', benefits: ['Estimula liberación de GH', 'Músculo magro', 'Apoyo a recuperación', 'Calidad del sueño']},
+            motsc: {name: 'MOTS-C', emoji: '⚡', price: 3626, description: 'Activador Mitocondrial', benefits: ['Energía celular', 'Regulación metabólica', 'Soporte mitocondrial', 'Vías energéticas']},
+            nadpep: {name: 'NAD+ 1000', emoji: '🧬', price: 3798, description: 'Reparación de ADN y Longevidad Celular', benefits: ['Energía celular', 'Apoyo a reparación de ADN', 'Salud metabólica', 'Investigación de longevidad'], specifications: {purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: 'Less than 5 EU/mg', lot: '2026011901', storage: 'Protected from Light, 0°C', certificateLink: 'COA_NADplus_Certificate.jpg'}},
+            retatrutide: {name: 'Retatrutide', emoji: '🎯', price: 3275, description: 'Triple Agonista GLP-1/GIP/GCG', benefits: ['Reducción de apetito', 'Apoyo a pérdida de grasa', 'Control metabólico', 'Recomposición corporal'], specifications: {purity: '99.48%', assay: '21.7 mg/vial', water: '1.68%', endotoxins: 'Less than 5 EU/mg', lot: 'RT20-20260112-RT20260113', storage: 'Protected from Light, 0°C', certificateLink: 'COA_RT20_Retatrutide_Certificate.jpg'}},
+            tb500: {name: 'TB-500', emoji: '🩸', price: 3104, description: 'Péptido Regenerador de Tejidos', benefits: ['Regeneración de tejidos', 'Apoyo a recuperación', 'Salud de tendones', 'Mejora de movilidad']},
+            tesamorelin: {name: 'Tesamorelin', emoji: '🔥', price: 2585, description: 'Eliminador de Grasa Visceral', benefits: ['Reducción de grasa visceral', 'Estimula GH', 'Recomposición corporal', 'Salud metabólica']},
+            melanotan2: {name: 'Melanotan II', emoji: '🌞', price: 2780, description: 'Investigación de Bronceado y Pigmentación', benefits: ['Estimulación de melanina', 'Pigmentación de piel', 'Apoyo fotoprotección', 'Péptido de investigación']}
+        };
+
+        function showProductDetail(productKey) {
+            const product = productDetails[productKey];
+            let dosageHtml = '';
+            let packageInfo = '';
+            
+            // For wellness products (first three), show only 3-month package
+            if (['tirzepatida', 'semaglutida', 'rtide'].includes(productKey)) {
+                packageInfo = `
+                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
+                        <p class="text-sm text-gray-700"><strong>📦 Paquete:</strong> 3 Meses</p>
+                        <p class="text-sm text-gray-700 mt-2"><strong>⏰ Precio:</strong> El precio mostrado es para el paquete completo de 3 meses</p>
+                    </div>
+                `;
+            } else if (product.dosages) {
+                dosageHtml = `
+                    <div class="mb-6">
+                        <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Selecciona Dosis:</h3>
+                        <select id="dosageSelect" class="w-full border-2 border-green-300 p-3 rounded-lg">
+                            <option value="">-- Elige tu dosis --</option>
+                            ${product.dosages.map(d => `<option value="${d}">${d}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+
+            const html = `
+                <h2 class="text-3xl font-bold mb-2" style="color: #1B6B3D;">${product.emoji} ${product.name}</h2>
+                <p class="text-gray-600 mb-4">${product.description}</p>
+                
+                <div class="bg-green-100 border-2 border-green-400 p-4 rounded-lg mb-6">
+                    <p class="text-3xl font-bold" style="color: #C41E3A;">$${product.price.toLocaleString('es-MX')} MXN</p>
+                </div>
+
+                ${packageInfo}
+
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Beneficios Principales:</h3>
+                    <ul class="space-y-2">
+                        ${product.benefits.map(b => `<li class="text-gray-700">✓ ${b}</li>`).join('')}
+                    </ul>
+                </div>
+
+                ${dosageHtml}
+
+                ${product.specifications ? `
+                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
+                        <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">📋 Especificaciones HPLC:</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="font-semibold">Pureza:</span><span>${product.specifications.purity}</span></div>
+                            <div class="flex justify-between"><span class="font-semibold">Ensayo:</span><span>${product.specifications.assay}</span></div>
+                            <div class="flex justify-between"><span class="font-semibold">Agua:</span><span>${product.specifications.water}</span></div>
+                            <div class="flex justify-between"><span class="font-semibold">Endotoxinas:</span><span>${product.specifications.endotoxins}</span></div>
+                            <div class="flex justify-between"><span class="font-semibold">Lote:</span><span style="font-size: 0.85rem;">${product.specifications.lot}</span></div>
+                            <div class="flex justify-between"><span class="font-semibold">Almacenamiento:</span><span>${product.specifications.storage}</span></div>
+                        </div>
+                        <div class="mt-4 pt-3 border-t">
+                            <a href="${product.specifications.certificateLink}" target="_blank" class="inline-block px-4 py-2 bg-green-600 text-white rounded font-bold hover:bg-green-700 text-sm">
+                                📄 Ver Reporte Completo
+                            </a>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div class="mb-6">
+                    <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Declaración de Investigación:</h3>
+                    <div class="space-y-3 bg-gray-50 p-4 rounded-lg">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="research" class="w-5 h-5">
+                            <span class="text-sm">Esto es solo para propósitos de investigación</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="legal" class="w-5 h-5">
+                            <span class="text-sm">Entiendo los términos legales</span>
+                        </label>
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="responsibility" class="w-5 h-5">
+                            <span class="text-sm font-bold">Asumo responsabilidad total</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="bg-red-50 border-2 border-red-300 p-4 rounded-lg">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="disclaimerAccept" class="w-6 h-6 cursor-pointer">
+                            <span class="font-bold text-gray-900">Acepto el Descargo de Responsabilidad Legal</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button onclick="addProductToCart('${productKey}')" class="flex-1 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D; cursor: pointer;">Agregar al Carrito</button>
+                    <button onclick="closeModal()" class="flex-1 py-3 bg-gray-400 text-white rounded-lg font-bold">Cancelar</button>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = html;
+            document.getElementById('productModal').classList.add('show');
+        }
+
+        function addProductToCart(productKey) {
+            const product = productDetails[productKey];
+            const dosage = product.dosages ? document.getElementById('dosageSelect').value : null;
+            const research = document.getElementById('research').checked;
+            const legal = document.getElementById('legal').checked;
+            const responsibility = document.getElementById('responsibility').checked;
+            const disclaimerAccept = document.getElementById('disclaimerAccept').checked;
+
+            if (product.dosages && !dosage) {
+                alert('Por favor selecciona una dosis');
+                return;
+            }
+
+            if (!research || !legal || !responsibility) {
+                alert('Por favor confirma todos los términos de investigación');
+                return;
+            }
+
+            if (!disclaimerAccept) {
+                alert('Debes aceptar el descargo de responsabilidad');
+                return;
+            }
+
+            const itemName = dosage ? `${product.name} (${dosage})` : product.name;
+            addToCart(itemName, product.price);
+            closeModal();
+        }
+
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('show');
+        }
+
+        function addToCart(name, price) {
+            cart.push({name, price});
+            updateCart();
+            alert(`✓ ${name} agregado al carrito`);
+        }
+
+        function updateCart() {
+            document.getElementById('cartCount').textContent = cart.length;
+            
+            let html = '';
+            let subtotal = 0;
+            
+            cart.forEach((item, index) => {
+                html += `<div class="flex justify-between items-center py-2 border-b">
+                    <span class="text-sm">${item.name}</span>
+                    <div class="flex items-center gap-3">
+                        <span class="font-bold" style="color: #1B6B3D;">$${item.price.toLocaleString('es-MX')}</span>
+                        <button onclick="removeFromCart(${index})" class="text-red-600 font-bold">✕</button>
+                    </div>
+                </div>`;
+                subtotal += item.price;
+            });
+
+            if(cart.length === 0) {
+                html = '<p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>';
+                document.getElementById('cartItems').innerHTML = html;
+                document.getElementById('subtotal').textContent = '$0';
+                let total = currentShipping;
+                document.getElementById('total').textContent = '$' + total.toLocaleString('es-MX');
+            } else {
+                document.getElementById('cartItems').innerHTML = html;
+                document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString('es-MX');
+                
+                let discount = Math.floor((subtotal * discountPercent) / 100);
+                let total = subtotal - discount + currentShipping;
+                
+                document.getElementById('total').textContent = '$' + total.toLocaleString('es-MX');
+                
+                if (discountPercent > 0) {
+                    document.getElementById('discountRow').classList.remove('hidden');
+                    document.getElementById('discountAmount').textContent = '-$' + discount.toLocaleString('es-MX');
+                } else {
+                    document.getElementById('discountRow').classList.add('hidden');
+                }
+            }
+        }
+
+        function updateShipping() {
+            const selected = document.querySelector('input[name="shipping"]:checked').value;
+            currentShipping = parseInt(selected);
+            document.getElementById('shippingCost').textContent = '$' + currentShipping.toLocaleString('es-MX');
+            updateCart();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        function toggleCart() {
+            document.getElementById('cartPanel').classList.toggle('hidden');
+        }
+
+        function goToCheckout() {
+            if(cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            showCheckout();
+        }
+
+        function showCheckout() {
+            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            let discount = Math.floor((subtotal * discountPercent) / 100);
+            let total = subtotal - discount + currentShipping;
+
+            const html = `
+                <div>
+                    <h2 class="text-3xl font-bold mb-6" style="color: #1B6B3D;">Pago</h2>
+                    
+                    <div class="mb-8 p-4 bg-gray-50 rounded-lg">
+                        <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Resumen de Orden</h3>
+                        <div class="space-y-2 mb-4">
+                            ${cart.map(item => `<div class="flex justify-between"><span>${item.name}</span><span>$${item.price.toLocaleString('es-MX')}</span></div>`).join('')}
+                        </div>
+                        <div class="border-t-2 pt-2">
+                            <div class="flex justify-between mb-2"><span>Subtotal:</span><span>$${subtotal.toLocaleString('es-MX')}</span></div>
+                            <div class="flex justify-between mb-2"><span>Envío:</span><span>$${currentShipping.toLocaleString('es-MX')}</span></div>
+                            ${discountPercent > 0 ? `<div class="flex justify-between mb-2" style="color: green;"><span>Descuento (${discountPercent}%):</span><span id="checkoutDiscount">-$${discount.toLocaleString('es-MX')}</span></div>` : ''}
+                            <div class="flex justify-between text-xl font-bold" style="color: #C41E3A;">
+                                <span>Total:</span>
+                                <span id="checkoutTotal">$${total.toLocaleString('es-MX')}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
+                        <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Aplicar Código Promocional</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="checkoutCoupon" placeholder="Ingresa código promocional" class="flex-1 border-2 border-gray-300 p-2 rounded text-sm">
+                            <button type="button" onclick="applyCouponCheckout()" class="px-4 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700">Aplicar</button>
+                        </div>
+                        <div id="couponMsg" class="text-xs mt-2"></div>
+                    </div>
+
+                    <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Información de Envío y Facturación</h3>
+                    
+                    <form id="checkoutForm">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-2">Nombre *</label>
+                                <input type="text" id="firstName" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Juan">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2">Apellido *</label>
+                                <input type="text" id="lastName" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Pérez">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold mb-2">Correo Electrónico *</label>
+                            <input type="email" id="email" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="juan@ejemplo.com">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold mb-2">Teléfono *</label>
+                            <input type="tel" id="phone" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="+52 (55) 1234 5678">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm font-bold mb-2">Dirección *</label>
+                            <input type="text" id="address" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Calle Principal 123">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-2">Ciudad *</label>
+                                <input type="text" id="city" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Ciudad de México">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2">Estado/Provincia *</label>
+                                <input type="text" id="state" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="CDMX">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-bold mb-2">Código Postal *</label>
+                                <input type="text" id="postal" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="01000">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold mb-2">País *</label>
+                                <input type="text" id="country" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="México">
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                <input type="checkbox" id="agreeTerms" required class="w-5 h-5">
+                                <span class="text-sm">Acepto los Términos y Condiciones y la Política de Privacidad</span>
+                            </label>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="button" onclick="processPayment()" class="flex-1 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D;">Proceder al Pago</button>
+                            <button type="button" onclick="closeCheckout()" class="flex-1 py-3 bg-gray-400 text-white rounded-lg font-bold">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+
+            document.getElementById('checkoutBody').innerHTML = html;
+            document.getElementById('checkoutModal').classList.add('show');
+        }
+
+        function applyCouponCheckout() {
+            const couponCode = document.getElementById('checkoutCoupon').value.toUpperCase();
+            const messageDiv = document.getElementById('couponMsg');
+            
+            if (!couponCode) {
+                messageDiv.innerHTML = '<span style="color: red;">Por favor ingresa un código promocional</span>';
+                return;
+            }
+            
+            if (coupons[couponCode]) {
+                discountPercent = coupons[couponCode];
+                messageDiv.innerHTML = `<span style="color: green;">✓ ¡Código aplicado! ${discountPercent}% de descuento</span>`;
+                document.getElementById('checkoutCoupon').disabled = true;
+                document.getElementById('checkoutCoupon').style.opacity = '0.6';
+                updateCheckoutSummary();
+            } else {
+                messageDiv.innerHTML = '<span style="color: red;">Código inválido</span>';
+                discountPercent = 0;
+            }
+        }
+
+        function updateCheckoutSummary() {
+            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            let discount = Math.floor((subtotal * discountPercent) / 100);
+            let total = subtotal - discount + currentShipping;
+
+            if (discountPercent > 0) {
+                document.getElementById('checkoutDiscount').textContent = `-$${discount.toLocaleString('es-MX')}`;
+            }
+            
+            document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString('es-MX')}`;
+        }
+
+        function processPayment() {
+            const form = document.getElementById('checkoutForm');
+            if (!form.checkValidity()) {
+                alert('Por favor completa todos los campos requeridos');
+                return;
+            }
+
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const postal = document.getElementById('postal').value;
+            const country = document.getElementById('country').value;
+
+            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+            let discount = Math.floor((subtotal * discountPercent) / 100);
+            let total = subtotal - discount + currentShipping;
+
+            const orderSummary = `
+CONFIRMACIÓN DE ORDEN
+====================
+Nombre: ${firstName} ${lastName}
+Correo: ${email}
+Teléfono: ${phone}
+Dirección: ${address}, ${city}, ${state} ${postal}, ${country}
+
+Artículos:
+${cart.map(item => `  - ${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n')}
+
+Subtotal: $${subtotal.toLocaleString('es-MX')}
+Envío: $${currentShipping.toLocaleString('es-MX')}
+${discountPercent > 0 ? `Descuento (${discountPercent}%): -$${discount.toLocaleString('es-MX')}` : ''}
+Total: $${total.toLocaleString('es-MX')}
+
+Tu orden será procesada en breve. Recibirás un correo de confirmación en ${email}.
+            `;
+
+            alert(orderSummary + '\n\nRedirigiendo a la puerta de pago...');
+            
+            closeCheckout();
+            cart = [];
+            discountPercent = 0;
+            updateCart();
+            toggleCart();
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('show');
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('productModal');
+            const checkout = document.getElementById('checkoutModal');
+            if (event.target == modal) {
+                modal.classList.remove('show');
+            }
+            if (event.target == checkout) {
+                checkout.classList.remove('show');
+            }
+        }
+    </script>
+
+    </body>
+</html>
