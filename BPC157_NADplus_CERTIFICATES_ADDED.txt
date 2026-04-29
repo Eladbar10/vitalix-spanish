@@ -1,0 +1,148 @@
+═══════════════════════════════════════════════════════════════════════════════
+              BPC-157 & NAD+ LABORATORY CERTIFICATES - ADDED
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WHAT HAS BEEN ADDED:
+
+1. NEW CERTIFICATE IMAGES
+   ├─ COA_BPC157_Certificate.jpg (Body Protection Compound 157)
+   └─ COA_NADplus_Certificate.jpg (NAD+ 1000)
+
+2. BOTH WEBSITES UPDATED
+   ├─ VITALIX_Complete.html (English)
+   └─ VITALIX_Espanol.html (Spanish)
+
+3. CLICKABLE LAB REPORT BUTTONS
+   ├─ English: "📄 View Full Lab Report"
+   └─ Spanish: "📄 Ver Reporte Completo"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 BPC-157 SPECIFICATIONS:
+
+Product Name: BPC-157
+CAS No.: 137525-51-0
+Batch No.: 2026011303
+Molecular Formula: C62H98N16O22
+Molecular Weight: 1419.54
+Date of Production: 2026/01/13
+Retest Date: 2028/04/09
+Specification: 10mg/vial
+
+HPLC Test Results:
+├─ Peptide Purity: 99.6% (Requirement: ≥98.0%) ✅
+├─ Total Impurities: 0.4% (Requirement: ≤2.0%) ✅
+├─ Largest Single Impurity: 0.1% (Requirement: ≤1.0%) ✅
+├─ Water Content: 3.5% (Requirement: ≤8.0%) ✅
+├─ Sodium Salt: 1.7% (Requirement: ≤5.0%) ✅
+├─ Assay: 100.2% (Requirement: 95%-105%) ✅
+└─ Conclusion: Product conforms with enterprise standard and qualified ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 NAD+ SPECIFICATIONS:
+
+Product Name: NAD+ 1000
+CAS No.: 53-84-9
+Batch No.: 2026011901
+Molecular Formula: C21H27N7O14P2
+Molecular Weight: 663.43
+Date of Production: 2026/01/09
+Retest Date: 2028/03/08
+Specification: 10mg/vial
+
+HPLC Test Results:
+├─ Peptide Purity: 99.6% (Requirement: ≥98.0%) ✅
+├─ Total Impurities: 0.4% (Requirement: ≤2.0%) ✅
+├─ Largest Single Impurity: 0.1% (Requirement: ≤1.0%) ✅
+├─ Water Content: 3.5% (Requirement: ≤8.0%) ✅
+├─ Sodium Salt: 1.7% (Requirement: ≤5.0%) ✅
+├─ Assay: 100.2% (Requirement: 95%-105%) ✅
+└─ Conclusion: Product conforms with enterprise standard and qualified ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 SITE UPDATES:
+
+VITALIX_Complete.html (English):
+├─ BPC-157: Added specifications & certificate link
+│  └─ Purity: 99.6% | Assay: 100.2% | Batch: 2026011303
+├─ NAD+ 1000: Added specifications & certificate link
+│  └─ Purity: 99.6% | Assay: 100.2% | Batch: 2026011901
+└─ Both now have "📄 View Full Lab Report" button
+
+VITALIX_Espanol.html (Spanish):
+├─ BPC-157: Añadidas especificaciones y enlace de certificado
+│  └─ Pureza: 99.6% | Ensayo: 100.2% | Lote: 2026011303
+├─ NAD+ 1000: Añadidas especificaciones y enlace de certificado
+│  └─ Pureza: 99.6% | Ensayo: 100.2% | Lote: 2026011901
+└─ Ambos ahora tienen botón "📄 Ver Reporte Completo"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 COMPLETE VITALIX PRODUCT LINEUP WITH CERTIFICATES:
+
+✅ 5 Products with Full Lab Reports:
+
+1. T-TIDE R-2 (Tirzepatida) ..................... TR30 Certificate
+2. S-TIDE R-1 (Semaglutida) ..................... SM30 Certificate ⭐
+3. R-TIDE R-3 (Retatrutida) ..................... RT20 Certificate
+4. BPC-157 (Body Protection Compound) .......... BPC157 Certificate NEW
+5. NAD+ 1000 (Cellular Energy) ................. NADplus Certificate NEW
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 USER EXPERIENCE:
+
+When customer clicks on BPC-157 or NAD+ product:
+1. Product modal opens
+2. They see specifications section with:
+   ✓ Peptide Purity: 99.6%
+   ✓ Assay: 100.2%
+   ✓ Water Content: 3.5%
+   ✓ Batch Number: 2026011303 (BPC-157) or 2026011901 (NAD+)
+   ✓ Storage: Protected from Light, 0°C
+3. Green button appears: "📄 View Full Lab Report" / "📄 Ver Reporte Completo"
+4. Clicking opens the official lab certificate in a new tab
+5. Full transparency - customers see professional lab testing
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✨ QUALITY METRICS:
+
+Both BPC-157 and NAD+ show:
+• Exceptional purity (99.6%)
+• Perfect assay results (100.2%)
+• Low water content (3.5%)
+• Minimal impurities (0.4%)
+• Full compliance with standards
+• Professional lab certification
+• Enterprise standard compliance
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📁 FINAL FILE STRUCTURE:
+
+/outputs/
+├── VITALIX_Complete.html ..................... English Website (Updated)
+├── VITALIX_Espanol.html ....................... Spanish Website (Updated)
+├── COA_TR30_Tirzepatide_Certificate.jpg ...... Tirzepatida Lab Report
+├── COA_SM30_Semaglutide_Certificate.jpg ...... Semaglutida Lab Report
+├── COA_RT20_Retatrutide_Certificate.jpg ...... Retatrutida Lab Report
+├── COA_BPC157_Certificate.jpg ................ BPC-157 Lab Report (NEW)
+└── COA_NADplus_Certificate.jpg ............... NAD+ Lab Report (NEW)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 DEPLOYMENT READY:
+
+All files are ready to upload to your server:
+✓ 2 HTML website files (English & Spanish) with new certificates
+✓ 5 Certificate images (all linked and functional)
+✓ Full lab report access for customers
+✓ Professional presentation of quality metrics
+
+═══════════════════════════════════════════════════════════════════════════════
+Document prepared: April 29, 2026
+VITALIX Mexico - Premium Research Peptides with Full Lab Certification
+═══════════════════════════════════════════════════════════════════════════════

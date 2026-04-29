@@ -1,0 +1,713 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    VITALIX WEBSITE DEPLOYMENT & LAUNCH GUIDE
+                 Complete Instructions for Publishing & Monetization
+═══════════════════════════════════════════════════════════════════════════════
+
+⚠️ IMPORTANT LEGAL NOTICE:
+═══════════════════════════════════════════════════════════════════════════════
+
+These websites are for RESEARCH PURPOSES ONLY. All products are labeled as:
+- "Research Peptides"
+- "For Research Use Only"
+- "Not for Human Use"
+
+Ensure compliance with:
+✓ Local regulations in hosting country
+✓ Payment processor terms & conditions
+✓ Export/import laws for research compounds
+✓ Domain registration requirements
+✓ Data protection (GDPR, CCPA, etc.)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 1: DOMAIN REGISTRATION
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 SITE 1: ENGLISH VERSION (AMERICAN SITE - NOT in USA)
+
+Recommended Location: CANADA, IRELAND, UK, or SINGAPORE
+Domain Options:
+├─ Primary: vitalix.ca (Canada) or vitalix.ie (Ireland)
+├─ Alternative: vitalix.co.uk (United Kingdom)
+└─ Asian Market: vitalix.sg (Singapore)
+
+Registrar Options (NOT in USA):
+1. **Namecheap** (USA-based but registers anywhere)
+2. **1&1 IONOS** (Germany-based)
+3. **GoDaddy** (USA-based but registers anywhere)
+4. **Domain.com** (USA-based)
+5. **Hover** (Canada-based) ⭐ RECOMMENDED
+6. **Gandi** (France-based)
+
+Registration Steps:
+1. Go to registrar website
+2. Search for domain (e.g., vitalix.ca)
+3. Add to cart ($8-15/year)
+4. Complete registration with address outside USA
+5. Enable auto-renewal
+6. Protect privacy (hide registrant info)
+
+🌐 SITE 2: SPANISH VERSION (MEXICAN SITE - NOT in Mexico)
+
+Recommended Location: COLOMBIA, ARGENTINA, SPAIN, or COSTA RICA
+Domain Options:
+├─ Primary: vitalix.mx (Mexico - NOT ALLOWED) ❌
+├─ Alternative 1: vitalix.co (Colombia) ✅
+├─ Alternative 2: vitalix.ar (Argentina) ✅
+├─ Alternative 3: vitalix.es (Spain) ✅
+└─ Alternative 4: vitalix.cr (Costa Rica) ✅
+
+Registrar: Same as above (Hover, IONOS, etc.)
+
+Registration Steps: Same as above but select Colombia/Argentina/Spain/Costa Rica
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 2: WEB HOSTING
+═══════════════════════════════════════════════════════════════════════════════
+
+⚠️ HOSTING REQUIREMENTS:
+├─ NOT in United States (for English site)
+├─ NOT in Mexico (for Spanish site)
+├─ Good uptime (99.9%+)
+├─ SSL/TLS support (HTTPS)
+├─ Fast server response time
+├─ Good customer support
+└─ Backup capabilities
+
+🔧 RECOMMENDED HOSTING PROVIDERS:
+
+**TIER 1 (Best Performance):**
+
+1. **Cloudflare Pages** (Global CDN)
+   ├─ Price: FREE for basic, $20+/month for advanced
+   ├─ Location: Global edge servers
+   ├─ Best for: Static sites, fast loading
+   ├─ SSL: FREE automatic
+   └─ Setup: GitHub integration (free)
+
+2. **Vercel** (Optimized for modern web)
+   ├─ Price: FREE for hobby, $20+/month for production
+   ├─ Location: Global edge network
+   ├─ Best for: Fast deployment, auto-scaling
+   ├─ SSL: FREE automatic
+   └─ Setup: GitHub integration (free)
+
+3. **Netlify** (Developer-friendly)
+   ├─ Price: FREE for basic, $19+/month for pro
+   ├─ Location: Global CDN
+   ├─ Best for: Easy deployment, forms
+   ├─ SSL: FREE automatic
+   └─ Setup: GitHub integration (free)
+
+**TIER 2 (Traditional Hosting - Lower Cost):**
+
+4. **IONOS** (Germany-based) ⭐
+   ├─ Price: €2-10/month
+   ├─ Location: Europe
+   ├─ Best for: Budget-friendly, reliable
+   ├─ SSL: FREE automatic (Let's Encrypt)
+   └─ Storage: 50-500GB SSD
+
+5. **Bluehost** (USA-based, but serves globally)
+   ├─ Price: $2.95-13.95/month
+   ├─ Location: Multiple data centers worldwide
+   ├─ Best for: Reliable, established
+   ├─ SSL: FREE automatic
+   └─ Storage: Unlimited
+
+6. **SiteGround** (Bulgaria-based) ⭐
+   ├─ Price: $2.99-7.99/month
+   ├─ Location: Europe/USA/Asia
+   ├─ Best for: Excellent support, security
+   ├─ SSL: FREE automatic
+   └─ Storage: Unlimited SSD
+
+**RECOMMENDED SETUP:**
+├─ English Site (VITALIX.ca or VITALIX.ie)
+│  └─ Host: Cloudflare Pages or Vercel
+│     └─ Location: Global with Canada/Europe focus
+│
+└─ Spanish Site (VITALIX.co or VITALIX.es)
+   └─ Host: Cloudflare Pages or Vercel
+      └─ Location: Global with Latin America/Spain focus
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 3: HOSTING SETUP INSTRUCTIONS (Using Cloudflare Pages - FREE)
+═══════════════════════════════════════════════════════════════════════════════
+
+**STEP 1: Prepare Your Files**
+1. Take both HTML files:
+   ├─ VITALIX_Complete.html (rename to index.html for root)
+   └─ VITALIX_Espanol.html (or keep name for /es/)
+
+2. Create folder structure:
+   vitalix-english/
+   ├─ index.html
+   ├─ COA_TR30_Tirzepatide_Certificate.jpg
+   ├─ COA_SM30_Semaglutide_Certificate.jpg
+   ├─ COA_RT20_Retatrutide_Certificate.jpg
+   ├─ COA_BPC157_Certificate.jpg
+   └─ COA_NADplus_Certificate.jpg
+
+   vitalix-spanish/
+   ├─ index.html
+   ├─ COA files (same)
+   └─ _redirects (for routing)
+
+**STEP 2: Create GitHub Account**
+1. Go to github.com
+2. Sign up (free)
+3. Verify email
+4. Create two repositories:
+   ├─ vitalix-english (public)
+   └─ vitalix-spanish (public)
+
+**STEP 3: Upload Files to GitHub**
+1. Clone repository locally
+2. Copy HTML files and images
+3. Commit and push to GitHub
+4. Verify files appear on GitHub website
+
+**STEP 4: Deploy with Cloudflare Pages**
+1. Go to pages.cloudflare.com
+2. Click "Create a project"
+3. Connect your GitHub account
+4. Select vitalix-english repository
+5. Build settings:
+   ├─ Framework: None
+   ├─ Build command: (leave blank)
+   └─ Build output directory: /
+6. Click "Save and Deploy"
+7. Wait 1-2 minutes for deployment
+8. Test: https://vitalix-english.pages.dev
+
+**STEP 5: Connect Custom Domain**
+1. In Cloudflare Pages project
+2. Go to "Custom domains"
+3. Add your domain (e.g., vitalix.ca)
+4. Update nameservers at registrar:
+   ├─ Add Cloudflare nameservers
+   └─ Usually takes 24-48 hours
+5. After propagation: https://vitalix.ca works!
+
+**REPEAT FOR SPANISH SITE**
+└─ Same steps with vitalix-spanish repository
+   └─ Final domain: https://vitalix.co (or your chosen domain)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 4: SSL/TLS CERTIFICATE (HTTPS)
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WITH CLOUDFLARE (AUTOMATIC):
+├─ FREE automatic SSL
+├─ Issued by Cloudflare
+├─ Auto-renews
+└─ Takes 5-10 minutes to activate
+
+✅ WITH TRADITIONAL HOSTING:
+├─ Option 1: Let's Encrypt (FREE)
+│  ├─ Go to letsencrypt.org
+│  ├─ Use hosting provider's auto-installer
+│  └─ Takes 2 minutes
+│
+├─ Option 2: Hosting provider included
+│  └─ Most include free SSL with hosting
+│
+└─ Option 3: Purchase premium certificate
+   └─ Not necessary for research site (~$50-200/year)
+
+VERIFICATION:
+1. Open your domain in browser
+2. Look for 🔒 icon in address bar
+3. Click lock → should show certificate details
+4. If green: HTTPS is working ✅
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 5: PAYMENT GATEWAY INTEGRATION
+═══════════════════════════════════════════════════════════════════════════════
+
+⚠️ CRITICAL: Research peptides are DIFFICULT for payment processors
+
+Current Implementation: ORDER FORM ONLY (No auto-payment)
+└─ Customer fills checkout form
+└─ Receives order summary
+└─ Contacts you manually for payment
+
+TO ADD AUTOMATIC PAYMENT:
+
+**OPTION A: Stripe** (RECOMMENDED FOR RESEARCH PRODUCTS)
+├─ Supports high-risk businesses
+├─ International payments (USD, MXN, EUR)
+├─ Fees: 2.9% + $0.30 per transaction
+├─ Countries: 195+ (including Colombia, Argentina, Spain)
+├─ Setup Time: 1-3 days
+
+Stripe Setup:
+1. Go to stripe.com
+2. Create account (non-US address)
+3. Verify business information
+4. Get API keys
+5. Integration code needed (see below)
+
+**OPTION B: PayPal** (MORE RESTRICTIVE)
+├─ May decline research products
+├─ International payments supported
+├─ Fees: 2.9% + $0.30
+├─ Requires approval for high-risk
+├─ Setup Time: 3-7 days (may be rejected)
+
+**OPTION C: 2Checkout (Verifone)** (GOOD FOR RESEARCH)
+├─ Accepts high-risk businesses
+├─ Global payments
+├─ Fees: 2.9% + $0.49
+├─ Countries: 180+
+├─ Setup Time: 1-2 days
+
+**OPTION D: Wise (formerly TransferWise)** (FOR TRANSFERS)
+├─ For receiving customer payments
+├─ Real exchange rates (no markup)
+├─ Fees: 0.66% (flat)
+├─ Setup Time: 1 day
+└─ Best for: Receiving payments in multiple currencies
+
+**RECOMMENDED APPROACH:**
+
+1. Start with: Payment form → Manual verification
+   └─ Customer fills form, you send payment link
+   └─ Reduces approval issues
+
+2. Add later: Stripe or 2Checkout
+   └─ After business is established
+   └─ Lower risk of account closure
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 6: PAYMENT INTEGRATION CODE (Stripe Example)
+═══════════════════════════════════════════════════════════════════════════════
+
+ADD TO YOUR HTML (before </head>):
+```html
+<script src="https://js.stripe.com/v3/"></script>
+```
+
+MODIFY processPayment() FUNCTION:
+```javascript
+async function processPayment() {
+    const form = document.getElementById('checkoutForm');
+    if (!form.checkValidity()) {
+        alert('Please fill in all required fields');
+        return;
+    }
+
+    // Get cart total
+    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let discount = Math.floor((subtotal * discountPercent) / 100);
+    let total = subtotal - discount + currentShipping;
+
+    // Convert to cents
+    const amountInCents = Math.round(total * 100);
+
+    // Create payment intent on your server
+    const response = await fetch('/create-payment-intent', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            amount: amountInCents,
+            currency: 'usd', // or 'mxn' for Spanish site
+            email: document.getElementById('email').value
+        })
+    });
+
+    const {clientSecret} = await response.json();
+
+    // Confirm payment
+    const stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+    const {error, paymentIntent} = await stripe.confirmCardPayment(
+        clientSecret, {
+            payment_method: {
+                card: cardElement,
+                billing_details: {
+                    name: document.getElementById('firstName').value,
+                    email: document.getElementById('email').value
+                }
+            }
+        }
+    );
+
+    if (error) {
+        alert('Payment failed: ' + error.message);
+    } else {
+        alert('Payment successful! Order ID: ' + paymentIntent.id);
+        clearCart();
+        document.getElementById('checkoutModal').classList.remove('show');
+    }
+}
+```
+
+GET STRIPE KEYS:
+1. Log in to dashboard.stripe.com
+2. Go to Developers > API Keys
+3. Copy "Publishable Key" and "Secret Key"
+4. Replace 'YOUR_STRIPE_PUBLIC_KEY' above
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 7: SITE TESTING CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ FUNCTIONALITY TESTS:
+
+Homepage:
+☐ Page loads in <3 seconds
+☐ Navigation menu works
+☐ Language switcher works (if added)
+☐ Images load properly
+☐ Mobile responsive (test on phone)
+
+Products Display:
+☐ All 13 peptides display
+☐ All 3 wellness products display
+☐ Prices show correctly (USD/MXN)
+☐ Product cards are clickable
+
+Product Modal:
+☐ Modal opens when clicking product
+☐ Product details display
+☐ Benefits list shows
+☐ Dosage selector works (first 3 products only)
+☐ Lab report link works (for products with certs)
+☐ Research declaration checkboxes present
+☐ Legal disclaimer checkbox present
+☐ Modal closes with Cancel button
+
+Shopping Cart:
+☐ "Add to Cart" button works
+☐ Items appear in cart panel
+☐ Quantities can be adjusted
+☐ Remove item button works
+☐ Cart total updates correctly
+☐ Shipping options selectable
+☐ Coupon code field appears
+☐ Discount applies correctly
+
+Checkout:
+☐ Checkout modal opens
+☐ All form fields present
+☐ Form validation works (required fields)
+☐ Order summary displays
+☐ Coupon code applies to checkout
+☐ Total price correct (subtotal - discount + shipping)
+☐ Payment button functional
+
+Security:
+☐ HTTPS/SSL working (🔒 icon visible)
+☐ No mixed content warnings
+☐ Forms don't expose sensitive data
+☐ No console errors
+☐ Cookies handled properly
+
+Performance:
+☐ Page loads in <2 seconds (desktop)
+☐ Page loads in <4 seconds (mobile)
+☐ No broken image links
+☐ Images optimized (< 1MB each)
+☐ Smooth scrolling
+☐ No layout shift
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 8: LAUNCHING THE SITES
+═══════════════════════════════════════════════════════════════════════════════
+
+**WEEK 1-2: PRE-LAUNCH PREPARATION**
+
+☐ Task 1: Register domains (vitalix.ca + vitalix.co)
+  └─ Time: 30 minutes
+  └─ Cost: $10-20/year
+
+☐ Task 2: Set up hosting (Cloudflare Pages)
+  └─ Time: 1 hour
+  └─ Cost: FREE (basic plan)
+
+☐ Task 3: Deploy sites
+  └─ Time: 30 minutes
+  └─ Cost: FREE
+
+☐ Task 4: Test functionality
+  └─ Time: 2-3 hours
+  └─ Check all items in checklist above
+
+☐ Task 5: Set up email (optional but recommended)
+  └─ Go to Cloudflare Email Routing (FREE)
+  └─ Create: info@vitalix.ca
+  └─ Forwards to your Gmail
+
+**WEEK 3: PAYMENT SETUP**
+
+☐ Task 6: Apply for Stripe account
+  └─ Time: 2 hours
+  └─ Approval: 1-3 days
+
+☐ Task 7: Integrate Stripe (if approved)
+  └─ Time: 3-4 hours
+  └─ Requires some coding
+
+☐ Task 8: Test payment flow
+  └─ Use Stripe test cards
+  └─ Don't charge real money yet
+
+**WEEK 4: LAUNCH PHASE**
+
+☐ Task 9: Final QA testing
+  └─ All checklist items pass
+  └─ No errors or warnings
+
+☐ Task 10: Go LIVE
+  └─ Announce on social media
+  └─ Send to email list
+  └─ Post on relevant forums
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 9: POST-LAUNCH MAINTENANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+**MONTHLY TASKS:**
+├─ Check site uptime/performance
+├─ Review order logs
+├─ Update product prices if needed
+├─ Respond to customer inquiries
+├─ Monitor analytics
+
+**QUARTERLY TASKS:**
+├─ Security audit
+├─ SSL certificate verification
+├─ Backup all files
+├─ Update product information
+├─ Add new lab test certificates
+
+**YEARLY TASKS:**
+├─ Renew domain registration
+├─ Update payment processing agreements
+├─ Review hosting plan
+├─ Analyze sales data
+├─ Plan product additions/removals
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 10: ANALYTICS & MARKETING
+═══════════════════════════════════════════════════════════════════════════════
+
+**ADD GOOGLE ANALYTICS** (Track visitors):
+1. Go to analytics.google.com
+2. Create new property
+3. Get tracking ID
+4. Add to HTML (before </head>):
+```html
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=GA_ID"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'GA_ID');
+</script>
+```
+
+**MARKETING CHANNELS** (Already created):
+✅ WhatsApp messages (WhatsApp_Mensajes_Completos.txt)
+✅ Social media templates (Social_Media_Templates_VITALIX.txt)
+✅ Email marketing templates (included in templates)
+
+**PROMOTION STRATEGY:**
+1. Post on Reddit (/r/peptides, /r/researchchemicals)
+2. Post on relevant forums
+3. Send WhatsApp messages (existing template)
+4. Create social media content
+5. Consider paid ads (Google Ads, Facebook Ads - but risky for research products)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 11: LEGAL & COMPLIANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ REQUIRED PAGES TO ADD:
+
+1. **Terms of Service**
+   ├─ Research use only
+   ├─ No human consumption
+   ├─ Age restrictions (18+)
+   ├─ Liability disclaimer
+   └─ Refund policy
+
+2. **Privacy Policy**
+   ├─ Data collection methods
+   ├─ Use of customer data
+   ├─ GDPR/CCPA compliance
+   ├─ Cookie policy
+   └─ Contact info
+
+3. **Disclaimer Page**
+   ├─ For research use only
+   ├─ Not evaluated by FDA/regulatory bodies
+   ├─ Not for human use
+   ├─ Liability waiver
+   └─ International variations
+
+4. **FAQ Page**
+   ├─ How to order
+   ├─ Shipping info
+   ├─ Return policy
+   ├─ Product info
+   └─ Safety warnings
+
+CONSULT WITH LAWYER in your jurisdiction regarding:
+- Product liability
+- Age verification requirements
+- Export regulations
+- Payment processor compliance
+- Local advertising laws
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 12: QUICK REFERENCE - HOSTING PROVIDERS BY LOCATION
+═══════════════════════════════════════════════════════════════════════════════
+
+**FOR ENGLISH SITE (USA-banned countries):**
+
+CANADA:
+✅ Cloudflare Pages (Global)
+✅ Hover (Domain registrar from Canada)
+✅ Namecheap (US-based, but works everywhere)
+
+IRELAND:
+✅ Cloudflare Pages (Global)
+✅ GoDaddy (Europe option)
+✅ IONOS (Germany-based)
+
+UK:
+✅ Cloudflare Pages (Global)
+✅ Bytehost (UK-based)
+✅ UK2.net (UK-based)
+
+SINGAPORE:
+✅ Cloudflare Pages (Global)
+✅ Exabytes (Singapore-based)
+✅ Hostinger (Global, Singapore servers)
+
+**FOR SPANISH SITE (Mexico-banned countries):**
+
+COLOMBIA:
+✅ Cloudflare Pages (Global)
+✅ NIC.co registry
+✅ Namecheap
+
+ARGENTINA:
+✅ Cloudflare Pages (Global)
+✅ NIC.ar registry
+✅ IONOS Argentina
+
+SPAIN:
+✅ Cloudflare Pages (Global)
+✅ RedIRIS (Spain academic)
+✅ Acens (Spain hosting)
+
+COSTA RICA:
+✅ Cloudflare Pages (Global)
+✅ Registro Nacional (local registry)
+✅ Hosting.com
+
+═══════════════════════════════════════════════════════════════════════════════
+
+PART 13: COST SUMMARY
+═══════════════════════════════════════════════════════════════════════════════
+
+**ONE-TIME COSTS:**
+├─ Domain registration (2 × .ca/.co): $20
+├─ SSL certificate: FREE (Cloudflare)
+├─ Payment processor setup: FREE
+└─ **Total: $20**
+
+**MONTHLY COSTS:**
+├─ Hosting (Cloudflare Pages): FREE
+├─ Email (Cloudflare routing): FREE
+├─ Payment processing (2.9% + $0.30): Variable
+├─ Optional: Advanced CDN ($20/month)
+└─ **Basic Total: FREE - Advanced: $20/month**
+
+**YEARLY COSTS:**
+├─ Domain renewal (2 domains): $20
+├─ Hosting: FREE
+├─ Payment processing (typical 5% of revenue): Variable
+├─ Optional Analytics: FREE
+└─ **Total: $20 + payment fees**
+
+**EXAMPLE REVENUE SCENARIO:**
+If you make 10 sales/month at $160 average:
+├─ Monthly revenue: $1,600
+├─ Stripe fees (2.9%): -$46
+├─ Hosting: FREE
+├─ Domain: ~$2/month allocation
+└─ **Net monthly: ~$1,552**
+
+═══════════════════════════════════════════════════════════════════════════════
+
+FINAL CHECKLIST - BEFORE GOING LIVE
+═══════════════════════════════════════════════════════════════════════════════
+
+☐ English domain registered (NOT USA)
+☐ Spanish domain registered (NOT Mexico)
+☐ Both hosted on Cloudflare Pages or alternative
+☐ Both have HTTPS/SSL certificates
+☐ Homepage loads correctly
+☐ All 16 products display
+☐ Product modals work
+☐ Lab certificates link properly
+☐ Cart system functional
+☐ Checkout form works
+☐ Coupon codes apply correctly
+☐ Mobile responsive design works
+☐ No broken links
+☐ No console errors
+☐ Images load properly
+☐ Site loads fast (<3 seconds)
+☐ Payment system ready (or form-based)
+☐ Contact info updated
+☐ Terms of Service added
+☐ Privacy Policy added
+☐ Disclaimer added
+☐ Google Analytics added
+☐ All team members trained
+☐ Customer support plan ready
+☐ Social media templates prepared
+
+═══════════════════════════════════════════════════════════════════════════════
+
+SUPPORT & NEXT STEPS
+═══════════════════════════════════════════════════════════════════════════════
+
+Questions about:
+1. Hosting? Contact Cloudflare support (24/7)
+2. Domains? Contact your registrar
+3. Payment? Contact Stripe/payment provider
+4. Technical? Review HTML files for issues
+
+Need to add:
+- Terms of Service page
+- Privacy Policy page
+- Disclaimer page
+- FAQ page
+- Additional lab certificates
+- Email integration
+- Analytics integration
+- Payment gateway integration
+
+═══════════════════════════════════════════════════════════════════════════════
+Document prepared: April 29, 2026
+VITALIX Mexico - Premium Research Peptides
+Complete Deployment Guide
+═══════════════════════════════════════════════════════════════════════════════

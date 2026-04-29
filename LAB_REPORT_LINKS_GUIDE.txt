@@ -1,0 +1,120 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    VITALIX LAB REPORT LINKS - IMPLEMENTATION GUIDE
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ WHAT HAS BEEN ADDED:
+
+1. LAB REPORT IMAGES (Certificate of Analysis)
+   ├─ COA_TR30_Tirzepatide_Certificate.jpg (T-Tide R-2)
+   ├─ COA_SM30_Semaglutide_Certificate.jpg (S-Tide R-1)
+   └─ COA_RT20_Retatrutide_Certificate.jpg (R-Tide R-3)
+
+2. CLICKABLE "VIEW LAB REPORT" BUTTONS
+   ├─ English: "📄 View Full Lab Report"
+   └─ Spanish: "📄 Ver Reporte Completo"
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🔗 HOW IT WORKS:
+
+When a customer views a product and clicks on "View Full Lab Report" button:
+✅ Opens the Certificate of Analysis image in a new tab/window
+✅ Shows the official laboratory test results
+✅ Displays all quality metrics (Purity, Assay, Water content, etc.)
+✅ Includes lot numbers and manufacturing dates
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 PRODUCTS WITH LAB REPORTS LINKED:
+
+1. T-TIDE R-2 (Tirzepatida)
+   ├─ Button: "View Full Lab Report" / "Ver Reporte Completo"
+   ├─ Certificate: COA_TR30_Tirzepatide_Certificate.jpg
+   ├─ Purity: 99.20%
+   ├─ Assay: 30.6 mg/vial
+   └─ Lot: TR30-20260122-TR20260123
+
+2. S-TIDE R-1 (Semaglutida)
+   ├─ Button: "View Full Lab Report" / "Ver Reporte Completo"
+   ├─ Certificate: COA_SM30_Semaglutide_Certificate.jpg
+   ├─ Purity: 99.67%
+   ├─ Assay: 31.2 mg/vial
+   └─ Lot: SM30-20260124-SM20260126
+
+3. R-TIDE R-3 (Retatrutida)
+   ├─ Button: "View Full Lab Report" / "Ver Reporte Completo"
+   ├─ Certificate: COA_RT20_Retatrutide_Certificate.jpg
+   ├─ Purity: 99.48%
+   ├─ Assay: 21.7 mg/vial
+   └─ Lot: RT20-20260112-RT20260113
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🌐 BOTH SITES UPDATED:
+
+✅ VITALIX_Complete.html (English)
+   - Button text: "📄 View Full Lab Report"
+   - Links to certificate images
+   - All three products have lab report links
+
+✅ VITALIX_Espanol.html (Spanish)
+   - Button text: "📄 Ver Reporte Completo"
+   - Links to certificate images
+   - All three products have lab report links
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📁 FILE STRUCTURE:
+
+/outputs/
+├── VITALIX_Complete.html ........................ English Website
+├── VITALIX_Espanol.html ......................... Spanish Website
+├── COA_TR30_Tirzepatide_Certificate.jpg ........ Tirzepatide Lab Report
+├── COA_SM30_Semaglutide_Certificate.jpg ........ Semaglutide Lab Report
+└── COA_RT20_Retatrutide_Certificate.jpg ........ Retatrutide Lab Report
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 USER EXPERIENCE:
+
+1. Customer visits product page
+2. Clicks on product "View More" button
+3. Product modal opens showing:
+   - Product name and emoji
+   - Price
+   - Benefits list
+   - Dosage selector (if applicable)
+   - HPLC CERTIFICATE SPECIFICATIONS section with:
+     • Purity percentage
+     • Assay results
+     • Water content
+     • Endotoxin levels
+     • Lot number
+     • Storage instructions
+     ➜ GREEN BUTTON: "View Full Lab Report" / "Ver Reporte Completo"
+4. Clicking the button opens the official lab certificate in new tab
+5. Customer can verify all quality metrics
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✨ BENEFITS:
+
+✓ Full transparency - Customers can verify quality
+✓ Professional credibility - Shows lab-tested products
+✓ Legal compliance - Documents research specifications
+✓ Customer trust - Easy access to certificates
+✓ Bilingual support - English and Spanish available
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 DEPLOYMENT:
+
+To deploy:
+1. Upload VITALIX_Complete.html (English website)
+2. Upload VITALIX_Espanol.html (Spanish website)
+3. Upload all three COA JPG files to same directory
+4. Ensure all files are in the same folder structure
+
+The links will automatically work when users click "View Full Lab Report" button!
+
+═══════════════════════════════════════════════════════════════════════════════
