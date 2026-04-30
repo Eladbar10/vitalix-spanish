@@ -335,7 +335,7 @@
             'PEPTIDOS25': 25,
             'LEALTAD30': 30,
             'ARIELLA10': 10,
-            'SERGIO5' : 5
+            'SERGIO5': 5
         };
 
         const productDetails = {
@@ -647,6 +647,28 @@
                         </div>
 
                         <div class="mb-6">
+                            <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Método de Pago</h3>
+                            <div class="space-y-3">
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-green-50" style="border-color: #1B6B3D;">
+                                    <input type="radio" name="paymentMethod" value="creditCard" checked onchange="updatePaymentDisplay()" class="w-5 h-5">
+                                    <span class="flex-1">
+                                        <span class="font-bold">💳 Tarjeta de Crédito/Débito</span>
+                                        <span class="block text-xs text-gray-600 mt-1">Visa, Mastercard, American Express</span>
+                                    </span>
+                                </label>
+                                <label class="flex items-center gap-3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
+                                    <input type="radio" name="paymentMethod" value="bankTransfer" onchange="updatePaymentDisplay()" class="w-5 h-5">
+                                    <span class="flex-1">
+                                        <span class="font-bold">🏦 Transferencia Bancaria</span>
+                                        <span class="block text-xs text-gray-600 mt-1">Recibe los detalles por correo</span>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="paymentDetails" class="mb-6"></div>
+
+                        <div class="mb-6">
                             <label class="flex items-center gap-3 cursor-pointer">
                                 <input type="checkbox" id="agreeTerms" required class="w-5 h-5">
                                 <span class="text-sm">Acepto los Términos y Condiciones y la Política de Privacidad</span>
@@ -663,6 +685,7 @@
 
             document.getElementById('checkoutBody').innerHTML = html;
             document.getElementById('checkoutModal').classList.add('show');
+            updatePaymentDisplay(); // עדכן את תצוגת התשלום
         }
 
         function applyCouponCheckout() {
@@ -698,6 +721,50 @@
             document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString('es-MX')}`;
         }
 
+        function updatePaymentDisplay() {
+            const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const paymentDetails = document.getElementById('paymentDetails');
+            
+            if (method === 'bankTransfer') {
+                paymentDetails.innerHTML = `
+                    <div class="p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
+                        <h4 class="font-bold text-lg mb-4" style="color: #1B6B3D;">📋 Detalles de Transferencia Bancaria</h4>
+                        <div class="space-y-3 bg-white p-3 rounded border-l-4" style="border-color: #1B6B3D;">
+                            <div>
+                                <span class="text-sm text-gray-600 font-bold">Beneficiario:</span>
+                                <span class="block font-bold text-lg">VITALIX MEXICO</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600 font-bold">Cuenta CLABE:</span>
+                                <span class="block font-mono text-lg font-bold">684180253001000985</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-600 font-bold">Banco:</span>
+                                <span class="block font-bold text-lg">OPM / TRANSFER</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
+                            <p class="text-sm text-gray-700">
+                                <strong>⚠️ Importante:</strong> Recibirás un correo con estos detalles y tu número de referencia. Por favor, usa el número de referencia en la transferencia.
+                            </p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                paymentDetails.innerHTML = `
+                    <div class="p-4 bg-green-50 border-2 border-green-300 rounded-lg">
+                        <h4 class="font-bold text-lg mb-4" style="color: #1B6B3D;">💳 Pago con Tarjeta</h4>
+                        <p class="text-sm text-gray-700 mb-4">Serás redirigido de forma segura al procesador de pagos de Stripe para completar tu pago.</p>
+                        <div class="flex gap-2 justify-start">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded">VISA</span>
+                            <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-bold rounded">MASTERCARD</span>
+                            <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded">AMEX</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
         function processPayment() {
             const form = document.getElementById('checkoutForm');
             if (!form.checkValidity()) {
@@ -714,37 +781,152 @@
             const state = document.getElementById('state').value;
             const postal = document.getElementById('postal').value;
             const country = document.getElementById('country').value;
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
             let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
             let discount = Math.floor((subtotal * discountPercent) / 100);
             let total = subtotal - discount + currentShipping;
 
-            const orderSummary = `
-CONFIRMACIÓN DE ORDEN
-====================
-Nombre: ${firstName} ${lastName}
-Correo: ${email}
-Teléfono: ${phone}
-Dirección: ${address}, ${city}, ${state} ${postal}, ${country}
+            // Generar número de referencia único
+            const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-Artículos:
-${cart.map(item => `  - ${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n')}
+            const orderData = {
+                referenceNumber: referenceNumber,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                address: address,
+                city: city,
+                state: state,
+                postal: postal,
+                country: country,
+                items: cart,
+                subtotal: subtotal,
+                discount: discount,
+                discountPercent: discountPercent,
+                shipping: currentShipping,
+                total: total,
+                paymentMethod: paymentMethod,
+                orderDate: new Date().toLocaleString('es-MX')
+            };
 
-Subtotal: $${subtotal.toLocaleString('es-MX')}
-Envío: $${currentShipping.toLocaleString('es-MX')}
-${discountPercent > 0 ? `Descuento (${discountPercent}%): -$${discount.toLocaleString('es-MX')}` : ''}
-Total: $${total.toLocaleString('es-MX')}
+            if (paymentMethod === 'bankTransfer') {
+                processBankTransfer(orderData);
+            } else {
+                processStripePayment(orderData);
+            }
+        }
 
-Tu orden será procesada en breve. Recibirás un correo de confirmación en ${email}.
+        function processBankTransfer(orderData) {
+            const emailBody = `
+VITALIX MÉXICO - CONFIRMACIÓN DE ORDEN
+======================================
+
+Hola ${orderData.firstName} ${orderData.lastName},
+
+Gracias por tu compra en VITALIX. Tu orden ha sido recibida y está pendiente de confirmación de pago.
+
+NÚMERO DE REFERENCIA: ${orderData.referenceNumber}
+Fecha de Orden: ${orderData.orderDate}
+
+--- DETALLES DE TU ORDEN ---
+${orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n')}
+
+Subtotal: $${orderData.subtotal.toLocaleString('es-MX')}
+Envío: $${orderData.shipping.toLocaleString('es-MX')}
+${orderData.discountPercent > 0 ? `Descuento (${orderData.discountPercent}%): -$${orderData.discount.toLocaleString('es-MX')}` : ''}
+TOTAL A PAGAR: $${orderData.total.toLocaleString('es-MX')}
+
+--- INFORMACIÓN DE ENVÍO ---
+${orderData.firstName} ${orderData.lastName}
+${orderData.address}
+${orderData.city}, ${orderData.state} ${orderData.postal}
+${orderData.country}
+
+--- DETALLES PARA TRANSFERENCIA BANCARIA ---
+Para completar tu pago, realiza una transferencia bancaria con los siguientes datos:
+
+Beneficiario: VITALIX MEXICO
+Cuenta CLABE: 684180253001000985
+Banco: OPM / TRANSFER
+
+⚠️ IMPORTANTE: 
+- Asegúrate de incluir el número de referencia (${orderData.referenceNumber}) en el concepto de la transferencia
+- Tu orden será procesada una vez que confirmemos el pago
+- Plazo: Realiza la transferencia dentro de 48 horas
+
+Contacto: ${orderData.email}
+Teléfono: ${orderData.phone}
+
+Una vez que recibamos tu pago, procederemos inmediatamente con el envío de tu orden.
+
+¡Gracias por tu compra!
+VITALIX MÉXICO
             `;
 
-            alert(orderSummary + '\n\nRedirigiendo a la puerta de pago...');
-            
-            closeCheckout();
+            // Mostrar confirmación
+            alert(`✓ ORDEN CREADA\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nRecibe un correo con los detalles de la transferencia bancaria.\n\nDetalles:\nCuenta CLABE: 684180253001000985\nBanco: OPM / TRANSFER\n\nTotal a pagar: $${orderData.total.toLocaleString('es-MX')}`);
+
+            // Aquí enviar correo (necesitarás un backend)
+            // Por ahora, guardaremos en localStorage como demostración
+            saveOrderToLocalStorage(orderData);
+
+            // Limpiar carrito
             cart = [];
             discountPercent = 0;
+            currentShipping = 200;
             updateCart();
+            closeCheckout();
             toggleCart();
+        }
+
+        function processStripePayment(orderData) {
+            // Para Stripe, necesitarías redirigir a tu servidor
+            // Este es un ejemplo de cómo sería
+            
+            const stripeForm = document.createElement('form');
+            stripeForm.method = 'POST';
+            stripeForm.action = '/api/create-payment-intent'; // Tu endpoint backend
+
+            const inputs = [
+                { name: 'referenceNumber', value: orderData.referenceNumber },
+                { name: 'email', value: orderData.email },
+                { name: 'total', value: orderData.total },
+                { name: 'cartData', value: JSON.stringify(orderData) }
+            ];
+
+            inputs.forEach(input => {
+                const field = document.createElement('input');
+                field.type = 'hidden';
+                field.name = input.name;
+                field.value = input.value;
+                stripeForm.appendChild(field);
+            });
+
+            // Por ahora, mostrar un alert indicando que se necesita integración con Stripe
+            alert(`✓ ORDEN CASI COMPLETADA\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nSerás redirigido al pago seguro con Stripe...\n\nTotal: $${orderData.total.toLocaleString('es-MX')}`);
+
+            // Guardar orden
+            saveOrderToLocalStorage(orderData);
+
+            // Limpiar carrito
+            cart = [];
+            discountPercent = 0;
+            currentShipping = 200;
+            updateCart();
+            closeCheckout();
+            toggleCart();
+
+            // Descomentar cuando Stripe esté configurado:
+            // document.body.appendChild(stripeForm);
+            // stripeForm.submit();
+        }
+
+        function saveOrderToLocalStorage(orderData) {
+            const existingOrders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
+            existingOrders.push(orderData);
+            localStorage.setItem('vitalixOrders', JSON.stringify(existingOrders));
         }
 
         function closeCheckout() {
