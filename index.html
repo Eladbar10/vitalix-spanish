@@ -331,28 +331,6 @@
         const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
         const OWNER_EMAIL = 'eladbar@gmail.com'; // החלף בדוא"ל שלך
         
-        // ===== Address Autocomplete - OpenStreetMap =====
-        function updateAddressSuggestions(value) {
-            if (value.length < 3) return;
-            
-            const datalist = document.getElementById('addressSuggestions');
-            if (!datalist) return;
-            
-            const query = value + ', México';
-            
-            fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=mx`)
-                .then(response => response.json())
-                .then(data => {
-                    datalist.innerHTML = '';
-                    data.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = item.display_name;
-                        datalist.appendChild(option);
-                    });
-                })
-                .catch(error => console.log('Address search error:', error));
-        }
-        
         let cart = [];
         let currentShipping = 200;
         let discountPercent = 0;
@@ -650,8 +628,7 @@
 
                         <div class="mb-4">
                             <label class="block text-sm font-bold mb-2">Dirección *</label>
-                            <input type="text" id="address" list="addressSuggestions" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Calle Principal 123, Ciudad de México">
-                            <datalist id="addressSuggestions"></datalist>
+                            <input type="text" id="address" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Calle Principal 123">
                         </div>
 
                         <div class="grid grid-cols-2 gap-4 mb-4">
@@ -716,16 +693,6 @@
             document.getElementById('checkoutBody').innerHTML = html;
             document.getElementById('checkoutModal').classList.add('show');
             updatePaymentDisplay(); // עדכן את תצוגת התשלום
-            
-            // Activate Address Autocomplete
-            setTimeout(() => {
-                const addressInput = document.getElementById('address');
-                if (addressInput) {
-                    addressInput.addEventListener('input', (e) => {
-                        updateAddressSuggestions(e.target.value);
-                    });
-                }
-            }, 100);
         }
 
         function applyCouponCheckout() {
