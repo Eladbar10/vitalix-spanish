@@ -467,23 +467,28 @@
 
         function addProductToCart(productKey) {
             const product = productDetails[productKey];
-            const dosage = product.dosages ? document.getElementById('dosageSelect').value : null;
-            const research = document.getElementById('research').checked;
-            const legal = document.getElementById('legal').checked;
-            const responsibility = document.getElementById('responsibility').checked;
-            const disclaimerAccept = document.getElementById('disclaimerAccept').checked;
+            const dosageSelect = document.getElementById('dosageSelect');
+            const dosage = dosageSelect ? dosageSelect.value : null;
+            const research = document.getElementById('research');
+            const legal = document.getElementById('legal');
+            const responsibility = document.getElementById('responsibility');
+            const disclaimerAccept = document.getElementById('disclaimerAccept');
 
-            if (product.dosages && !dosage) {
+            // בדוק אם יש דוזה לבחור
+            if (dosageSelect && dosage === '') {
                 alert('Por favor selecciona una dosis');
                 return;
             }
 
-            if (!research || !legal || !responsibility) {
-                alert('Por favor confirma todos los términos de investigación');
-                return;
+            // בדוק checkboxes - אם הם לא קיימים, זה בסדר (כמו T-Tide ו-S-Tide)
+            if (research && legal && responsibility) {
+                if (!research.checked || !legal.checked || !responsibility.checked) {
+                    alert('Por favor confirma todos los términos de investigación');
+                    return;
+                }
             }
 
-            if (!disclaimerAccept) {
+            if (disclaimerAccept && !disclaimerAccept.checked) {
                 alert('Debes aceptar el descargo de responsabilidad');
                 return;
             }
