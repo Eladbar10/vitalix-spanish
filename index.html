@@ -7,6 +7,9 @@
     <title>VITALIX - Péptidos Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <style>
         :root {
             --primary-green: #1B6B3D;
@@ -693,6 +696,9 @@
             document.getElementById('checkoutBody').innerHTML = html;
             document.getElementById('checkoutModal').classList.add('show');
             updatePaymentDisplay(); // עדכן את תצוגת התשלום
+            
+            // Activate Address Autocomplete
+            initAddressAutocomplete();
         }
 
         function applyCouponCheckout() {
@@ -726,6 +732,61 @@
             }
             
             document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString('es-MX')}`;
+        }
+
+        function initAddressAutocomplete() {
+            const addressInput = document.getElementById('address');
+            
+            if (!addressInput) return;
+            
+            $(addressInput).autocomplete({
+                source: function(request, response) {
+                    const searchTerm = request.term;
+                    
+                    // Búsqueda con Nominatim (OpenStreetMap)
+                    $.ajax({
+                        url: 'https://nominatim.openstreetmap.org/search',
+                        data: {
+                            q: searchTerm + ', México',
+                            format: 'json',
+                            limit: 10,
+                            countrycodes: 'mx'
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            const suggestions = data.map(item => ({
+                                label: item.display_name,
+                                value: item.display_name,
+                                lat: item.lat,
+                                lon: item.lon,
+                                address: item.address || {}
+                            }));
+                            response(suggestions);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                minLength: 3,
+                select: function(event, ui) {
+                    const address = ui.item;
+                    
+                    // Llenar campos con información de la dirección
+                    document.getElementById('address').value = address.label;
+                    
+                    // Intentar extraer ciudad, estado y código postal
+                    const parts = address.label.split(',');
+                    if (parts.length > 0) {
+                        document.getElementById('city').value = parts[0].trim();
+                    }
+                    if (parts.length > 1) {
+                        document.getElementById('state').value = parts[1].trim();
+                    }
+                    
+                    return false;
+                }
+            });
         }
 
         function updatePaymentDisplay() {
