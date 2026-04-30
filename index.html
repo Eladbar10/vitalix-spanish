@@ -693,9 +693,6 @@
             document.getElementById('checkoutBody').innerHTML = html;
             document.getElementById('checkoutModal').classList.add('show');
             updatePaymentDisplay(); // עדכן את תצוגת התשלום
-            
-            // Activate Address Autocomplete
-            initAddressAutocomplete();
         }
 
         function applyCouponCheckout() {
@@ -729,76 +726,6 @@
             }
             
             document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString('es-MX')}`;
-        }
-
-        function initAddressAutocomplete() {
-            // Autocomplete פשוט בלי jQuery - עובד טוב!
-            const addressInput = document.getElementById('address');
-            
-            if (!addressInput) return;
-            
-            let suggestionsList = null;
-            
-            addressInput.addEventListener('input', function() {
-                const searchTerm = this.value.trim();
-                
-                if (searchTerm.length < 3) {
-                    if (suggestionsList) suggestionsList.remove();
-                    return;
-                }
-                
-                // חפש בNominatim (OpenStreetMap)
-                fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(searchTerm + ', México')}&format=json&limit=8&countrycodes=mx`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (suggestionsList) suggestionsList.remove();
-                        
-                        if (data.length === 0) return;
-                        
-                        suggestionsList = document.createElement('div');
-                        suggestionsList.className = 'bg-white border-2 border-gray-300 rounded mt-1 shadow-lg z-50 absolute w-80 max-h-40 overflow-y-auto';
-                        suggestionsList.style.position = 'absolute';
-                        suggestionsList.style.top = (addressInput.offsetTop + addressInput.offsetHeight) + 'px';
-                        suggestionsList.style.left = addressInput.offsetLeft + 'px';
-                        
-                        data.forEach(item => {
-                            const option = document.createElement('div');
-                            option.className = 'p-2 hover:bg-green-50 cursor-pointer text-sm border-b';
-                            option.textContent = item.display_name;
-                            option.style.borderColor = '#1B6B3D';
-                            
-                            option.addEventListener('click', function() {
-                                addressInput.value = item.display_name;
-                                
-                                // מלא את שדות העיר והמדינה
-                                const parts = item.display_name.split(',');
-                                if (parts.length > 0) {
-                                    const cityField = document.getElementById('city');
-                                    if (cityField) cityField.value = parts[0].trim();
-                                }
-                                if (parts.length > 1) {
-                                    const stateField = document.getElementById('state');
-                                    if (stateField) stateField.value = parts[1].trim();
-                                }
-                                
-                                suggestionsList.remove();
-                            });
-                            
-                            suggestionsList.appendChild(option);
-                        });
-                        
-                        addressInput.parentElement.appendChild(suggestionsList);
-                    })
-                    .catch(error => console.log('Geocoding error:', error));
-            });
-            
-            // סגור את ההצעות כשלוחצים בחוץ
-            document.addEventListener('click', function(e) {
-                if (e.target !== addressInput && suggestionsList) {
-                    suggestionsList.remove();
-                    suggestionsList = null;
-                }
-            });
         }
 
         function updatePaymentDisplay() {
