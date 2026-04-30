@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VITALIX - Péptidos Premium</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
     <style>
         :root {
             --primary-green: #1B6B3D;
@@ -324,6 +325,12 @@
     </footer>
 
     <script>
+        // ===== EmailJS Configuration =====
+        emailjs.init('sxTuTwtP01OBzlCYB'); // Public Key
+        const EMAILJS_SERVICE_ID = 'service_34xgp3y';
+        const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
+        const OWNER_EMAIL = 'eladbar@gmail.com'; // החלף בדוא"ל שלך
+        
         let cart = [];
         let currentShipping = 200;
         let discountPercent = 0;
@@ -819,66 +826,81 @@
         }
 
         function processBankTransfer(orderData) {
-            const emailBody = `
-VITALIX MÉXICO - CONFIRMACIÓN DE ORDEN
-======================================
+            // הכן את נתוני הדוא"ל
+            const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
+            
+            const emailData = {
+                to_email: orderData.email,
+                firstName: orderData.firstName,
+                lastName: orderData.lastName,
+                referenceNumber: orderData.referenceNumber,
+                orderDate: orderData.orderDate,
+                items: itemsList,
+                subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
+                shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
+                discount: orderData.discountPercent > 0 ? `-$${orderData.discount.toLocaleString('es-MX')} (${orderData.discountPercent}%)` : 'N/A',
+                total: '$' + orderData.total.toLocaleString('es-MX'),
+                address: orderData.address,
+                city: orderData.city,
+                state: orderData.state,
+                postal: orderData.postal,
+                country: orderData.country,
+                phone: orderData.phone
+            };
 
-Hola ${orderData.firstName} ${orderData.lastName},
-
-Gracias por tu compra en VITALIX. Tu orden ha sido recibida y está pendiente de confirmación de pago.
-
-NÚMERO DE REFERENCIA: ${orderData.referenceNumber}
-Fecha de Orden: ${orderData.orderDate}
-
---- DETALLES DE TU ORDEN ---
-${orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n')}
-
-Subtotal: $${orderData.subtotal.toLocaleString('es-MX')}
-Envío: $${orderData.shipping.toLocaleString('es-MX')}
-${orderData.discountPercent > 0 ? `Descuento (${orderData.discountPercent}%): -$${orderData.discount.toLocaleString('es-MX')}` : ''}
-TOTAL A PAGAR: $${orderData.total.toLocaleString('es-MX')}
-
---- INFORMACIÓN DE ENVÍO ---
-${orderData.firstName} ${orderData.lastName}
-${orderData.address}
-${orderData.city}, ${orderData.state} ${orderData.postal}
-${orderData.country}
-
---- DETALLES PARA TRANSFERENCIA BANCARIA ---
-Para completar tu pago, realiza una transferencia bancaria con los siguientes datos:
-
-Beneficiario: VITALIX MEXICO
-Cuenta CLABE: 684180253001000985
-Banco: OPM / TRANSFER
-
-⚠️ IMPORTANTE: 
-- Asegúrate de incluir el número de referencia (${orderData.referenceNumber}) en el concepto de la transferencia
-- Tu orden será procesada una vez que confirmemos el pago
-- Plazo: Realiza la transferencia dentro de 48 horas
-
-Contacto: ${orderData.email}
-Teléfono: ${orderData.phone}
-
-Una vez que recibamos tu pago, procederemos inmediatamente con el envío de tu orden.
-
-¡Gracias por tu compra!
-VITALIX MÉXICO
-            `;
-
-            // Mostrar confirmación
-            alert(`✓ ORDEN CREADA\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nRecibe un correo con los detalles de la transferencia bancaria.\n\nDetalles:\nCuenta CLABE: 684180253001000985\nBanco: OPM / TRANSFER\n\nTotal a pagar: $${orderData.total.toLocaleString('es-MX')}`);
-
-            // Aquí enviar correo (necesitarás un backend)
-            // Por ahora, guardaremos en localStorage como demostración
-            saveOrderToLocalStorage(orderData);
-
-            // Limpiar carrito
-            cart = [];
-            discountPercent = 0;
-            currentShipping = 200;
-            updateCart();
-            closeCheckout();
-            toggleCart();
+            // שלח דוא"ל ללקוח
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(() => {
+                    console.log('✓ Correo enviado al cliente');
+                    
+                    // שלח דוא"ל לבעלים
+                    sendOwnerNotification(orderData);
+                    
+                    // הצג הודעה לסיום
+                    alert(`✓ ORDEN CREADA CON ÉXITO\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nRecibe un correo con los detalles de la transferencia bancaria.\n\nDetalles:\nCuenta CLABE: 684180253001000985\nBanco: OPM / TRANSFER\n\nTotal a pagar: $${orderData.total.toLocaleString('es-MX')}`);
+                    
+                    // שמור בקובץ localStorage
+                    saveOrderToLocalStorage(orderData);
+                    
+                    // נקה את הסל
+                    cart = [];
+                    discountPercent = 0;
+                    currentShipping = 200;
+                    updateCart();
+                    closeCheckout();
+                    toggleCart();
+                })
+                .catch(error => {
+                    console.error('Error enviando correo:', error);
+                    alert('⚠️ Orden creada pero hubo un problema enviando el correo.\nNúmero de Referencia: ' + orderData.referenceNumber);
+                    
+                    // Aún así guardar la orden
+                    saveOrderToLocalStorage(orderData);
+                    cart = [];
+                    discountPercent = 0;
+                    currentShipping = 200;
+                    updateCart();
+                    closeCheckout();
+                    toggleCart();
+                });
+        }
+        
+        function sendOwnerNotification(orderData) {
+            const ownerEmailData = {
+                to_email: OWNER_EMAIL,
+                firstName: orderData.firstName,
+                lastName: orderData.lastName,
+                referenceNumber: orderData.referenceNumber,
+                email: orderData.email,
+                phone: orderData.phone,
+                total: '$' + orderData.total.toLocaleString('es-MX'),
+                items: orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join(', '),
+                address: `${orderData.address}, ${orderData.city}, ${orderData.state} ${orderData.postal}, ${orderData.country}`
+            };
+            
+            emailjs.send(EMAILJS_SERVICE_ID, 'owner_notification', ownerEmailData)
+                .then(() => console.log('✓ Notificación enviada al propietario'))
+                .catch(error => console.error('Error notificando al propietario:', error));
         }
 
         function processStripePayment(orderData) {
