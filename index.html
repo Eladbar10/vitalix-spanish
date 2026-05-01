@@ -329,7 +329,7 @@
         emailjs.init('sxTuTwtP01OBzlCYB'); // Public Key
         const EMAILJS_SERVICE_ID = 'service_34xgp3y';
         const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
-        const OWNER_EMAIL = 'Eladbarkan10@gmail.com'; // Owner email for notifications
+        const OWNER_EMAIL = 'Eladbarkan10@gmail.com'; // Owner email // החלף בדוא"ל שלך
         
         let cart = [];
         let currentShipping = 200;
@@ -366,15 +366,14 @@
         };
 
         function showProductDetail(productKey) {
-            console.log('🔍 DEBUG: showProductDetail called with:', productKey);
-            console.log('🔍 DEBUG: modal element:', document.getElementById('productModal'));
+            console.log('showProductDetail called with:', productKey);
             const product = productDetails[productKey];
             if (!product) {
-                console.error('❌ Product not found:', productKey);
-                alert('Product not found');
+                console.error('Product not found:', productKey);
+                alert('מוצר לא נמצא');
                 return;
             }
-            console.log('✓ Product found:', product.name);
+            console.log('Product found:', product.name);
             let dosageHtml = '';
             let packageInfo = '';
             
@@ -700,7 +699,7 @@
 
             document.getElementById('checkoutBody').innerHTML = html;
             document.getElementById('checkoutModal').classList.add('show');
-            updatePaymentDisplay(); // Update payment display
+            updatePaymentDisplay(); // עדכן את תצוגת התשלום
         }
 
         function applyCouponCheckout() {
@@ -834,7 +833,7 @@
         }
 
         function processBankTransfer(orderData) {
-            // Prepare email data
+            // הכן את נתוני הדוא"ל
             const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
             
             const emailData = {
@@ -856,21 +855,21 @@
                 phone: orderData.phone
             };
 
-            // Send email to customer
+            // שלח דוא"ל ללקוח
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
                 .then(() => {
                     console.log('✓ Correo enviado al cliente');
                     
-                    // Send owner notification
+                    // שלח דוא"ל לבעלים
                     sendOwnerNotification(orderData);
                     
-                    // Show success message
+                    // הצג הודעה לסיום
                     alert(`✓ ORDEN CREADA CON ÉXITO\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nRecibe un correo con los detalles de la transferencia bancaria.\n\nDetalles:\nCuenta CLABE: 684180253001000985\nBanco: OPM / TRANSFER\n\nTotal a pagar: $${orderData.total.toLocaleString('es-MX')}`);
                     
-                    // Save order to localStorage
+                    // שמור בקובץ localStorage
                     saveOrderToLocalStorage(orderData);
                     
-                    // Clear cart
+                    // נקה את הסל
                     cart = [];
                     discountPercent = 0;
                     currentShipping = 200;
