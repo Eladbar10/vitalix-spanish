@@ -329,8 +329,11 @@
         // ===== EmailJS Configuration =====
         try {
             if (typeof emailjs !== 'undefined') {
-                emailjs.init('sxTuTwtP01OBzlCYB'); // Public Key
-                console.log('EmailJS initialized');
+                // EmailJS V4 syntax
+                emailjs.init({
+                    publicKey: 'sxTuTwtP01OBzlCYB'
+                });
+                console.log('✓ EmailJS initialized (V4)');
             } else {
                 console.warn('EmailJS not loaded yet');
             }
@@ -929,9 +932,14 @@
 
                 // Try to send emails - but complete order regardless
                 if (typeof emailjs !== 'undefined' && emailjs.send) {
+                    console.log('=== Sending CUSTOMER email ===');
+                    console.log('Service ID:', EMAILJS_SERVICE_ID);
+                    console.log('Template ID:', EMAILJS_TEMPLATE_ID);
+                    console.log('Email data:', emailData);
+                    
                     emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
-                        .then(function() {
-                            console.log('✓ Customer email sent');
+                        .then(function(response) {
+                            console.log('✅ CUSTOMER email SENT:', response);
                             // Try to send owner notification
                             try {
                                 sendOwnerNotification(orderData);
@@ -941,7 +949,8 @@
                             completeOrder('success');
                         })
                         .catch(function(error) {
-                            console.error('Email error:', error);
+                            console.error('❌ CUSTOMER email FAILED:', error);
+                            console.error('Error details:', JSON.stringify(error));
                             // Still try owner notification
                             try {
                                 sendOwnerNotification(orderData);
@@ -962,6 +971,9 @@
         }
         
         function sendOwnerNotification(orderData) {
+            console.log('=== sendOwnerNotification START ===');
+            console.log('Sending to OWNER_EMAIL:', OWNER_EMAIL);
+            
             const ownerEmailData = {
                 to_email: OWNER_EMAIL,
                 firstName: orderData.firstName,
@@ -971,12 +983,23 @@
                 phone: orderData.phone,
                 total: '$' + orderData.total.toLocaleString('es-MX'),
                 items: orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join(', '),
-                address: `${orderData.address}, ${orderData.city}, ${orderData.state} ${orderData.postal}, ${orderData.country}`
+                address: `${orderData.address}, ${orderData.city}, ${orderData.state} ${orderData.postal}, ${orderData.country}`,
+                paymentMethod: orderData.paymentMethod === 'bankTransfer' ? 'Transferencia Bancaria' : 'Tarjeta',
+                orderDate: orderData.orderDate
             };
             
-            emailjs.send(EMAILJS_SERVICE_ID, 'owner_notification', ownerEmailData)
-                .then(() => console.log('✓ Notificación enviada al propietario'))
-                .catch(error => console.error('Error notificando al propietario:', error));
+            console.log('Owner email data:', ownerEmailData);
+            
+            return emailjs.send(EMAILJS_SERVICE_ID, 'owner_notification', ownerEmailData)
+                .then(function(response) {
+                    console.log('✅ Owner notification SENT:', response);
+                    return response;
+                })
+                .catch(function(error) {
+                    console.error('❌ Owner notification FAILED:', error);
+                    console.error('Error details:', JSON.stringify(error));
+                    throw error;
+                });
         }
 
         function processStripePayment(orderData) {
