@@ -387,7 +387,7 @@
             let dosageHtml = '';
             let packageInfo = '';
             
-            // For wellness products (first three), show only 3-month package
+            // For wellness products (first three), show 3-month package info
             if (['tirzepatida', 'semaglutida', 'rtide'].includes(productKey)) {
                 packageInfo = `
                     <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
@@ -395,7 +395,10 @@
                         <p class="text-sm text-gray-700 mt-2"><strong>⏰ Precio:</strong> El precio mostrado es para el paquete completo de 3 meses</p>
                     </div>
                 `;
-            } else if (product.dosages) {
+            }
+            
+            // Show dosage selector for all products that have dosages
+            if (product.dosages) {
                 dosageHtml = `
                     <div class="mb-6">
                         <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Selecciona Dosis:</h3>
@@ -484,12 +487,17 @@
 
         function addProductToCart(productKey) {
             const product = productDetails[productKey];
-            const dosage = product.dosages ? document.getElementById('dosageSelect').value : null;
+            
+            // Get dosage if the selector exists in DOM
+            const dosageSelectElement = document.getElementById('dosageSelect');
+            const dosage = dosageSelectElement ? dosageSelectElement.value : null;
+            
             const research = document.getElementById('research').checked;
             const legal = document.getElementById('legal').checked;
             const responsibility = document.getElementById('responsibility').checked;
             const disclaimerAccept = document.getElementById('disclaimerAccept').checked;
 
+            // Require dosage selection if product has dosages
             if (product.dosages && !dosage) {
                 alert('Por favor selecciona una dosis');
                 return;
