@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VITALIX - הזמנות שמורות</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { direction: rtl; font-family: Arial, sans-serif; background: #f5f5f5; }
+        .order-card { transition: all 0.3s; }
+        .order-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<nav class="bg-white border-b-4 shadow" style="border-color: #1B6B3D;">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center">
+        <h1 class="text-3xl font-bold" style="color: #1B6B3D;">🏥 VITALIX - ניהול הזמנות</h1>
+    </div>
+</nav>
+
+<div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold" style="color: #1B6B3D;">כל ההזמנות</h2>
+            <div class="flex gap-3">
+                <button onclick="exportOrders()" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">📥 הורד CSV</button>
+                <button onclick="clearAllOrders()" class="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700">🗑️ מחק הכל</button>
+                <button onclick="loadOrders()" class="px-4 py-2 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700">🔄 רענן</button>
+            </div>
+        </div>
+        <div id="stats" class="grid grid-cols-3 gap-4 mb-6">
+            <div class="bg-green-50 p-4 rounded-lg text-center">
+                <p class="text-sm text-gray-600">סך הזמנות</p>
+                <p class="text-3xl font-bold" style="color: #1B6B3D;" id="totalOrders">0</p>
+            </div>
+            <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                <p class="text-sm text-gray-600">סך מכירות</p>
+                <p class="text-3xl font-bold text-yellow-600" id="totalSales">$0</p>
+            </div>
+            <div class="bg-blue-50 p-4 rounded-lg text-center">
+                <p class="text-sm text-gray-600">העברה בנקאית</p>
+                <p class="text-3xl font-bold text-blue-600" id="bankTransfers">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="ordersList" class="space-y-4"></div>
+    
+    <div id="noOrders" class="hidden bg-white rounded-lg shadow-lg p-12 text-center">
+        <p class="text-6xl mb-4">📭</p>
+        <p class="text-xl text-gray-600">אין הזמנות עדיין</p>
+    </div>
+</div>
+
+<script>
+    function loadOrders() {
+        const orders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
+        
+        // Update stats
+        document.getElementById('totalOrders').textContent = orders.length;
+        const totalSales = orders.reduce((sum, o) => sum + (o.total || 0), 0);
+        document.getElementById('totalSales').textContent = '$' + totalSales.toLocaleString('es-MX');
+        const bankCount = orders.filter(o => o.paymentMethod === 'bankTransfer').length;
+        document.getElementById('bankTransfers').textContent = bankCount;
+        
+        const list = document.getElementById('ordersList');
+        const noOrders = document.getElementById('noOrders');
+        
+        if (orders.length === 0) {
+            list.innerHTML = '';
+            noOrders.classList.remove('hidden');
+            return;
+        }
+        
+        noOrders.classList.add('hidden');
+        
+        // Sort by newest first
+        orders.reverse();
+        
+        list.innerHTML = orders.map((order, idx) => {
+            const itemsHtml = order.items.map(item => 
+                `<li class="text-sm py-1">• ${item.name} - $${item.price.toLocaleString('es-MX')}</li>`
+            ).join('');
+            
+            const paymentLabel = order.paymentMethod === 'bankTransfer' ? 'העברה בנקאית' : 'כרטיס אשראי';
+            const paymentColor = order.paymentMethod === 'bankTransfer' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800';
+            
+            return `
+                <div class="order-card bg-white rounded-lg shadow-lg p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="text-sm text-gray-500">${order.orderDate}</p>
+                            <p class="font-mono text-xs text-gray-400">${order.referenceNumber}</p>
+                        </div>
+                        <span class="px-3 py-1 rounded-full text-sm font-bold ${paymentColor}">${paymentLabel}</span>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <h3 class="font-bold text-lg mb-2" style="color: #1B6B3D;">👤 לקוח</h3>
+                            <p><strong>שם:</strong> ${order.firstName} ${order.lastName}</p>
+                            <p><strong>אימייל:</strong> <a href="mailto:${order.email}" class="text-blue-600">${order.email}</a></p>
+                            <p><strong>טלפון:</strong> <a href="tel:${order.phone}" class="text-blue-600">${order.phone}</a></p>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-lg mb-2" style="color: #1B6B3D;">📍 כתובת</h3>
+                            <p>${order.address}</p>
+                            <p>${order.city}, ${order.state} ${order.postal}</p>
+                            <p>${order.country}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h3 class="font-bold text-lg mb-2" style="color: #1B6B3D;">📦 מוצרים</h3>
+                        <ul>${itemsHtml}</ul>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="flex justify-between"><span>סכום ביניים:</span><span>$${order.subtotal.toLocaleString('es-MX')}</span></div>
+                        ${order.discount > 0 ? `<div class="flex justify-between text-green-600"><span>הנחה (${order.discountPercent}%):</span><span>-$${order.discount.toLocaleString('es-MX')}</span></div>` : ''}
+                        <div class="flex justify-between"><span>משלוח:</span><span>$${order.shipping.toLocaleString('es-MX')}</span></div>
+                        <div class="flex justify-between text-xl font-bold mt-2 pt-2 border-t" style="color: #C41E3A;">
+                            <span>סה"כ:</span><span>$${order.total.toLocaleString('es-MX')} MXN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex gap-2">
+                        <button onclick="copyEmail('${order.email}')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">📋 העתק מייל</button>
+                        <button onclick="deleteOrder(${orders.length - 1 - idx})" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm">🗑️ מחק</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function copyEmail(email) {
+        navigator.clipboard.writeText(email);
+        alert('הועתק: ' + email);
+    }
+    
+    function deleteOrder(index) {
+        if (!confirm('האם למחוק הזמנה זו?')) return;
+        const orders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
+        orders.splice(index, 1);
+        localStorage.setItem('vitalixOrders', JSON.stringify(orders));
+        loadOrders();
+    }
+    
+    function clearAllOrders() {
+        if (!confirm('⚠️ האם למחוק את כל ההזמנות? פעולה זו אינה הפיכה!')) return;
+        if (!confirm('בטוח? כל ההזמנות יימחקו!')) return;
+        localStorage.removeItem('vitalixOrders');
+        loadOrders();
+    }
+    
+    function exportOrders() {
+        const orders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
+        if (orders.length === 0) {
+            alert('אין הזמנות לייצא');
+            return;
+        }
+        
+        let csv = 'Reference,Date,FirstName,LastName,Email,Phone,Address,City,State,Postal,Country,PaymentMethod,Subtotal,Discount,Shipping,Total,Items\n';
+        
+        orders.forEach(o => {
+            const items = o.items.map(i => `${i.name}:$${i.price}`).join(' | ');
+            csv += `"${o.referenceNumber}","${o.orderDate}","${o.firstName}","${o.lastName}","${o.email}","${o.phone}","${o.address}","${o.city}","${o.state}","${o.postal}","${o.country}","${o.paymentMethod}","${o.subtotal}","${o.discount}","${o.shipping}","${o.total}","${items}"\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'vitalix-orders-' + new Date().toISOString().split('T')[0] + '.csv';
+        link.click();
+    }
+    
+    loadOrders();
+</script>
+
+</body>
+</html>
