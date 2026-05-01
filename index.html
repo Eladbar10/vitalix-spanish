@@ -7,268 +7,199 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
     <style>
-        .product-card { 
-            cursor: pointer; 
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-        .product-card:hover { 
-            transform: translateY(-5px);
-        }
-        .modal { 
-            display: none !important;
-            position: fixed; 
-            z-index: 1000; 
-            left: 0; 
-            top: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0,0,0,0.5);
-            overflow-y: auto;
-        }
-        .modal.show { 
-            display: flex !important;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content { 
-            background-color: white; 
-            padding: 30px; 
-            border-radius: 10px; 
-            width: 90%; 
-            max-width: 700px;
-            position: relative;
-        }
+        .product-card { cursor: pointer; transition: all 0.3s ease; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal.show { display: block; }
+        .modal-content { background-color: white; margin: 20px auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 700px; }
     </style>
 </head>
-<body class="bg-gray-50">
+<body>
 
 <nav class="bg-white border-b-4 shadow" style="border-color: #1B6B3D;">
     <div class="max-w-6xl mx-auto px-4 py-6 text-center">
-        <h1 class="text-4xl font-bold" style="color: #1B6B3D;">🏥 VITALIX México - Péptidos Premium</h1>
+        <h1 class="text-4xl font-bold" style="color: #1B6B3D;">🏥 VITALIX México</h1>
     </div>
 </nav>
 
-<div class="max-w-6xl mx-auto px-4 py-16">
+<div class="max-w-6xl mx-auto px-4 py-12">
     <h2 class="text-4xl font-bold text-center mb-4" style="color: #1B6B3D;">Productos de Bienestar</h2>
     <p class="text-center text-gray-600 mb-12">Uso de Investigación | Certificado en Laboratorio | Testado HPLC</p>
 
     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="tirzepatida">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">💉</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">T-Tide R-2</h3>
-            <p class="text-gray-600 mb-4">Control de Peso y Metabólico</p>
+            <p class="text-gray-600 mb-4">Control de Peso</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$14,999 MXN</p>
-            <p class="text-xs text-gray-500">Paquete de 3 Meses →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="semaglutida">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">💉</div>
-            <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">S-Tide R-1 ⭐</h3>
+            <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">S-Tide R-1</h3>
             <p class="text-gray-600 mb-4">Inyectable Semanal</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$12,999 MXN</p>
-            <p class="text-xs text-gray-500">Promoción especial →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="rtide">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🎯</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">R-Tide R-3</h3>
             <p class="text-gray-600 mb-4">Péptido Premium</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$16,999 MXN</p>
-            <p class="text-xs text-gray-500">3 Meses →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="aod9604">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🔥</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">AOD-9604</h3>
             <p class="text-gray-600 mb-4">Quema de Grasa</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,451 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="bpc157">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🩹</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">BPC-157</h3>
-            <p class="text-gray-600 mb-4">Reparación de Tejidos</p>
+            <p class="text-gray-600 mb-4">Reparación Tejidos</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,104 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="cjc1295">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">💪</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">CJC-1295</h3>
-            <p class="text-gray-600 mb-4">Hormona de Crecimiento</p>
+            <p class="text-gray-600 mb-4">Hormona Crecimiento</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,626 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="ghkcu">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">✨</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">GHK-CU</h3>
             <p class="text-gray-600 mb-4">Anti-Envejecimiento</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,104 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="hghfrag">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🔥</div>
-            <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">HGH Fragment 176-191</h3>
-            <p class="text-gray-600 mb-4">Pérdida de Grasa</p>
+            <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">HGH Fragment</h3>
+            <p class="text-gray-600 mb-4">Pérdida Grasa</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,104 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="igf1lr3">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🦾</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">IGF-1 LR3</h3>
-            <p class="text-gray-600 mb-4">Factor de Crecimiento</p>
+            <p class="text-gray-600 mb-4">Factor Crecimiento</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,626 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="ipamorelin">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🚀</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">Ipamorelin</h3>
-            <p class="text-gray-600 mb-4">Secretagogo de GH</p>
+            <p class="text-gray-600 mb-4">Secretagogo GH</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,798 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="motsc">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">⚡</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">MOTS-C</h3>
-            <p class="text-gray-600 mb-4">Activador Mitocondrial</p>
+            <p class="text-gray-600 mb-4">Mitocondrial</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,626 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="nadpep">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🧬</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">NAD+ 1000</h3>
-            <p class="text-gray-600 mb-4">Reparación de ADN</p>
+            <p class="text-gray-600 mb-4">Reparación ADN</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,798 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="retatrutide">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🎯</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">Retatrutide</h3>
             <p class="text-gray-600 mb-4">Triple Agonista</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,275 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="tb500">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🩸</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">TB-500</h3>
             <p class="text-gray-600 mb-4">Regenerador</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$3,104 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="tesamorelin">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🔥</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">Tesamorelin</h3>
             <p class="text-gray-600 mb-4">Grasa Visceral</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$2,585 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
 
-        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="melanotan2">
+        <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center">
             <div class="text-5xl mb-3">🌞</div>
             <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">Melanotan II</h3>
             <p class="text-gray-600 mb-4">Bronceado</p>
             <p class="text-3xl font-bold mb-2" style="color: #C41E3A;">$2,780 MXN</p>
-            <p class="text-xs text-gray-500">Ver detalles →</p>
         </div>
     </div>
 </div>
 
 <div id="productModal" class="modal">
-    <div class="modal-content">
-        <button id="closeBtn" class="absolute top-4 right-4 text-2xl font-bold" style="color: #1B6B3D;">&times;</button>
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <button onclick="closeModal()" style="float:right; font-size:28px; cursor:pointer; border:none; background:none; color:#1B6B3D;">&times;</button>
         <div id="modalBody"></div>
     </div>
 </div>
 
 <script>
+    emailjs.init('sxTuTwtP01OBzlCYB');
+    const OWNER_EMAIL = 'Eladbarkan10@gmail.com';
+
     const products = {
-        tirzepatida: { name: 'T-Tide R-2', price: 14999, emoji: '💉', description: 'Control de Peso y Metabólico', benefits: ['Control de apetito', 'Pérdida de peso', 'Gestión de glucosa'], dosages: ['2.5mg', '5mg', '7.5mg', '10mg'] },
-        semaglutida: { name: 'S-Tide R-1', price: 12999, emoji: '💉', description: 'Inyectable Semanal', benefits: ['Reducción de peso', 'Control de glucosa', 'Efecto duradero'], dosages: ['0.25mg', '0.5mg', '1mg', '2mg'] },
-        rtide: { name: 'R-Tide R-3', price: 16999, emoji: '🎯', description: 'Péptido Premium', benefits: ['Regeneración celular', 'Recuperación acelerada', 'Mejora del rendimiento'] },
-        aod9604: { name: 'AOD-9604', price: 3451, emoji: '🔥', description: 'Quema de Grasa', benefits: ['Estimula lipólisis', 'Pérdida de grasa', 'Mejora metabólica'] },
-        bpc157: { name: 'BPC-157', price: 3104, emoji: '🩹', description: 'Reparación de Tejidos', benefits: ['Acelera reparación', 'Recuperación muscular', 'Salud de tendones'] },
-        cjc1295: { name: 'CJC-1295', price: 3626, emoji: '💪', description: 'Hormona de Crecimiento', benefits: ['Estimula GH', 'Crecimiento muscular', 'Reducción de grasa'] },
-        ghkcu: { name: 'GHK-CU', price: 3104, emoji: '✨', description: 'Anti-Envejecimiento', benefits: ['Estimula colágeno', 'Regeneración de piel', 'Anti-envejecimiento'] },
-        hghfrag: { name: 'HGH Fragment 176-191', price: 3104, emoji: '🔥', description: 'Pérdida de Grasa', benefits: ['Quema de grasa', 'Pérdida abdominal', 'Recomposición'] },
-        igf1lr3: { name: 'IGF-1 LR3', price: 3626, emoji: '🦾', description: 'Factor de Crecimiento', benefits: ['Crecimiento muscular', 'Síntesis proteica', 'Recuperación'] },
-        ipamorelin: { name: 'Ipamorelin', price: 3798, emoji: '🚀', description: 'Secretagogo de GH', benefits: ['Estimula GH', 'Músculo magro', 'Calidad del sueño'] },
-        motsc: { name: 'MOTS-C', price: 3626, emoji: '⚡', description: 'Activador Mitocondrial', benefits: ['Energía celular', 'Regulación metabólica', 'Vías energéticas'] },
-        nadpep: { name: 'NAD+ 1000', price: 3798, emoji: '🧬', description: 'Reparación de ADN', benefits: ['Energía celular', 'Reparación de ADN', 'Salud metabólica'] },
-        retatrutide: { name: 'Retatrutide', price: 3275, emoji: '🎯', description: 'Triple Agonista', benefits: ['Reducción de apetito', 'Pérdida de grasa', 'Control metabólico'] },
-        tb500: { name: 'TB-500', price: 3104, emoji: '🩸', description: 'Regenerador', benefits: ['Regeneración de tejidos', 'Recuperación', 'Tendones y ligamentos'] },
-        tesamorelin: { name: 'Tesamorelin', price: 2585, emoji: '🔥', description: 'Grasa Visceral', benefits: ['Reduce grasa visceral', 'Estimula GH', 'Recomposición corporal'] },
-        melanotan2: { name: 'Melanotan II', price: 2780, emoji: '🌞', description: 'Bronceado', benefits: ['Estimulación de melanina', 'Pigmentación', 'Fotoprotección'] }
+        tirzepatida: { name: 'T-Tide R-2', price: 14999, description: 'Control de Peso y Metabólico' },
+        semaglutida: { name: 'S-Tide R-1', price: 12999, description: 'Inyectable Semanal' },
+        rtide: { name: 'R-Tide R-3', price: 16999, description: 'Péptido Premium' },
+        aod9604: { name: 'AOD-9604', price: 3451, description: 'Quema de Grasa' },
+        bpc157: { name: 'BPC-157', price: 3104, description: 'Reparación de Tejidos' },
+        cjc1295: { name: 'CJC-1295', price: 3626, description: 'Hormona de Crecimiento' },
+        ghkcu: { name: 'GHK-CU', price: 3104, description: 'Anti-Envejecimiento' },
+        hghfrag: { name: 'HGH Fragment 176-191', price: 3104, description: 'Pérdida de Grasa' },
+        igf1lr3: { name: 'IGF-1 LR3', price: 3626, description: 'Factor de Crecimiento' },
+        ipamorelin: { name: 'Ipamorelin', price: 3798, description: 'Secretagogo de GH' },
+        motsc: { name: 'MOTS-C', price: 3626, description: 'Activador Mitocondrial' },
+        nadpep: { name: 'NAD+ 1000', price: 3798, description: 'Reparación de ADN' },
+        retatrutide: { name: 'Retatrutide', price: 3275, description: 'Triple Agonista' },
+        tb500: { name: 'TB-500', price: 3104, description: 'Regenerador de Tejidos' },
+        tesamorelin: { name: 'Tesamorelin', price: 2585, description: 'Grasa Visceral' },
+        melanotan2: { name: 'Melanotan II', price: 2780, description: 'Bronceado' }
     };
 
-    function showProduct(key) {
-        const product = products[key];
-        if (!product) return;
+    document.querySelectorAll('.product-card').forEach((card, index) => {
+        const keys = Object.keys(products);
+        const key = keys[index];
         
-        let html = `
-            <h2 class="text-3xl font-bold mb-4" style="color: #1B6B3D;">${product.emoji} ${product.name}</h2>
-            <p class="text-gray-600 mb-4">${product.description}</p>
-            <div class="bg-green-100 border-2 border-green-400 p-4 rounded-lg mb-6">
-                <p class="text-3xl font-bold" style="color: #C41E3A;">$${product.price.toLocaleString('es-MX')} MXN</p>
-            </div>
-            <div class="mb-6">
-                <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Beneficios:</h3>
-                <ul class="space-y-2">
-                    ${product.benefits.map(b => `<li class="text-gray-700">✓ ${b}</li>`).join('')}
-                </ul>
-            </div>
-        `;
-        
-        if (product.dosages) {
-            html += `
-                <div class="mb-6">
-                    <label class="block font-bold mb-2" style="color: #1B6B3D;">Dosis:</label>
-                    <select class="w-full border-2 border-green-300 p-2 rounded">
-                        ${product.dosages.map(d => `<option>${d}</option>`).join('')}
-                    </select>
+        card.style.cursor = 'pointer';
+        card.onclick = function() {
+            const product = products[key];
+            document.getElementById('modalBody').innerHTML = `
+                <h2 style="color: #1B6B3D; font-size: 28px; margin-bottom: 15px;">${product.name}</h2>
+                <p style="color: #666; margin-bottom: 20px;">${product.description}</p>
+                <div style="background: #E8F5E9; border: 2px solid #4CAF50; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <p style="color: #C41E3A; font-size: 32px; font-weight: bold;">$${product.price.toLocaleString('es-MX')} MXN</p>
                 </div>
+                <button style="width: 100%; padding: 12px; background: #1B6B3D; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer;">Agregar al Carrito</button>
+                <button onclick="closeModal()" style="width: 100%; padding: 12px; background: #999; color: white; border: none; border-radius: 6px; font-weight: bold; margin-top: 10px; cursor: pointer;">Cerrar</button>
             `;
-        }
-        
-        html += `
-            <button class="w-full py-3 text-white rounded-lg font-bold" style="background-color: #1B6B3D;">Agregar al Carrito</button>
-        `;
-        
-        document.getElementById('modalBody').innerHTML = html;
-        document.getElementById('productModal').classList.add('show');
+            document.getElementById('productModal').classList.add('show');
+        };
+    });
+
+    function closeModal() {
+        document.getElementById('productModal').classList.remove('show');
     }
 
-    // Add click listeners
-    document.querySelectorAll('.product-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const key = card.getAttribute('data-product');
-            console.log('Clicked:', key);
-            showProduct(key);
-        });
-    });
-
-    // Close modal
-    document.getElementById('closeBtn').addEventListener('click', () => {
-        document.getElementById('productModal').classList.remove('show');
-    });
-
-    document.getElementById('productModal').addEventListener('click', (e) => {
-        if (e.target.id === 'productModal') {
-            document.getElementById('productModal').classList.remove('show');
+    window.onclick = function(event) {
+        const modal = document.getElementById('productModal');
+        if (event.target === modal) {
+            modal.classList.remove('show');
         }
-    });
-
-    console.log('Script loaded - ready for clicks');
+    }
 </script>
 
 </body>
