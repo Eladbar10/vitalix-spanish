@@ -366,7 +366,14 @@
         };
 
         function showProductDetail(productKey) {
+            console.log('showProductDetail called with:', productKey);
             const product = productDetails[productKey];
+            if (!product) {
+                console.error('Product not found:', productKey);
+                alert('מוצר לא נמצא');
+                return;
+            }
+            console.log('Product found:', product.name);
             let dosageHtml = '';
             let packageInfo = '';
             
