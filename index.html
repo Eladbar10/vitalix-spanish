@@ -798,116 +798,167 @@
         }
 
         function processPayment() {
-            const form = document.getElementById('checkoutForm');
-            if (!form.checkValidity()) {
-                alert('Por favor completa todos los campos requeridos');
-                return;
-            }
+            console.log('processPayment called');
+            
+            try {
+                const form = document.getElementById('checkoutForm');
+                if (!form) {
+                    alert('Error: formulario no encontrado');
+                    return;
+                }
+                
+                if (!form.checkValidity()) {
+                    form.reportValidity(); // Show which fields are invalid
+                    return;
+                }
 
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            const city = document.getElementById('city').value;
-            const state = document.getElementById('state').value;
-            const postal = document.getElementById('postal').value;
-            const country = document.getElementById('country').value;
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+                const address = document.getElementById('address').value;
+                const city = document.getElementById('city').value;
+                const state = document.getElementById('state').value;
+                const postal = document.getElementById('postal').value;
+                const country = document.getElementById('country').value;
+                
+                const paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
+                if (!paymentMethodElement) {
+                    alert('Por favor selecciona un método de pago');
+                    return;
+                }
+                const paymentMethod = paymentMethodElement.value;
+                
+                console.log('Payment method:', paymentMethod);
 
-            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            let discount = Math.floor((subtotal * discountPercent) / 100);
-            let total = subtotal - discount + currentShipping;
+                let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+                let discount = Math.floor((subtotal * discountPercent) / 100);
+                let total = subtotal - discount + currentShipping;
 
-            // Generar número de referencia único
-            const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+                const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-            const orderData = {
-                referenceNumber: referenceNumber,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phone: phone,
-                address: address,
-                city: city,
-                state: state,
-                postal: postal,
-                country: country,
-                items: cart,
-                subtotal: subtotal,
-                discount: discount,
-                discountPercent: discountPercent,
-                shipping: currentShipping,
-                total: total,
-                paymentMethod: paymentMethod,
-                orderDate: new Date().toLocaleString('es-MX')
-            };
+                const orderData = {
+                    referenceNumber: referenceNumber,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone,
+                    address: address,
+                    city: city,
+                    state: state,
+                    postal: postal,
+                    country: country,
+                    items: cart,
+                    subtotal: subtotal,
+                    discount: discount,
+                    discountPercent: discountPercent,
+                    shipping: currentShipping,
+                    total: total,
+                    paymentMethod: paymentMethod,
+                    orderDate: new Date().toLocaleString('es-MX')
+                };
+                
+                console.log('Order data prepared:', orderData);
 
-            if (paymentMethod === 'bankTransfer') {
-                processBankTransfer(orderData);
-            } else {
-                processStripePayment(orderData);
+                if (paymentMethod === 'bankTransfer') {
+                    processBankTransfer(orderData);
+                } else {
+                    processStripePayment(orderData);
+                }
+            } catch (error) {
+                console.error('Error in processPayment:', error);
+                alert('Error procesando el pago: ' + error.message);
             }
         }
 
         function processBankTransfer(orderData) {
-            // Prepare email data
-            const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
+            console.log('processBankTransfer called');
             
-            const emailData = {
-                to_email: orderData.email,
-                firstName: orderData.firstName,
-                lastName: orderData.lastName,
-                referenceNumber: orderData.referenceNumber,
-                orderDate: orderData.orderDate,
-                items: itemsList,
-                subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
-                shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
-                discount: orderData.discountPercent > 0 ? `-$${orderData.discount.toLocaleString('es-MX')} (${orderData.discountPercent}%)` : 'N/A',
-                total: '$' + orderData.total.toLocaleString('es-MX'),
-                address: orderData.address,
-                city: orderData.city,
-                state: orderData.state,
-                postal: orderData.postal,
-                country: orderData.country,
-                phone: orderData.phone
-            };
+            try {
+                // Prepare email data
+                const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
+                
+                const emailData = {
+                    to_email: orderData.email,
+                    firstName: orderData.firstName,
+                    lastName: orderData.lastName,
+                    referenceNumber: orderData.referenceNumber,
+                    orderDate: orderData.orderDate,
+                    items: itemsList,
+                    subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
+                    shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
+                    discount: orderData.discountPercent > 0 ? `-$${orderData.discount.toLocaleString('es-MX')} (${orderData.discountPercent}%)` : 'N/A',
+                    total: '$' + orderData.total.toLocaleString('es-MX'),
+                    address: orderData.address,
+                    city: orderData.city,
+                    state: orderData.state,
+                    postal: orderData.postal,
+                    country: orderData.country,
+                    phone: orderData.phone
+                };
 
-            // Send email to customer
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
-                .then(() => {
-                    console.log('✓ Correo enviado al cliente');
+                // Function to complete the order (called after emails are tried)
+                const completeOrder = function(emailStatus) {
+                    console.log('Completing order, email status:', emailStatus);
                     
-                    // Send owner notification
-                    sendOwnerNotification(orderData);
+                    let message = `✓ ORDEN CREADA CON ÉXITO\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\n`;
                     
-                    // Show success message
-                    alert(`✓ ORDEN CREADA CON ÉXITO\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nRecibe un correo con los detalles de la transferencia bancaria.\n\nDetalles:\nCuenta CLABE: 684180253001000985\nBanco: OPM / TRANSFER\n\nTotal a pagar: $${orderData.total.toLocaleString('es-MX')}`);
+                    if (emailStatus === 'success') {
+                        message += `Recibiste un correo con los detalles de la transferencia bancaria.\n\n`;
+                    } else {
+                        message += `⚠️ El correo no pudo enviarse, pero tu orden está guardada.\n\n`;
+                    }
                     
-                    // Save to localStorage
-                    saveOrderToLocalStorage(orderData);
+                    message += `📋 DETALLES DE TRANSFERENCIA BANCARIA:\n`;
+                    message += `Cuenta CLABE: 684180253001000985\n`;
+                    message += `Banco: OPM / TRANSFER\n`;
+                    message += `Beneficiario: VITALIX MÉXICO\n\n`;
+                    message += `💰 Total a pagar: $${orderData.total.toLocaleString('es-MX')} MXN\n\n`;
+                    message += `⚠️ IMPORTANTE: Usa el número de referencia ${orderData.referenceNumber} en tu transferencia.`;
                     
-                    // Clear cart
-                    cart = [];
-                    discountPercent = 0;
-                    currentShipping = 200;
-                    updateCart();
-                    closeCheckout();
-                    toggleCart();
-                })
-                .catch(error => {
-                    console.error('Error enviando correo:', error);
-                    alert('⚠️ Orden creada pero hubo un problema enviando el correo.\nNúmero de Referencia: ' + orderData.referenceNumber);
+                    alert(message);
                     
-                    // Aún así guardar la orden
+                    // Save and clean
                     saveOrderToLocalStorage(orderData);
                     cart = [];
                     discountPercent = 0;
                     currentShipping = 200;
                     updateCart();
                     closeCheckout();
-                    toggleCart();
-                });
+                };
+
+                // Try to send emails - but complete order regardless
+                if (typeof emailjs !== 'undefined' && emailjs.send) {
+                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                        .then(function() {
+                            console.log('✓ Customer email sent');
+                            // Try to send owner notification
+                            try {
+                                sendOwnerNotification(orderData);
+                            } catch(e) {
+                                console.error('Owner notification failed:', e);
+                            }
+                            completeOrder('success');
+                        })
+                        .catch(function(error) {
+                            console.error('Email error:', error);
+                            // Still try owner notification
+                            try {
+                                sendOwnerNotification(orderData);
+                            } catch(e) {
+                                console.error('Owner notification failed:', e);
+                            }
+                            completeOrder('error');
+                        });
+                } else {
+                    console.warn('EmailJS not available - completing order without email');
+                    completeOrder('error');
+                }
+            } catch (error) {
+                console.error('processBankTransfer error:', error);
+                alert('Error procesando la orden: ' + error.message + '\n\nNúmero de Referencia: ' + orderData.referenceNumber);
+                saveOrderToLocalStorage(orderData);
+            }
         }
         
         function sendOwnerNotification(orderData) {
