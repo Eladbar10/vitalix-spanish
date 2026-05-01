@@ -99,7 +99,7 @@
 
     <!-- MODAL DE PRODUCTO -->
     <div id="productModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <span onclick="closeModal()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
             <div id="modalBody"></div>
         </div>
@@ -107,7 +107,7 @@
 
     <!-- MODAL DE CHECKOUT -->
     <div id="checkoutModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content" style="max-width: 800px;" onclick="event.stopPropagation()">
             <span onclick="closeCheckout()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
             <div id="checkoutBody"></div>
         </div>
@@ -325,7 +325,7 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        
         // ===== EmailJS Configuration =====
         emailjs.init('sxTuTwtP01OBzlCYB'); // Public Key
         const EMAILJS_SERVICE_ID = 'service_34xgp3y';
@@ -973,7 +973,7 @@
                 checkout.classList.remove('show');
             }
         }
-        }); // Close DOMContentLoaded
+        
     </script>
 
     </body>
