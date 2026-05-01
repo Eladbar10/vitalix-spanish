@@ -99,7 +99,7 @@
 
     <!-- MODAL DE PRODUCTO -->
     <div id="productModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" onclick="event.stopPropagation()">
             <span onclick="closeModal()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
             <div id="modalBody"></div>
         </div>
@@ -107,7 +107,7 @@
 
     <!-- MODAL DE CHECKOUT -->
     <div id="checkoutModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 800px;">
             <span onclick="closeCheckout()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
             <div id="checkoutBody"></div>
         </div>
@@ -366,14 +366,15 @@
         };
 
         function showProductDetail(productKey) {
-            console.log('showProductDetail called with:', productKey);
+            console.log('🔍 DEBUG: showProductDetail called with:', productKey);
+            console.log('🔍 DEBUG: modal element:', document.getElementById('productModal'));
             const product = productDetails[productKey];
             if (!product) {
-                console.error('Product not found:', productKey);
+                console.error('❌ Product not found:', productKey);
                 alert('Product not found');
                 return;
             }
-            console.log('Product found:', product.name);
+            console.log('✓ Product found:', product.name);
             let dosageHtml = '';
             let packageInfo = '';
             
