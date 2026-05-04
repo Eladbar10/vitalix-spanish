@@ -1,1108 +1,2145 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITALIX - Péptidos Premium</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>VITALIX | Péptidos Premium de Investigación México</title>
+    <meta name="description" content="VITALIX - Péptidos de investigación de alta pureza. Productos certificados HPLC para investigación médica.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
     <style>
-        :root {
-            --primary-green: #1B6B3D;
-            --secondary-red: #C41E3A;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-        html { scroll-behavior: smooth; }
-        .product-card { transition: all 0.3s ease; cursor: pointer; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
-        .modal.show { display: block; }
-        .modal-content { background-color: white; margin: 20px auto; padding: 30px; border-radius: 10px; width: 90%; max-width: 700px; }
+    /* ============ DESIGN TOKENS ============ */
+    :root {
+        --void: #050514;
+        --deep-space: #0a0a2e;
+        --midnight: #1a1454;
+        --royal: #3b1d8e;
+        --violet: #7c3aed;
+        --lavender: #a78bfa;
+        --mist: #c7d2fe;
+        --frost: #e0e7ff;
+        --pearl: #f0f0ff;
+        --cyan: #22d3ee;
+        --cyan-deep: #06b6d4;
+        --gold: #fbbf24;
+        --crimson: #dc2626;
+        --emerald: #10b981;
+        --shadow-soft: 0 4px 20px rgba(59, 29, 142, 0.08);
+        --shadow-md: 0 8px 30px rgba(59, 29, 142, 0.12);
+        --shadow-glow: 0 0 40px rgba(167, 139, 250, 0.4);
+        --bg-gradient: linear-gradient(135deg, #050514 0%, #0a0a2e 25%, #1a1454 50%, #3b1d8e 75%, #7c3aed 100%);
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    html { scroll-behavior: smooth; }
+    
+    body {
+        font-family: 'Outfit', sans-serif;
+        background: #fafaff;
+        color: #1a1454;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+    
+    /* ============ TYPOGRAPHY ============ */
+    .display-font { font-family: 'Cormorant Garamond', serif; }
+    .mono-font { font-family: 'JetBrains Mono', monospace; }
+    
+    /* ============ ANIMATIONS ============ */
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    @keyframes slideInLeft {
+        from { opacity: 0; transform: translateX(-50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.3); }
+        50% { box-shadow: 0 0 30px rgba(167, 139, 250, 0.6); }
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+    @keyframes rotate-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+    
+    /* ============ NAVIGATION ============ */
+    nav {
+        background: var(--bg-gradient);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 30px rgba(10, 10, 46, 0.4);
+        border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+    }
+    
+    .nav-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 18px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+    
+    .nav-dna {
+        width: 38px;
+        height: 90px;
+        filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.6));
+    }
+    
+    .nav-text-block {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .nav-vitalix {
+        font-family: 'Outfit', sans-serif;
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        background: linear-gradient(90deg, #ffffff 0%, #c4b5fd 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+        padding-left: 4px;
+    }
+    
+    .nav-tagline {
+        color: var(--mist);
+        font-size: 10px;
+        letter-spacing: 5px;
+        font-weight: 500;
+        margin-top: 4px;
+        padding-left: 4px;
+    }
+    
+    .nav-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .cart-btn {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 100px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+    
+    .cart-btn:hover {
+        background: rgba(167, 139, 250, 0.2);
+        border-color: var(--lavender);
+        transform: translateY(-2px);
+    }
+    
+    .cart-count {
+        background: var(--cyan);
+        color: var(--midnight);
+        font-weight: 900;
+        padding: 2px 8px;
+        border-radius: 100px;
+        font-size: 12px;
+        min-width: 22px;
+        text-align: center;
+    }
+    
+    /* ============ HERO ============ */
+    .hero {
+        position: relative;
+        background: var(--bg-gradient);
+        padding: 80px 32px 100px;
+        overflow: hidden;
+        text-align: center;
+        color: white;
+    }
+    
+    .hero::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: 
+            radial-gradient(circle at 20% 30%, rgba(167, 139, 250, 0.3) 0%, transparent 40%),
+            radial-gradient(circle at 80% 70%, rgba(34, 211, 238, 0.2) 0%, transparent 40%);
+        pointer-events: none;
+    }
+    
+    .hero-grid {
+        position: absolute;
+        inset: 0;
+        background-image: 
+            linear-gradient(rgba(167, 139, 250, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(167, 139, 250, 0.05) 1px, transparent 1px);
+        background-size: 60px 60px;
+        pointer-events: none;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 900px;
+        margin: 0 auto;
+        animation: fadeInUp 0.8s ease-out;
+    }
+    
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(34, 211, 238, 0.1);
+        border: 1px solid rgba(34, 211, 238, 0.3);
+        padding: 8px 18px;
+        border-radius: 100px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--cyan);
+        letter-spacing: 2px;
+        margin-bottom: 24px;
+    }
+    
+    .hero-badge::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        background: var(--cyan);
+        border-radius: 50%;
+        animation: pulse-glow 2s infinite;
+    }
+    
+    .hero-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(48px, 8vw, 96px);
+        font-weight: 600;
+        line-height: 0.95;
+        margin-bottom: 24px;
+        letter-spacing: -2px;
+    }
+    
+    .hero-title .accent {
+        font-style: italic;
+        background: linear-gradient(90deg, #c4b5fd 0%, #22d3ee 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .hero-subtitle {
+        font-size: 18px;
+        color: var(--mist);
+        max-width: 600px;
+        margin: 0 auto 40px;
+        font-weight: 300;
+        line-height: 1.7;
+    }
+    
+    .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin-top: 60px;
+        flex-wrap: wrap;
+    }
+    
+    .stat {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 56px;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #ffffff, #a78bfa);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--mist);
+        letter-spacing: 2px;
+        margin-top: 8px;
+        text-transform: uppercase;
+    }
+    
+    /* ============ MAIN CONTENT ============ */
+    main {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 80px 32px;
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+    
+    .section-tag {
+        display: inline-block;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--violet);
+        letter-spacing: 4px;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+    }
+    
+    .section-tag::before {
+        content: '— ';
+    }
+    .section-tag::after {
+        content: ' —';
+    }
+    
+    .section-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(36px, 5vw, 56px);
+        font-weight: 600;
+        color: var(--midnight);
+        line-height: 1.1;
+        margin-bottom: 16px;
+        letter-spacing: -1px;
+    }
+    
+    .section-title .italic {
+        font-style: italic;
+        color: var(--violet);
+    }
+    
+    .section-subtitle {
+        color: #6b7280;
+        font-size: 17px;
+        max-width: 600px;
+        margin: 0 auto;
+        font-weight: 300;
+    }
+    
+    /* ============ CATEGORY TABS ============ */
+    .category-section {
+        margin-bottom: 100px;
+    }
+    
+    .category-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .category-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 40px;
+        padding-bottom: 24px;
+        border-bottom: 2px solid #f0f0ff;
+    }
+    
+    .category-icon {
+        width: 60px;
+        height: 60px;
+        background: var(--bg-gradient);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .category-info h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 36px;
+        font-weight: 600;
+        color: var(--midnight);
+        line-height: 1;
+        margin-bottom: 4px;
+    }
+    
+    .category-info p {
+        color: #6b7280;
+        font-size: 14px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 1px;
+    }
+    
+    /* ============ PRODUCT GRID ============ */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+    
+    .products-grid.featured {
+        grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+        gap: 32px;
+    }
+    
+    .product-card {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid #f0f0ff;
+        box-shadow: var(--shadow-soft);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-12px);
+        box-shadow: 0 30px 60px -15px rgba(59, 29, 142, 0.3);
+        border-color: var(--lavender);
+    }
+    
+    .product-card.premium {
+        background: var(--bg-gradient);
+        color: white;
+    }
+    
+    .product-card.premium .product-name,
+    .product-card.premium .product-description {
+        color: white;
+    }
+    
+    .product-card.premium .product-description {
+        color: var(--mist);
+    }
+    
+    .product-card.premium:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 40px 80px -20px rgba(167, 139, 250, 0.5);
+    }
+    
+    .product-image-area {
+        position: relative;
+        height: 200px;
+        background: linear-gradient(135deg, #f0f0ff 0%, #e0e7ff 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .product-card.premium .product-image-area {
+        background: linear-gradient(135deg, rgba(167, 139, 250, 0.2) 0%, rgba(34, 211, 238, 0.1) 100%);
+        border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+    }
+    
+    .product-emoji {
+        font-size: 80px;
+        filter: drop-shadow(0 4px 20px rgba(124, 58, 237, 0.3));
+        transition: transform 0.5s;
+    }
+    
+    .product-card:hover .product-emoji {
+        transform: scale(1.1) rotate(-5deg);
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: var(--gold);
+        color: var(--midnight);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 6px 12px;
+        border-radius: 100px;
+        letter-spacing: 1px;
+    }
+    
+    .product-badge.purity {
+        background: rgba(255, 255, 255, 0.95);
+        color: var(--midnight);
+    }
+    
+    .product-info {
+        padding: 24px;
+    }
+    
+    .product-id {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 10px;
+        color: var(--violet);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    
+    .product-card.premium .product-id {
+        color: var(--cyan);
+    }
+    
+    .product-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--midnight);
+        line-height: 1.1;
+        margin-bottom: 8px;
+    }
+    
+    .product-description {
+        color: #6b7280;
+        font-size: 14px;
+        margin-bottom: 20px;
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    
+    .product-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0ff;
+    }
+    
+    .product-card.premium .product-footer {
+        border-top-color: rgba(167, 139, 250, 0.2);
+    }
+    
+    .product-price {
+        font-family: 'Outfit', sans-serif;
+    }
+    
+    .product-price .currency {
+        font-size: 12px;
+        color: #9ca3af;
+        font-weight: 500;
+        margin-right: 2px;
+    }
+    
+    .product-card.premium .product-price .currency {
+        color: var(--mist);
+    }
+    
+    .product-price .amount {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--midnight);
+        letter-spacing: -0.5px;
+    }
+    
+    .product-card.premium .product-price .amount {
+        color: white;
+    }
+    
+    .product-price .mxn {
+        font-size: 11px;
+        color: #9ca3af;
+        margin-left: 4px;
+        font-weight: 500;
+    }
+    
+    .view-btn {
+        background: transparent;
+        border: 1px solid var(--royal);
+        color: var(--royal);
+        padding: 8px 16px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .product-card:hover .view-btn {
+        background: var(--royal);
+        color: white;
+    }
+    
+    .product-card.premium .view-btn {
+        border-color: rgba(255, 255, 255, 0.4);
+        color: white;
+    }
+    
+    .product-card.premium:hover .view-btn {
+        background: white;
+        color: var(--royal);
+        border-color: white;
+    }
+    
+    /* ============ MODAL ============ */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(5, 5, 20, 0.85);
+        backdrop-filter: blur(10px);
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease-out;
+    }
+    
+    .modal.show { display: block; }
+    
+    .modal-content {
+        background: white;
+        margin: 40px auto;
+        border-radius: 24px;
+        width: 92%;
+        max-width: 800px;
+        overflow: hidden;
+        box-shadow: 0 40px 100px rgba(0, 0, 0, 0.4);
+        animation: fadeInUp 0.4s ease-out;
+    }
+    
+    .modal-header {
+        background: var(--bg-gradient);
+        padding: 40px;
+        position: relative;
+        color: white;
+        overflow: hidden;
+    }
+    
+    .modal-header::before {
+        content: '';
+        position: absolute;
+        right: -50px;
+        top: -50px;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, rgba(34, 211, 238, 0.2), transparent);
+        border-radius: 50%;
+    }
+    
+    .modal-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        opacity: 0.9;
+    }
+    
+    .modal-brand-text {
+        font-family: 'Outfit', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        background: linear-gradient(90deg, #ffffff, #c4b5fd);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .modal-product-name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 48px;
+        font-weight: 600;
+        line-height: 1;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+        position: relative;
+    }
+    
+    .modal-product-subtitle {
+        color: var(--mist);
+        font-size: 14px;
+        font-style: italic;
+        position: relative;
+    }
+    
+    .close-btn {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+    }
+    
+    .close-btn:hover {
+        background: white;
+        color: var(--royal);
+        transform: rotate(90deg);
+    }
+    
+    .modal-body {
+        padding: 40px;
+        max-height: calc(100vh - 250px);
+        overflow-y: auto;
+    }
+    
+    .price-banner {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid var(--gold);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        margin-bottom: 32px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .price-banner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: shimmer 3s infinite;
+        background-size: 200% 100%;
+    }
+    
+    .price-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: #92400e;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+    
+    .price-value {
+        font-family: 'Outfit', sans-serif;
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--crimson);
+        letter-spacing: -1px;
+    }
+    
+    .price-value .currency {
+        font-size: 24px;
+        font-weight: 500;
+    }
+    
+    .price-value .mxn {
+        font-size: 18px;
+        font-weight: 500;
+        color: #92400e;
+        margin-left: 4px;
+    }
+    
+    .info-block {
+        margin-bottom: 28px;
+    }
+    
+    .info-block-title {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--midnight);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--frost);
+    }
+    
+    .info-block-title-icon {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--violet), var(--royal));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: white;
+    }
+    
+    .info-block-content {
+        color: #4b5563;
+        line-height: 1.8;
+        font-size: 15px;
+    }
+    
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+    }
+    
+    .benefit-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 16px;
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        border-left: 3px solid var(--emerald);
+        border-radius: 8px;
+        font-size: 14px;
+        color: #065f46;
+        transition: transform 0.2s;
+    }
+    
+    .benefit-item:hover {
+        transform: translateX(4px);
+    }
+    
+    .benefit-check {
+        color: var(--emerald);
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 1.3;
+    }
+    
+    .dosage-box {
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border-left: 4px solid var(--gold);
+        padding: 20px 24px;
+        border-radius: 12px;
+        line-height: 1.8;
+    }
+    
+    .dosage-box strong {
+        color: #92400e;
+        font-weight: 700;
+    }
+    
+    .usage-box {
+        background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+        border-left: 4px solid #3b82f6;
+        padding: 20px 24px;
+        border-radius: 12px;
+        line-height: 1.8;
+        color: #1e3a8a;
+    }
+    
+    .specs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        background: linear-gradient(135deg, var(--frost), var(--pearl));
+        padding: 20px;
+        border-radius: 12px;
+    }
+    
+    .spec-item {
+        background: white;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(167, 139, 250, 0.2);
+    }
+    
+    .spec-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 9px;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+    }
+    
+    .spec-value {
+        font-family: 'Outfit', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--midnight);
+    }
+    
+    .dosage-selector {
+        margin-bottom: 24px;
+    }
+    
+    .dosage-selector label {
+        display: block;
+        font-family: 'Outfit', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--midnight);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    
+    .dosage-selector select {
+        width: 100%;
+        padding: 14px 18px;
+        border: 2px solid var(--frost);
+        border-radius: 12px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 16px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .dosage-selector select:focus {
+        outline: none;
+        border-color: var(--violet);
+        box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1);
+    }
+    
+    .checkbox-group {
+        background: linear-gradient(135deg, #fef2f2, #fee2e2);
+        border: 1px solid #fecaca;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+    
+    .checkbox-group h4 {
+        color: #991b1b;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .checkbox-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: #7f1d1d;
+        cursor: pointer;
+    }
+    
+    .checkbox-item input {
+        margin-top: 3px;
+        cursor: pointer;
+        accent-color: var(--crimson);
+    }
+    
+    .modal-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+    }
+    
+    .btn-add-cart {
+        flex: 1;
+        background: linear-gradient(135deg, var(--emerald), #059669);
+        color: white;
+        padding: 18px;
+        border: none;
+        border-radius: 14px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+    
+    .btn-add-cart:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
+    }
+    
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #6b7280;
+        padding: 18px 32px;
+        border: none;
+        border-radius: 14px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .btn-cancel:hover {
+        background: #e5e7eb;
+    }
+    
+    /* ============ CART PANEL ============ */
+    .cart-panel {
+        position: fixed;
+        top: 0;
+        right: -440px;
+        width: 420px;
+        max-width: 95%;
+        height: 100vh;
+        background: white;
+        z-index: 999;
+        box-shadow: -20px 0 60px rgba(0, 0, 0, 0.3);
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .cart-panel.open { right: 0; }
+    
+    .cart-header {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 28px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .cart-header h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        font-weight: 600;
+    }
+    
+    .cart-items {
+        flex: 1;
+        overflow-y: auto;
+        padding: 24px;
+    }
+    
+    .cart-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: #9ca3af;
+    }
+    
+    .cart-empty-icon {
+        font-size: 60px;
+        margin-bottom: 16px;
+        opacity: 0.4;
+    }
+    
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        background: var(--pearl);
+        border-radius: 12px;
+        margin-bottom: 12px;
+        border: 1px solid var(--frost);
+    }
+    
+    .cart-item-info h4 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--midnight);
+        margin-bottom: 4px;
+    }
+    
+    .cart-item-price {
+        color: var(--crimson);
+        font-weight: 700;
+    }
+    
+    .remove-btn {
+        background: rgba(220, 38, 38, 0.1);
+        color: var(--crimson);
+        border: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .remove-btn:hover {
+        background: var(--crimson);
+        color: white;
+    }
+    
+    .cart-footer {
+        background: var(--pearl);
+        padding: 24px;
+        border-top: 1px solid var(--frost);
+    }
+    
+    .cart-summary {
+        margin-bottom: 16px;
+    }
+    
+    .cart-summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        color: #4b5563;
+    }
+    
+    .cart-summary-row.total {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--midnight);
+        padding-top: 16px;
+        border-top: 2px solid var(--frost);
+    }
+    
+    .cart-summary-row.total .amount {
+        color: var(--crimson);
+    }
+    
+    .checkout-btn {
+        width: 100%;
+        background: var(--bg-gradient);
+        color: white;
+        padding: 18px;
+        border: none;
+        border-radius: 14px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .checkout-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 40px rgba(124, 58, 237, 0.4);
+    }
+    
+    /* ============ TRUST BADGES ============ */
+    .trust-section {
+        background: linear-gradient(135deg, var(--pearl), var(--frost));
+        padding: 80px 32px;
+        margin: 100px 0 0;
+    }
+    
+    .trust-grid {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 32px;
+    }
+    
+    .trust-item {
+        text-align: center;
+    }
+    
+    .trust-icon {
+        width: 70px;
+        height: 70px;
+        background: white;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin: 0 auto 16px;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .trust-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--midnight);
+        margin-bottom: 8px;
+    }
+    
+    .trust-desc {
+        color: #6b7280;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    
+    /* ============ FOOTER ============ */
+    footer {
+        background: var(--bg-gradient);
+        color: white;
+        padding: 60px 32px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    footer::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(circle at 20% 50%, rgba(167, 139, 250, 0.2) 0%, transparent 50%);
+    }
+    
+    .footer-content {
+        position: relative;
+        max-width: 1280px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    
+    .footer-disclaimer {
+        font-size: 12px;
+        color: var(--mist);
+        max-width: 700px;
+        margin: 32px auto 0;
+        line-height: 1.7;
+        opacity: 0.7;
+    }
+    
+    .footer-copyright {
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid rgba(167, 139, 250, 0.2);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        color: var(--mist);
+        letter-spacing: 2px;
+    }
+    
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 768px) {
+        .nav-vitalix { font-size: 24px; }
+        .hero { padding: 60px 20px 80px; }
+        .hero-stats { gap: 30px; }
+        .stat-number { font-size: 40px; }
+        main { padding: 60px 20px; }
+        .modal-content { margin: 20px auto; }
+        .modal-body { padding: 24px; }
+        .modal-product-name { font-size: 36px; }
+        .modal-actions { flex-direction: column; }
+        .cart-panel { width: 100%; }
+        .product-image-area { height: 160px; }
+        .product-emoji { font-size: 60px; }
+    }
     </style>
 </head>
 <body>
-    <!-- NAVEGACIÓN -->
-    <nav class="sticky top-0 z-50 bg-white shadow-xl border-b-4" style="border-color: #1B6B3D;">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex items-center justify-between py-4">
-                <div class="text-3xl font-bold" style="color: #1B6B3D;">🏥 VITALIX México</div>
 
-                <div class="hidden lg:flex items-center gap-8">
-                    <a href="#inicio" class="text-gray-700 hover:text-green-700 font-semibold">Inicio</a>
-                    <a href="#bienestar" class="text-gray-700 hover:text-green-700 font-semibold">Bienestar</a>
-                    <a href="#peptidos" class="text-gray-700 hover:text-green-700 font-semibold">Péptidos</a>
-                </div>
-
-                <div class="flex items-center gap-4">
-                    <div class="relative cursor-pointer" onclick="toggleCart()">
-                        <span class="text-3xl">🛒</span>
-                        <span class="absolute -top-2 -right-2 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold" id="cartCount">0</span>
-                    </div>
-                </div>
+<!-- ========== NAVIGATION ========== -->
+<nav>
+    <div class="nav-container">
+        <div class="nav-logo">
+            <svg class="nav-dna" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="#a78bfa" stroke-width="2" opacity="0.7">
+                    <line x1="8" y1="20" x2="52" y2="20"/><line x1="8" y1="40" x2="52" y2="40"/>
+                    <line x1="8" y1="60" x2="52" y2="60"/><line x1="8" y1="80" x2="52" y2="80"/>
+                    <line x1="8" y1="100" x2="52" y2="100"/><line x1="8" y1="120" x2="52" y2="120"/>
+                    <line x1="8" y1="140" x2="52" y2="140"/>
+                </g>
+                <path d="M 8 10 Q 25 20, 52 30 Q 35 40, 8 50 Q 25 60, 52 70 Q 35 80, 8 90 Q 25 100, 52 110 Q 35 120, 8 130 Q 25 140, 52 150" stroke="#22d3ee" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <path d="M 52 10 Q 35 20, 8 30 Q 25 40, 52 50 Q 35 60, 8 70 Q 25 80, 52 90 Q 35 100, 8 110 Q 25 120, 52 130 Q 35 140, 8 150" stroke="#a78bfa" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <circle cx="8" cy="20" r="3" fill="#22d3ee"/><circle cx="52" cy="20" r="3" fill="#a78bfa"/>
+                <circle cx="8" cy="60" r="3" fill="#22d3ee"/><circle cx="52" cy="60" r="3" fill="#a78bfa"/>
+                <circle cx="8" cy="100" r="3" fill="#22d3ee"/><circle cx="52" cy="100" r="3" fill="#a78bfa"/>
+                <circle cx="8" cy="140" r="3" fill="#22d3ee"/><circle cx="52" cy="140" r="3" fill="#a78bfa"/>
+            </svg>
+            <div class="nav-text-block">
+                <div class="nav-vitalix">VITALIX</div>
+                <div class="nav-tagline">PEPTIDE LABS MÉXICO</div>
             </div>
         </div>
-    </nav>
-
-    <!-- CARRITO -->
-    <div id="cartPanel" class="hidden fixed right-0 top-0 h-screen w-96 bg-white shadow-2xl z-40 overflow-y-auto">
-        <div class="sticky top-0 bg-white border-b-4" style="border-color: #1B6B3D;">
-            <div class="p-6 flex justify-between items-center">
-                <h2 class="text-2xl font-bold" style="color: #1B6B3D;">Tu Carrito</h2>
-                <button onclick="toggleCart()" class="text-3xl cursor-pointer">✕</button>
-            </div>
-        </div>
-
-        <div class="p-6">
-            <div id="cartItems">
-                <p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>
-            </div>
-
-            <div class="mt-8 bg-green-50 border-2 border-green-200 p-6 rounded-lg">
-                <div class="flex justify-between mb-3">
-                    <span class="text-gray-700">Subtotal:</span>
-                    <span class="font-bold" style="color: #1B6B3D;" id="subtotal">$0</span>
-                </div>
-
-                <div class="mb-4 pb-4 border-b-2 border-green-200">
-                    <p class="text-xs font-bold text-gray-700 mb-2">Envío:</p>
-                    <label class="flex items-center gap-2 mb-2 cursor-pointer">
-                        <input type="radio" name="shipping" value="200" checked onchange="updateShipping()">
-                        <span class="text-sm text-gray-700">Estándar: $200 (5-7 días)</span>
-                    </label>
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input type="radio" name="shipping" value="500" onchange="updateShipping()">
-                        <span class="text-sm text-gray-700 font-bold" style="color: #C41E3A;">Express: $500 (2-3 días) ⚡</span>
-                    </label>
-                </div>
-
-                <div class="flex justify-between mb-4 border-b-2 border-green-200 pb-4">
-                    <span class="text-gray-700">Envío:</span>
-                    <span class="font-bold" style="color: #1B6B3D;" id="shippingCost">$200</span>
-                </div>
-
-                <div id="discountRow" class="hidden flex justify-between mb-4 border-b-2 border-green-200 pb-4">
-                    <span class="text-gray-700">Descuento:</span>
-                    <span class="font-bold" style="color: green;" id="discountAmount">-$0</span>
-                </div>
-
-                <div class="flex justify-between text-xl">
-                    <span class="font-bold text-gray-900">Total:</span>
-                    <span class="font-bold text-2xl" style="color: #C41E3A;" id="total">$200</span>
-                </div>
-            </div>
-
-            <button onclick="goToCheckout()" class="w-full mt-6 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D;">Proceder al Pago →</button>
+        <div class="nav-actions">
+            <button class="cart-btn" onclick="toggleCart()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                <span>Carrito</span>
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
         </div>
     </div>
+</nav>
 
-    <!-- MODAL DE PRODUCTO -->
-    <div id="productModal" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <span onclick="closeModal()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
-            <div id="modalBody"></div>
+<!-- ========== HERO ========== -->
+<section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span>RESEARCH GRADE • 99%+ PURITY</span>
         </div>
-    </div>
-
-    <!-- MODAL DE CHECKOUT -->
-    <div id="checkoutModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;" onclick="event.stopPropagation()">
-            <span onclick="closeCheckout()" style="float:right; font-size:28px; cursor:pointer; color: #1B6B3D;">&times;</span>
-            <div id="checkoutBody"></div>
-        </div>
-    </div>
-
-    <!-- BANNER -->
-    <div class="bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 px-4 shadow-lg">
-        <div class="max-w-6xl mx-auto flex items-center gap-4">
-            <span class="text-2xl">⚠️</span>
-            <div>
-                <p class="font-bold">Tiempo de entrega actual: 3-7 días hábiles</p>
-                <p class="text-sm">Uso de investigación. Certificado en laboratorio y verificado. 📦</p>
+        <h1 class="hero-title">
+            Péptidos de <span class="accent">investigación</span><br>
+            premium para México
+        </h1>
+        <p class="hero-subtitle">
+            Soluciones farmacéuticas certificadas HPLC. Cada vial está cuidadosamente formulado para investigación científica avanzada con los más altos estándares de pureza.
+        </p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">99%+</div>
+                <div class="stat-label">Pureza HPLC</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">16</div>
+                <div class="stat-label">Productos</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Certificado</div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- HERO -->
-    <section id="inicio" style="background: linear-gradient(135deg, #f0fdf4 0%, #fee2e2 100%);" class="py-24 px-4 text-center">
-        <div class="max-w-4xl mx-auto">
-            <h1 class="text-6xl font-bold text-gray-900 mb-6">VITALIX México</h1>
-            <p class="text-2xl text-gray-700 mb-4">Péptidos Premium & Bienestar</p>
-            <p class="text-lg text-gray-600 mb-8">✓ Certificado en Laboratorio | ✓ Testado HPLC | ✓ Mejores Precios</p>
-            <a href="#bienestar" class="inline-block px-8 py-4 text-white text-lg rounded-lg font-bold" style="background-color: #1B6B3D;">Ver Catálogo →</a>
-        </div>
-    </section>
-
-    <!-- SECCIÓN BIENESTAR -->
-    <section id="bienestar" class="py-20 px-4 bg-white">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4" style="color: #1B6B3D;">Productos de Bienestar</h2>
-            <p class="text-center text-gray-600 mb-12">Uso de Investigación | Verifica los detalles antes de comprar</p>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-green-300 p-6 text-center" data-product="tirzepatida">
-                    <div class="text-5xl mb-3">💉</div>
-                    <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">T-Tide R-2</h3>
-                    
-                    <div class="mb-4 text-sm text-gray-500">
-                        <p>1 Mes: <span class="font-bold">$5,800 MXN</span></p>
-                    </div>
-                    
-                    <div class="mb-4 p-3 bg-gradient-to-r from-yellow-100 to-orange-100 border-3 border-yellow-400 rounded-lg">
-                        <p class="text-xs text-gray-700 mb-1">🎉 OFERTA ESPECIAL</p>
-                        <p class="text-3xl font-bold" style="color: #C41E3A; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">$14,999 MXN</p>
-                        <p class="text-xs font-bold text-gray-700 mt-1">Paquete de 3 Meses</p>
-                        <p class="text-xs bg-red-500 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 14% 💰</p>
-                    </div>
-                    
-                    <p class="text-xs text-gray-500 mb-4">Haz clic para detalles →</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded-lg font-bold hover:bg-green-800">Ver Más</button>
-                </div>
-
-                <div class="product-card bg-gradient-to-br from-green-600 to-red-600 text-white rounded-xl shadow-2xl border-4 border-amber-400 p-6 text-center" data-product="semaglutida">
-                    <div class="text-5xl mb-3">💉</div>
-                    <h3 class="text-xl font-bold mb-2">S-Tide R-1 ⭐</h3>
-                    
-                    <div class="mb-4 text-sm text-green-100">
-                        <p>1 Mes: <span class="font-bold">$4,900 MXN</span></p>
-                    </div>
-                    
-                    <div class="mb-4 p-3 bg-white bg-opacity-20 border-3 border-yellow-300 rounded-lg">
-                        <p class="text-xs text-yellow-200 mb-1">🎉 OFERTA ESPECIAL</p>
-                        <p class="text-3xl font-bold text-yellow-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">$12,999 MXN</p>
-                        <p class="text-xs font-bold text-green-100 mt-1">Paquete de 3 Meses</p>
-                        <p class="text-xs bg-red-600 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 12% 💰</p>
-                    </div>
-                    
-                    <p class="text-xs text-green-100 mb-4">Haz clic para detalles →</p>
-                    <button class="w-full py-2 bg-white text-green-700 rounded-lg font-bold hover:bg-gray-100">Ver Más</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-purple-400 p-6 text-center" data-product="rtide">
-                    <div class="text-5xl mb-3">🎯</div>
-                    <h3 class="text-xl font-bold mb-2" style="color: #1B6B3D;">R-Tide R-3</h3>
-                    
-                    <div class="mb-4 text-sm text-gray-500">
-                        <p>1 Mes: <span class="font-bold">$6,950 MXN</span></p>
-                    </div>
-                    
-                    <div class="mb-4 p-3 bg-gradient-to-r from-blue-100 to-purple-100 border-3 border-blue-400 rounded-lg">
-                        <p class="text-xs text-gray-700 mb-1">🎉 OFERTA ESPECIAL</p>
-                        <p class="text-3xl font-bold" style="color: #1B6B3D; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">$16,999 MXN</p>
-                        <p class="text-xs font-bold text-gray-700 mt-1">Paquete de 3 Meses</p>
-                        <p class="text-xs bg-blue-600 text-white inline-block px-2 py-1 rounded mt-2 font-bold">AHORRAS 18% 💰</p>
-                    </div>
-                    
-                    <p class="text-xs text-gray-500 mb-4">Haz clic para detalles →</p>
-                    <button class="w-full py-2 bg-purple-700 text-white rounded-lg font-bold hover:bg-purple-800">Ver Más</button>
-                </div>
+<!-- ========== MAIN CONTENT ========== -->
+<main>
+    <!-- ========== WELLNESS CATEGORY ========== -->
+    <div class="category-section">
+        <div class="category-header">
+            <div class="category-icon">⭐</div>
+            <div class="category-info">
+                <h2>Productos Premium de Bienestar</h2>
+                <p>PAQUETES DE 3 MESES // ENTREGA INMEDIATA</p>
             </div>
         </div>
-    </section>
+        <div class="products-grid featured" id="wellnessGrid"></div>
+    </div>
 
-    <!-- SECCIÓN PÉPTIDOS -->
-    <section id="peptidos" class="py-20 px-4 bg-gray-50">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-4xl font-bold text-center mb-4" style="color: #1B6B3D;">Péptidos de Investigación</h2>
-            <p class="text-center text-gray-600 mb-12">Haz clic en cualquier péptido para ver detalles, especificaciones y hacer tu pedido</p>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="aod9604">
-                    <div class="text-4xl mb-2">🔥 AOD-9604</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,451</p>
-                    <p class="text-xs text-gray-500 mb-3">Péptido Quema de Grasa</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="bpc157">
-                    <div class="text-4xl mb-2">🩹 BPC-157</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
-                    <p class="text-xs text-gray-500 mb-3">Reparación de Tejidos</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="cjc1295">
-                    <div class="text-4xl mb-2">💪 CJC-1295</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg SIN DAC</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
-                    <p class="text-xs text-gray-500 mb-3">Soporte de Hormona de Crecimiento</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="ghkcu">
-                    <div class="text-4xl mb-2">✨ GHK-CU</div>
-                    <p class="text-gray-600 text-xs mb-3">100mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
-                    <p class="text-xs text-gray-500 mb-3">Regeneración de Piel</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="hghfrag">
-                    <div class="text-4xl mb-2">🔥 HGH Fragment</div>
-                    <p class="text-gray-600 text-xs mb-3">5mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
-                    <p class="text-xs text-gray-500 mb-3">Pérdida de Grasa Selectiva</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="igf1lr3">
-                    <div class="text-4xl mb-2">🦾 IGF-1 LR3</div>
-                    <p class="text-gray-600 text-xs mb-3">1mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
-                    <p class="text-xs text-gray-500 mb-3">Factor de Crecimiento</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="ipamorelin">
-                    <div class="text-4xl mb-2">🚀 Ipamorelin</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,798</p>
-                    <p class="text-xs text-gray-500 mb-3">Secretagogo de GH</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="motsc">
-                    <div class="text-4xl mb-2">⚡ MOTS-C</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,626</p>
-                    <p class="text-xs text-gray-500 mb-3">Activador Mitocondrial</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="nadpep">
-                    <div class="text-4xl mb-2">🧬 NAD+ Péptido</div>
-                    <p class="text-gray-600 text-xs mb-3">1000mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,798</p>
-                    <p class="text-xs text-gray-500 mb-3">Reparación de ADN Celular</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg border-2 border-red-400 p-6" data-product="retatrutide">
-                    <div class="text-4xl mb-2">🎯 Retatrutide ⚠️</div>
-                    <p class="text-gray-600 text-xs mb-3">20mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,275</p>
-                    <p class="text-xs text-gray-500 mb-3">Triple Agonista GLP-1</p>
-                    <button class="w-full py-2 bg-red-700 text-white rounded text-sm font-bold hover:bg-red-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="tb500">
-                    <div class="text-4xl mb-2">🩸 TB-500</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$3,104</p>
-                    <p class="text-xs text-gray-500 mb-3">Regenerador de Tejidos</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="tesamorelin">
-                    <div class="text-4xl mb-2">🔥 Tesamorelin</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$2,585</p>
-                    <p class="text-xs text-gray-500 mb-3">Eliminador de Grasa Visceral</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
-
-                <div class="product-card bg-white rounded-xl shadow-lg p-6" data-product="melanotan2">
-                    <div class="text-4xl mb-2">🌞 Melanotan II</div>
-                    <p class="text-gray-600 text-xs mb-3">10mg Liofilizado</p>
-                    <p class="text-2xl font-bold mb-4" style="color: #C41E3A;">$2,780</p>
-                    <p class="text-xs text-gray-500 mb-3">Investigación de Bronceado</p>
-                    <button class="w-full py-2 bg-green-700 text-white rounded text-sm font-bold hover:bg-green-800">Ver Detalles</button>
-                </div>
+    <!-- ========== RESEARCH PEPTIDES CATEGORY ========== -->
+    <div class="category-section">
+        <div class="category-header">
+            <div class="category-icon">🧬</div>
+            <div class="category-info">
+                <h2>Péptidos de Investigación</h2>
+                <p>SOLUCIONES INDIVIDUALES // ALTA PUREZA</p>
             </div>
         </div>
-    </section>
+        <div class="products-grid" id="researchGrid"></div>
+    </div>
+</main>
 
-    <!-- PIE DE PÁGINA -->
-    <footer class="bg-gray-900 text-gray-400 py-12 px-4">
-        <div class="max-w-6xl mx-auto">
-            <p class="text-center mb-4">© 2026 VITALIX - Péptidos Premium de Investigación</p>
-            <p class="text-center text-xs">Email: info@vitalix.mx | Teléfono: +52 (55) 1234 5678</p>
-            <p class="text-center text-xs mt-4 text-gray-500">Uso de Investigación | Estos productos son solo para propósitos de investigación</p>
+<!-- ========== TRUST SECTION ========== -->
+<section class="trust-section">
+    <div class="trust-grid">
+        <div class="trust-item">
+            <div class="trust-icon">🧪</div>
+            <h3 class="trust-title">Certificado HPLC</h3>
+            <p class="trust-desc">Cada lote es analizado por cromatografía de alta presión para garantizar pureza superior al 99%.</p>
         </div>
-    </footer>
+        <div class="trust-item">
+            <div class="trust-icon">💧</div>
+            <h3 class="trust-title">Solución Lista</h3>
+            <p class="trust-desc">Productos en formato líquido ready-to-use. Sin necesidad de reconstitución.</p>
+        </div>
+        <div class="trust-item">
+            <div class="trust-icon">📦</div>
+            <h3 class="trust-title">Envío Discreto</h3>
+            <p class="trust-desc">Empaquetado en frío con seguimiento. Entrega en 24-48 horas en territorio mexicano.</p>
+        </div>
+        <div class="trust-item">
+            <div class="trust-icon">🔬</div>
+            <h3 class="trust-title">Solo para Investigación</h3>
+            <p class="trust-desc">Productos destinados exclusivamente a investigación científica y de laboratorio.</p>
+        </div>
+    </div>
+</section>
 
-    <script>
+<!-- ========== FOOTER ========== -->
+<footer>
+    <div class="footer-content">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
+            <svg width="32" height="80" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="#a78bfa" stroke-width="2" opacity="0.7">
+                    <line x1="8" y1="20" x2="52" y2="20"/><line x1="8" y1="60" x2="52" y2="60"/>
+                    <line x1="8" y1="100" x2="52" y2="100"/><line x1="8" y1="140" x2="52" y2="140"/>
+                </g>
+                <path d="M 8 10 Q 25 20, 52 30 Q 35 40, 8 50 Q 25 60, 52 70 Q 35 80, 8 90 Q 25 100, 52 110 Q 35 120, 8 130 Q 25 140, 52 150" stroke="#22d3ee" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M 52 10 Q 35 20, 8 30 Q 25 40, 52 50 Q 35 60, 8 70 Q 25 80, 52 90 Q 35 100, 8 110 Q 25 120, 52 130 Q 35 140, 8 150" stroke="#a78bfa" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div style="text-align: left;">
+                <div style="font-size: 28px; font-weight: 900; letter-spacing: 4px; background: linear-gradient(90deg, #ffffff, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">VITALIX</div>
+                <div style="font-size: 10px; letter-spacing: 4px; color: var(--mist);">PEPTIDE LABS MÉXICO</div>
+            </div>
+        </div>
+        <p class="footer-disclaimer">
+            ⚠️ Aviso Legal: Todos los productos VITALIX son destinados exclusivamente para investigación científica y experimental. No están aprobados para consumo humano. El usuario es completamente responsable del uso y aplicación de estos productos.
+        </p>
+        <div class="footer-copyright">
+            © 2026 VITALIX MÉXICO • TODOS LOS DERECHOS RESERVADOS
+        </div>
+    </div>
+</footer>
+
+<!-- ========== PRODUCT MODAL ========== -->
+<div id="productModal" class="modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-brand">
+                <svg width="24" height="50" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="#a78bfa" stroke-width="2" opacity="0.7">
+                        <line x1="8" y1="20" x2="52" y2="20"/><line x1="8" y1="60" x2="52" y2="60"/>
+                        <line x1="8" y1="100" x2="52" y2="100"/><line x1="8" y1="140" x2="52" y2="140"/>
+                    </g>
+                    <path d="M 8 10 Q 25 20, 52 30 Q 35 40, 8 50 Q 25 60, 52 70 Q 35 80, 8 90 Q 25 100, 52 110 Q 35 120, 8 130 Q 25 140, 52 150" stroke="#22d3ee" stroke-width="2.5" fill="none"/>
+                    <path d="M 52 10 Q 35 20, 8 30 Q 25 40, 52 50 Q 35 60, 8 70 Q 25 80, 52 90 Q 35 100, 8 110 Q 25 120, 52 130 Q 35 140, 8 150" stroke="#a78bfa" stroke-width="2.5" fill="none"/>
+                </svg>
+                <span class="modal-brand-text">VITALIX • PEPTIDE LABS</span>
+            </div>
+            <h2 class="modal-product-name" id="modalName"></h2>
+            <p class="modal-product-subtitle" id="modalSubtitle"></p>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<!-- ========== CHECKOUT MODAL ========== -->
+<div id="checkoutModal" class="modal" onclick="if(event.target===this) closeCheckout()">
+    <div class="modal-content" style="max-width: 900px;">
+        <div class="modal-header">
+            <button class="close-btn" onclick="closeCheckout()">×</button>
+            <div class="modal-brand">
+                <span class="modal-brand-text">VITALIX • CHECKOUT</span>
+            </div>
+            <h2 class="modal-product-name">Finalizar Pedido</h2>
+            <p class="modal-product-subtitle">Completa tus datos para procesar la orden</p>
+        </div>
+        <div class="modal-body" id="checkoutBody"></div>
+    </div>
+</div>
+
+<!-- ========== CART PANEL ========== -->
+<div id="cartPanel" class="cart-panel">
+    <div class="cart-header">
+        <h2>Tu Carrito</h2>
+        <button class="close-btn" onclick="toggleCart()" style="position:relative; top:0; right:0;">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+        <div class="cart-summary">
+            <div class="cart-summary-row">
+                <span>Subtotal</span>
+                <span id="cartSubtotal">$0 MXN</span>
+            </div>
+            <div class="cart-summary-row">
+                <span>Envío</span>
+                <span id="cartShipping">$200 MXN</span>
+            </div>
+            <div class="cart-summary-row total">
+                <span>Total</span>
+                <span class="amount" id="cartTotal">$200 MXN</span>
+            </div>
+        </div>
+        <button class="checkout-btn" onclick="goToCheckout()">Proceder al Pago →</button>
+    </div>
+</div>
+
+<script>
+// ========== EmailJS Configuration ==========
+try {
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: 'sxTuTwtP01OBzlCYB' });
+        console.log('✓ EmailJS initialized');
+    }
+} catch (e) {
+    console.error('EmailJS init error:', e);
+}
+
+const EMAILJS_SERVICE_ID = 'service_34xgp3y';
+const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
+const OWNER_EMAIL = 'Eladbarkan10@gmail.com';
+
+// ========== State ==========
+let cart = [];
+let currentShipping = 200;
+let discountPercent = 0;
+
+// ========== Product Data ==========
+const productDetails = {
+    tirzepatida: {
+        name: 'T-Tide R-2',
+        scientificName: 'Tirzepatide • Dual GLP-1/GIP Agonist',
+        category: 'wellness',
+        emoji: '💉',
+        price: 14999,
+        description: 'Tirzepatida es un péptido innovador de doble agonismo destinado al tratamiento de la diabetes tipo 2 y la pérdida de peso. Comercializado bajo los nombres comerciales Mounjaro y Zepbound.',
+        mechanism: 'Es un fármaco de doble acción (Dual Agonist) que imita la acción de dos hormonas naturales (incretinas) liberadas en el intestino, conduciendo a un equilibrio de azúcar más eficiente y reducción significativa en la ingesta de alimentos.',
+        dosageProtocol: 'Semanas 1-4: 2.5mg/semana | Semanas 5-8: 5mg/semana | Semanas 9-12: 7.5mg/semana | Semanas 13-16: 10mg/semana | Semana 17+: hasta 12.5-15mg/semana',
+        usage: 'Inyección subcutánea semanal en abdomen, muslo o brazo. Rotar sitios de inyección. Mismo día cada semana.',
+        benefits: ['Control de apetito', 'Pérdida de peso significativa', 'Gestión de glucosa', 'Doble mecanismo (GLP-1 + GIP)', 'Soporte metabólico', 'Saciedad prolongada'],
+        dosages: ['2.5mg', '5mg', '7.5mg', '10mg', '12.5mg', '15mg'],
+        specs: { purity: '99.20%', assay: '30.6 mg/vial', water: '1.82%', endotoxins: '<5 EU/mg', lot: 'TR30-20260122', storage: '0°C' }
+    },
+    semaglutida: {
+        name: 'S-Tide R-1',
+        scientificName: 'Semaglutide • GLP-1 Receptor Agonist',
+        category: 'wellness',
+        emoji: '💉',
+        price: 12999,
+        description: 'Semaglutida es un péptido inyectable semanal que imita la hormona GLP-1. Conocido comercialmente como Ozempic y Wegovy. Reduce el hambre y aumenta la saciedad.',
+        mechanism: 'Imita la hormona natural GLP-1 que se libera del intestino después de comer. Actúa sobre el cerebro para reducir la sensación de hambre, ralentiza el vaciado del estómago y aumenta la secreción de insulina.',
+        dosageProtocol: 'Semanas 1-4: 0.25mg/semana | Semanas 5-8: 0.5mg/semana | Semanas 9-12: 1mg/semana | Semanas 13-16: 1.7mg/semana | Semana 17+: hasta 2.4mg/semana',
+        usage: 'Inyección subcutánea semanal. Mejor momento: mismo día cada semana, antes o después de comer.',
+        benefits: ['Reducción de peso significativa', 'Control de glucosa óptimo', 'Efecto duradero (semanal)', 'Soporte cardiovascular', 'Saciedad prolongada', 'Mejora metabólica'],
+        dosages: ['0.25mg', '0.5mg', '1mg', '2mg', '2.4mg'],
+        specs: { purity: '99.67%', assay: '31.2 mg/vial', water: '1.62%', endotoxins: '<5 EU/mg', lot: 'SM30-20260124', storage: '0°C' }
+    },
+    rtide: {
+        name: 'R-Tide R-3',
+        scientificName: 'Retatrutide • Triple Agonist GLP-1/GIP/Glucagon',
+        category: 'wellness',
+        emoji: '🎯',
+        price: 16999,
+        description: 'Retatrutida es un agonista TRIPLE de receptores - el más avanzado en su categoría. Activa simultáneamente GLP-1, GIP y Glucagón para resultados sin precedentes.',
+        mechanism: 'Triple agonismo: GLP-1 (reduce apetito), GIP (mejora sensibilidad a insulina), Glucagón (aumenta gasto energético). Esta combinación única produce resultados sinérgicos.',
+        dosageProtocol: 'Semanas 1-4: 2mg/semana | Semanas 5-8: 4mg/semana | Semanas 9-12: 6mg/semana | Semanas 13-16: 8mg/semana | Semana 17+: hasta 12mg/semana',
+        usage: 'Inyección subcutánea semanal. Iniciar con dosis baja y subir gradualmente solo si la dosis anterior fue bien tolerada.',
+        benefits: ['Triple agonismo único', 'Pérdida de peso superior (hasta 24%)', 'Reduce antojos significativamente', 'Aumenta gasto energético', 'Mejora control glucémico', 'Saciedad prolongada'],
+        dosages: ['2mg', '4mg', '6mg', '8mg', '10mg', '12mg']
+    },
+    aod9604: {
+        name: 'AOD-9604',
+        scientificName: 'Anti-Obesity Drug 9604 • Lipolytic Peptide',
+        category: 'research',
+        emoji: '🔥',
+        price: 3451,
+        description: 'AOD-9604 es un fragmento modificado de la hormona del crecimiento (HGH 177-191), diseñado específicamente para potenciar la lipólisis sin afectar el crecimiento o el azúcar en sangre.',
+        mechanism: 'Estimula la lipólisis (descomposición de grasa) e inhibe la lipogénesis. Actúa sobre los receptores beta-3 adrenérgicos en el tejido adiposo.',
+        dosageProtocol: 'Dosis estándar: 300 mcg/día | Frecuencia: 1 inyección diaria | Ciclo: 12 semanas | Mejor momento: Mañana en ayunas',
+        usage: 'Inyección subcutánea en abdomen, muslo o brazo. Rotar los sitios de inyección. Almacenar refrigerado entre 2-8°C.',
+        benefits: ['Estimula quema de grasa', 'Reduce grasa abdominal', 'No afecta glucosa', 'Regeneración de cartílago', 'Mejora metabolismo', 'Sin efectos sobre IGF-1']
+    },
+    bpc157: {
+        name: 'BPC-157',
+        scientificName: 'Body Protection Compound 157',
+        category: 'research',
+        emoji: '🩹',
+        price: 3104,
+        description: 'BPC-157 es un péptido de 15 aminoácidos derivado de una proteína protectora del jugo gástrico. Ampliamente conocido por sus extraordinarias propiedades regenerativas y curativas.',
+        mechanism: 'Promueve la angiogénesis (formación de vasos sanguíneos), aumenta el óxido nítrico, modula receptores de serotonina y dopamina, acelera la migración de fibroblastos.',
+        dosageProtocol: 'Dosis estándar: 250-500 mcg/día | Frecuencia: 1-2 inyecciones diarias | Ciclo: 4-6 semanas | Lesiones agudas: 500 mcg en 2 dosis',
+        usage: 'Inyección subcutánea cerca del área lesionada para efectos localizados. También en abdomen para efectos sistémicos.',
+        benefits: ['Acelera reparación de tejidos', 'Recuperación muscular', 'Salud de tendones y ligamentos', 'Cicatrización mejorada', 'Protección gastrointestinal', 'Reducción de inflamación'],
+        specs: { purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: '<5 EU/mg', lot: '2026011303', storage: '0°C' }
+    },
+    cjc1295: {
+        name: 'CJC-1295',
+        scientificName: 'CJC-1295 No DAC • Modified GHRH',
+        category: 'research',
+        emoji: '💪',
+        price: 3626,
+        description: 'CJC-1295 (sin DAC) es un análogo modificado del GHRH. Estimula la liberación natural de hormona del crecimiento manteniendo el ritmo natural del cuerpo.',
+        mechanism: 'Se une a los receptores GHRH en la pituitaria, estimulando la liberación pulsátil de hormona del crecimiento. La versión "No DAC" tiene vida media corta (~30 min).',
+        dosageProtocol: 'Dosis estándar: 100-200 mcg por inyección | Frecuencia: 2-3 veces al día | Ciclo: 12 semanas | Combinar: con Ipamorelin',
+        usage: 'Inyección subcutánea con estómago vacío. Mejores momentos: al despertar, antes de entrenar, antes de dormir. Esperar 30 min antes de comer.',
+        benefits: ['Aumento natural de GH', 'Crecimiento muscular magro', 'Quema de grasa acelerada', 'Mejora calidad del sueño', 'Recuperación post-entrenamiento', 'Aumento de IGF-1']
+    },
+    ghkcu: {
+        name: 'GHK-CU',
+        scientificName: 'Glycyl-Histidyl-Lysine Copper Peptide',
+        category: 'research',
+        emoji: '✨',
+        price: 3104,
+        description: 'GHK-Cu es un péptido natural de cobre presente en el cuerpo humano. Famoso por sus propiedades anti-envejecimiento y regeneración de la piel.',
+        mechanism: 'Estimula producción de colágeno y elastina, activa receptores antioxidantes, modula expresión de genes relacionados con regeneración tisular.',
+        dosageProtocol: 'Inyección: 1-2 mg/día | Tópico: 2-3 veces/día | Ciclo: 8-12 semanas | Mantenimiento: Uso continuo seguro',
+        usage: 'Inyección subcutánea para efectos sistémicos. También uso tópico para beneficios localizados de la piel. Almacenar protegido de la luz.',
+        benefits: ['Estimula producción de colágeno', 'Reduce arrugas', 'Mejora firmeza', 'Acelera curación de heridas', 'Estimula crecimiento del cabello', 'Antioxidante potente']
+    },
+    hghfrag: {
+        name: 'HGH Fragment 176-191',
+        scientificName: 'Human Growth Hormone Fragment',
+        category: 'research',
+        emoji: '🔥',
+        price: 3104,
+        description: 'Fragmento de la HGH específicamente diseñado para potenciar la pérdida de grasa. Es 12.5 veces más efectivo que la HGH completa para quema de grasa.',
+        mechanism: 'Imita el efecto regulador de la HGH sobre las grasas sin afectar el crecimiento o la sensibilidad a la insulina. Estimula lipólisis e inhibe lipogénesis.',
+        dosageProtocol: 'Dosis estándar: 250-500 mcg/día | Frecuencia: 2 inyecciones diarias | Ciclo: 8-12 semanas | Mejor momento: Mañana en ayunas + antes de dormir',
+        usage: 'Inyección subcutánea en abdomen. Inyectar con estómago vacío y esperar al menos 1 hora antes de comer.',
+        benefits: ['Quema de grasa altamente eficiente', 'Pérdida de grasa abdominal', 'No afecta glucosa', 'No afecta crecimiento', 'Recomposición corporal', 'Aumento metabolismo basal']
+    },
+    igf1lr3: {
+        name: 'IGF-1 LR3',
+        scientificName: 'Long R3 Insulin-like Growth Factor 1',
+        category: 'research',
+        emoji: '🦾',
+        price: 3626,
+        description: 'IGF-1 LR3 es una versión sintética del Factor de Crecimiento Insulínico Tipo 1 con vida media extendida. Uno de los péptidos más potentes para crecimiento muscular.',
+        mechanism: 'Activa los receptores IGF-1 en el músculo esquelético, estimula síntesis proteica, promueve hiperplasia (creación de nuevas células musculares).',
+        dosageProtocol: 'Dosis estándar: 20-50 mcg/día | Frecuencia: 1 inyección diaria | Ciclo: 4 semanas (descanso 4 semanas) | Mejor momento: Post-entrenamiento',
+        usage: 'Inyección subcutánea o intramuscular cerca del músculo trabajado. Combinar con buena nutrición y entrenamiento de resistencia.',
+        benefits: ['Crecimiento muscular significativo', 'Síntesis proteica acelerada', 'Hiperplasia muscular', 'Recuperación mejorada', 'Pérdida de grasa', 'Aumento de fuerza']
+    },
+    ipamorelin: {
+        name: 'Ipamorelin',
+        scientificName: 'GH Secretagogue Pentapeptide',
+        category: 'research',
+        emoji: '🚀',
+        price: 3798,
+        description: 'Ipamorelin es uno de los secretagogos de hormona del crecimiento más selectivos y limpios. No afecta cortisol o prolactina, lo que lo hace muy seguro.',
+        mechanism: 'Se une selectivamente a receptores de ghrelina en la pituitaria, estimulando liberación pulsátil de GH sin afectar cortisol, prolactina o aldosterona.',
+        dosageProtocol: 'Dosis estándar: 200-300 mcg por inyección | Frecuencia: 2-3 veces al día | Ciclo: 8-12 semanas | Combinar: con CJC-1295 No DAC',
+        usage: 'Inyección subcutánea con estómago vacío. Mejores momentos: al despertar, antes/después de entrenar, antes de dormir.',
+        benefits: ['Aumento natural de GH', 'Crecimiento muscular magro', 'Mejora calidad del sueño', 'Anti-envejecimiento', 'Recuperación acelerada', 'Sin efectos sobre cortisol']
+    },
+    motsc: {
+        name: 'MOTS-C',
+        scientificName: 'Mitochondrial Open Reading Frame',
+        category: 'research',
+        emoji: '⚡',
+        price: 3626,
+        description: 'MOTS-c es un péptido único codificado por el ADN mitocondrial. Conocido como el "péptido del ejercicio" porque imita los efectos del ejercicio físico a nivel celular.',
+        mechanism: 'Activa la AMPK, mejora sensibilidad a la insulina, regula metabolismo de glucosa y lípidos, aumenta biogénesis mitocondrial.',
+        dosageProtocol: 'Dosis estándar: 5-10 mg/semana | Frecuencia: 2-3 veces por semana | Ciclo: 8-12 semanas | Mejor momento: Antes del ejercicio',
+        usage: 'Inyección subcutánea. Combina excelentemente con un programa de ejercicio regular. Almacenar refrigerado.',
+        benefits: ['Mejora energía celular', 'Regulación metabólica', 'Mejora sensibilidad a insulina', 'Aumenta resistencia física', 'Quema de grasa metabólica', 'Anti-envejecimiento celular']
+    },
+    nadpep: {
+        name: 'NAD+ 1000',
+        scientificName: 'Nicotinamide Adenine Dinucleotide',
+        category: 'research',
+        emoji: '🧬',
+        price: 3798,
+        description: 'NAD+ es una coenzima esencial para la producción de energía celular y la reparación del ADN. Su suplementación es una de las terapias anti-envejecimiento más prometedoras.',
+        mechanism: 'Activa las sirtuinas (proteínas de longevidad), repara ADN dañado, mejora función mitocondrial, regula metabolismo celular.',
+        dosageProtocol: 'Dosis estándar: 100-300 mg/día | Frecuencia: Diario o cada 2 días | Ciclo: 4-8 semanas | Iniciar: Con dosis baja (50mg) y aumentar gradualmente',
+        usage: 'Inyección subcutánea o intramuscular lenta. Aplicar lentamente durante 5-10 minutos para evitar efectos como enrojecimiento.',
+        benefits: ['Energía celular aumentada', 'Reparación del ADN', 'Anti-envejecimiento profundo', 'Mejora claridad mental', 'Aumenta longevidad celular', 'Apoyo a procesos detox'],
+        specs: { purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: '<5 EU/mg', lot: '2026011901', storage: '0°C' }
+    },
+    retatrutide: {
+        name: 'Retatrutide',
+        scientificName: 'Triple Agonist GLP-1/GIP/Glucagon',
+        category: 'research',
+        emoji: '🎯',
+        price: 3275,
+        description: 'Retatrutide es un péptido revolucionario de TRIPLE acción que activa simultáneamente tres receptores hormonales. El más avanzado para manejo de peso.',
+        mechanism: 'Triple agonismo: GLP-1 (reduce apetito), GIP (mejora sensibilidad a insulina), Glucagón (aumenta gasto energético). Resultados sinérgicos sin precedentes.',
+        dosageProtocol: 'Semanas 1-4: 2mg/semana | Semanas 5-8: 4mg | Semanas 9-12: 6mg | Semanas 13-16: 8mg | Semana 17+: hasta 12mg/semana',
+        usage: 'Inyección subcutánea semanal en abdomen, muslo o brazo. Rotar sitios. Mismo día cada semana.',
+        benefits: ['Pérdida de peso superior (24%)', 'Triple mecanismo de acción', 'Reduce antojos', 'Aumenta gasto energético', 'Mejora control glucémico', 'Reducción de grasa visceral'],
+        specs: { purity: '99.48%', assay: '21.7 mg/vial', water: '1.68%', endotoxins: '<5 EU/mg', lot: 'RT20-20260112', storage: '0°C' }
+    },
+    tb500: {
+        name: 'TB-500',
+        scientificName: 'Thymosin Beta-4 Fragment',
+        category: 'research',
+        emoji: '🩸',
+        price: 3104,
+        description: 'TB-500 es un péptido sintético basado en la Timosina Beta-4. Famoso por sus extraordinarias propiedades regenerativas y curación sistémica.',
+        mechanism: 'Promueve migración celular (especialmente células madre y fibroblastos) hacia sitios de lesión. Estimula angiogénesis y aumenta flexibilidad de tejidos.',
+        dosageProtocol: 'Carga (4-6 semanas): 5-10 mg/semana | Mantenimiento: 2-5 mg/semana | Frecuencia: 2 inyecciones por semana | Combinar: con BPC-157',
+        usage: 'Inyección subcutánea o intramuscular cerca del área lesionada. Para efectos sistémicos, abdomen es ideal. Almacenar refrigerado.',
+        benefits: ['Regeneración de tejidos sistémica', 'Recuperación acelerada', 'Salud de tendones', 'Mejora movilidad articular', 'Reducción de inflamación', 'Recuperación cardíaca']
+    },
+    tesamorelin: {
+        name: 'Tesamorelin',
+        scientificName: 'GHRH Analog',
+        category: 'research',
+        emoji: '🔥',
+        price: 2585,
+        description: 'Tesamorelin es un análogo sintético de la GHRH, aprobado por la FDA específicamente para reducir grasa visceral. Uno de los péptidos más efectivos para grasa abdominal profunda.',
+        mechanism: 'Estimula liberación natural de hormona del crecimiento desde la pituitaria, aumentando IGF-1 y promoviendo lipólisis específicamente en grasa visceral.',
+        dosageProtocol: 'Dosis estándar: 1-2 mg/día | Frecuencia: 1 inyección diaria | Ciclo: 12-26 semanas | Mejor momento: Antes de dormir',
+        usage: 'Inyección subcutánea en abdomen. Ideal aplicar 30 minutos antes de dormir para coincidir con el pico natural de GH.',
+        benefits: ['Reducción específica grasa visceral', 'Aumento natural de GH', 'Mejora composición corporal', 'Aumento masa muscular magra', 'Mejor perfil lipídico', 'Mejora función cognitiva']
+    },
+    melanotan2: {
+        name: 'Melanotan II',
+        scientificName: 'α-MSH Synthetic Analog',
+        category: 'research',
+        emoji: '🌞',
+        price: 2780,
+        description: 'Melanotan II es un análogo sintético de la hormona α-MSH. Estimula la producción de melanina produciendo bronceado natural y duradero.',
+        mechanism: 'Activa receptores de melanocortina (MC1R-MC5R), estimulando producción de melanina (eumelanina) en los melanocitos de la piel.',
+        dosageProtocol: 'Carga: 0.25-0.5 mg/día (1-2 semanas) | Mantenimiento: 1-2 mg/semana | Iniciar: Con 0.1 mg para evaluar tolerancia | Combinar: con exposición solar moderada',
+        usage: 'Inyección subcutánea, preferiblemente por la noche. Combinar con exposición solar gradual. Efectos visibles en 2-4 semanas.',
+        benefits: ['Bronceado natural duradero', 'Pigmentación uniforme', 'Protección UV mejorada', 'Reduce tiempo de exposición', 'Apoyo a libido', 'Reducción de apetito']
+    }
+};
+
+// ========== Render Products ==========
+function renderProducts() {
+    const wellness = document.getElementById('wellnessGrid');
+    const research = document.getElementById('researchGrid');
+    
+    let wellnessHtml = '';
+    let researchHtml = '';
+    
+    Object.keys(productDetails).forEach(key => {
+        const p = productDetails[key];
+        const isPremium = p.category === 'wellness';
+        const cardClass = isPremium ? 'product-card premium' : 'product-card';
+        const badgeClass = isPremium ? 'product-badge' : 'product-badge purity';
+        const badgeText = isPremium ? '3 MESES' : '99%+';
         
-        // ===== EmailJS Configuration =====
-        try {
-            if (typeof emailjs !== 'undefined') {
-                // EmailJS V4 syntax
-                emailjs.init({
-                    publicKey: 'sxTuTwtP01OBzlCYB'
-                });
-                console.log('✓ EmailJS initialized (V4)');
-            } else {
-                console.warn('EmailJS not loaded yet');
-            }
-        } catch (e) {
-            console.error('EmailJS init error:', e);
+        const card = `
+            <div class="${cardClass}" onclick="showProductDetail('${key}')">
+                <div class="product-image-area">
+                    <span class="product-emoji">${p.emoji}</span>
+                    <div class="${badgeClass}">${badgeText}</div>
+                </div>
+                <div class="product-info">
+                    <div class="product-id">${p.scientificName}</div>
+                    <h3 class="product-name">${p.name}</h3>
+                    <p class="product-description">${p.description}</p>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="currency">$</span>
+                            <span class="amount">${p.price.toLocaleString('es-MX')}</span>
+                            <span class="mxn">MXN</span>
+                        </div>
+                        <button class="view-btn">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        if (isPremium) wellnessHtml += card;
+        else researchHtml += card;
+    });
+    
+    wellness.innerHTML = wellnessHtml;
+    research.innerHTML = researchHtml;
+}
+
+// ========== Show Product Modal ==========
+function showProductDetail(key) {
+    const p = productDetails[key];
+    if (!p) return;
+    
+    document.getElementById('modalName').textContent = p.name;
+    document.getElementById('modalSubtitle').textContent = p.scientificName;
+    
+    let html = `
+        <div class="price-banner">
+            <div class="price-label">Precio</div>
+            <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
+        </div>
+        
+        <div class="info-block">
+            <div class="info-block-title">
+                <div class="info-block-title-icon">📖</div>
+                Descripción
+            </div>
+            <div class="info-block-content">${p.description}</div>
+        </div>
+        
+        <div class="info-block">
+            <div class="info-block-title">
+                <div class="info-block-title-icon">🧬</div>
+                Mecanismo de Acción
+            </div>
+            <div class="info-block-content">${p.mechanism}</div>
+        </div>
+        
+        <div class="info-block">
+            <div class="info-block-title">
+                <div class="info-block-title-icon">✨</div>
+                Beneficios Principales
+            </div>
+            <div class="benefits-grid">
+                ${p.benefits.map(b => `<div class="benefit-item"><span class="benefit-check">✓</span><span>${b}</span></div>`).join('')}
+            </div>
+        </div>
+        
+        ${p.dosageProtocol ? `
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">💊</div>
+                    Protocolo de Dosificación
+                </div>
+                <div class="dosage-box">${p.dosageProtocol}</div>
+            </div>
+        ` : ''}
+        
+        ${p.usage ? `
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">💉</div>
+                    Modo de Uso
+                </div>
+                <div class="usage-box">${p.usage}</div>
+            </div>
+        ` : ''}
+        
+        ${p.specs ? `
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">🧪</div>
+                    Especificaciones HPLC
+                </div>
+                <div class="specs-grid">
+                    <div class="spec-item"><div class="spec-label">Pureza</div><div class="spec-value">${p.specs.purity}</div></div>
+                    <div class="spec-item"><div class="spec-label">Ensayo</div><div class="spec-value">${p.specs.assay}</div></div>
+                    <div class="spec-item"><div class="spec-label">Agua</div><div class="spec-value">${p.specs.water}</div></div>
+                    <div class="spec-item"><div class="spec-label">Endotoxinas</div><div class="spec-value">${p.specs.endotoxins}</div></div>
+                    <div class="spec-item"><div class="spec-label">Lote</div><div class="spec-value">${p.specs.lot}</div></div>
+                    <div class="spec-item"><div class="spec-label">Almacén</div><div class="spec-value">${p.specs.storage}</div></div>
+                </div>
+            </div>
+        ` : ''}
+        
+        ${p.dosages ? `
+            <div class="dosage-selector">
+                <label>Selecciona Dosis:</label>
+                <select id="dosageSelect">
+                    <option value="">-- Elige tu dosis --</option>
+                    ${p.dosages.map(d => `<option value="${d}">${d}</option>`).join('')}
+                </select>
+            </div>
+        ` : ''}
+        
+        <div class="checkbox-group">
+            <h4>⚠️ Confirmación de Investigación</h4>
+            <label class="checkbox-item">
+                <input type="checkbox" id="research" required>
+                <span>Confirmo que este producto se utilizará exclusivamente para investigación científica.</span>
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" id="legal" required>
+                <span>Acepto los términos legales y soy mayor de 21 años.</span>
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" id="responsibility" required>
+                <span>Asumo total responsabilidad sobre el uso de este producto.</span>
+            </label>
+            <label class="checkbox-item">
+                <input type="checkbox" id="disclaimerAccept" required>
+                <span>Acepto el descargo de responsabilidad de VITALIX.</span>
+            </label>
+        </div>
+        
+        <div class="modal-actions">
+            <button class="btn-add-cart" onclick="addProductToCart('${key}')">🛒 Agregar al Carrito</button>
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+        </div>
+    `;
+    
+    document.getElementById('modalBody').innerHTML = html;
+    document.getElementById('productModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('productModal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// ========== Cart Functions ==========
+function addProductToCart(key) {
+    const p = productDetails[key];
+    
+    const dosageSelect = document.getElementById('dosageSelect');
+    const dosage = dosageSelect ? dosageSelect.value : null;
+    
+    const research = document.getElementById('research')?.checked;
+    const legal = document.getElementById('legal')?.checked;
+    const responsibility = document.getElementById('responsibility')?.checked;
+    const disclaimerAccept = document.getElementById('disclaimerAccept')?.checked;
+
+    if (p.dosages && !dosage) {
+        alert('Por favor selecciona una dosis');
+        return;
+    }
+
+    if (!research || !legal || !responsibility || !disclaimerAccept) {
+        alert('Por favor confirma todos los términos');
+        return;
+    }
+
+    const itemName = dosage ? `${p.name} (${dosage})` : p.name;
+    cart.push({ name: itemName, price: p.price });
+    updateCart();
+    closeModal();
+    
+    // Show added animation
+    const cartCount = document.getElementById('cartCount');
+    cartCount.style.animation = 'pulse-glow 0.5s';
+    setTimeout(() => cartCount.style.animation = '', 500);
+    
+    alert('✓ Producto agregado al carrito');
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCart();
+}
+
+function updateCart() {
+    document.getElementById('cartCount').textContent = cart.length;
+    
+    const cartItems = document.getElementById('cartItems');
+    const cartFooter = document.getElementById('cartFooter');
+    
+    if (cart.length === 0) {
+        cartItems.innerHTML = `
+            <div class="cart-empty">
+                <div class="cart-empty-icon">🛒</div>
+                <p>Tu carrito está vacío</p>
+            </div>
+        `;
+        cartFooter.style.display = 'none';
+        return;
+    }
+    
+    cartItems.innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <h4>${item.name}</h4>
+                <div class="cart-item-price">$${item.price.toLocaleString('es-MX')} MXN</div>
+            </div>
+            <button class="remove-btn" onclick="removeFromCart(${idx})">×</button>
+        </div>
+    `).join('');
+    
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    const total = subtotal + currentShipping;
+    
+    document.getElementById('cartSubtotal').textContent = '$' + subtotal.toLocaleString('es-MX') + ' MXN';
+    document.getElementById('cartTotal').textContent = '$' + total.toLocaleString('es-MX') + ' MXN';
+    
+    cartFooter.style.display = 'block';
+}
+
+function toggleCart() {
+    document.getElementById('cartPanel').classList.toggle('open');
+}
+
+// ========== Checkout ==========
+function goToCheckout() {
+    if (cart.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    showCheckout();
+}
+
+function showCheckout() {
+    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let total = subtotal + currentShipping;
+
+    const html = `
+        <form id="checkoutForm" onsubmit="event.preventDefault(); processPayment();">
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">📦</div>
+                    Resumen del Pedido
+                </div>
+                <div style="background: var(--pearl); padding: 16px; border-radius: 12px;">
+                    ${cart.map(item => `
+                        <div style="display:flex; justify-content:space-between; padding: 6px 0;">
+                            <span>${item.name}</span>
+                            <strong>$${item.price.toLocaleString('es-MX')}</strong>
+                        </div>
+                    `).join('')}
+                    <div style="display:flex; justify-content:space-between; padding-top: 12px; margin-top: 12px; border-top: 2px solid var(--frost); font-size: 18px; font-weight: 700; color: var(--crimson);">
+                        <span>Total:</span>
+                        <span>$${total.toLocaleString('es-MX')} MXN</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">👤</div>
+                    Datos Personales
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <input type="text" id="firstName" required placeholder="Nombre" style="padding: 12px; border: 2px solid var(--frost); border-radius: 8px; font-size: 14px;">
+                    <input type="text" id="lastName" required placeholder="Apellido" style="padding: 12px; border: 2px solid var(--frost); border-radius: 8px; font-size: 14px;">
+                </div>
+                <input type="email" id="email" required placeholder="Email" style="width: 100%; padding: 12px; border: 2px solid var(--frost); border-radius: 8px; margin-top: 12px; font-size: 14px;">
+                <input type="tel" id="phone" required placeholder="Teléfono (+52)" style="width: 100%; padding: 12px; border: 2px solid var(--frost); border-radius: 8px; margin-top: 12px; font-size: 14px;">
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">📍</div>
+                    Dirección de Envío
+                </div>
+                <input type="text" id="address" required placeholder="Calle y Número" style="width: 100%; padding: 12px; border: 2px solid var(--frost); border-radius: 8px; margin-bottom: 12px; font-size: 14px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+                    <input type="text" id="city" required placeholder="Ciudad" style="padding: 12px; border: 2px solid var(--frost); border-radius: 8px; font-size: 14px;">
+                    <input type="text" id="state" required placeholder="Estado" style="padding: 12px; border: 2px solid var(--frost); border-radius: 8px; font-size: 14px;">
+                    <input type="text" id="postal" required placeholder="C.P." style="padding: 12px; border: 2px solid var(--frost); border-radius: 8px; font-size: 14px;">
+                </div>
+                <input type="text" id="country" required value="México" style="width: 100%; padding: 12px; border: 2px solid var(--frost); border-radius: 8px; margin-top: 12px; font-size: 14px;">
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">💳</div>
+                    Método de Pago
+                </div>
+                <label style="display: flex; align-items: center; padding: 16px; background: var(--pearl); border: 2px solid var(--violet); border-radius: 12px; margin-bottom: 12px; cursor: pointer;">
+                    <input type="radio" name="paymentMethod" value="bankTransfer" checked style="margin-right: 12px; width: 20px; height: 20px; accent-color: var(--violet);">
+                    <div>
+                        <strong>🏦 Transferencia Bancaria (SPEI)</strong>
+                        <div style="font-size: 13px; color: #6b7280; margin-top: 4px;">Recibirás los datos de transferencia por correo</div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="modal-actions">
+                <button type="submit" class="btn-add-cart">✓ Confirmar Pedido</button>
+                <button type="button" class="btn-cancel" onclick="closeCheckout()">Cancelar</button>
+            </div>
+        </form>
+    `;
+    
+    document.getElementById('checkoutBody').innerHTML = html;
+    document.getElementById('checkoutModal').classList.add('show');
+    toggleCart();
+}
+
+function closeCheckout() {
+    document.getElementById('checkoutModal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+function processPayment() {
+    try {
+        const form = document.getElementById('checkoutForm');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
         }
-        const EMAILJS_SERVICE_ID = 'service_34xgp3y';
-        const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
-        const OWNER_EMAIL = 'Eladbarkan10@gmail.com'; // Owner email
-        
-        let cart = [];
-        let currentShipping = 200;
-        let discountPercent = 0;
 
-        const coupons = {
-            'BIENVENIDA10': 10,
-            'INVESTIGACION15': 15,
-            'VITALIX20': 20,
-            'PEPTIDOS25': 25,
-            'LEALTAD30': 30,
-            'ARIELLA10': 10,
-            'SERGIO5': 5
+        const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+        const total = subtotal + currentShipping;
+        const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+        const orderData = {
+            referenceNumber,
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            city: document.getElementById('city').value,
+            state: document.getElementById('state').value,
+            postal: document.getElementById('postal').value,
+            country: document.getElementById('country').value,
+            items: [...cart],
+            subtotal,
+            shipping: currentShipping,
+            total,
+            paymentMethod: 'bankTransfer',
+            orderDate: new Date().toLocaleString('es-MX')
+        };
+        
+        processBankTransfer(orderData);
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error: ' + error.message);
+    }
+}
+
+function processBankTransfer(orderData) {
+    try {
+        const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
+        
+        const emailData = {
+            to_email: orderData.email,
+            firstName: orderData.firstName,
+            lastName: orderData.lastName,
+            referenceNumber: orderData.referenceNumber,
+            orderDate: orderData.orderDate,
+            items: itemsList,
+            subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
+            shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
+            total: '$' + orderData.total.toLocaleString('es-MX'),
+            address: orderData.address,
+            city: orderData.city,
+            state: orderData.state,
+            postal: orderData.postal,
+            country: orderData.country,
+            phone: orderData.phone
         };
 
-        const productDetails = {
-            tirzepatida: {name: 'T-Tide R-2', emoji: '💉', price: 14999, description: 'Tirzepatida es un péptido innovador de doble agonismo (Dual Agonist) destinado al tratamiento de la diabetes tipo 2 y la pérdida de peso, que actúa como agonista dual de los receptores de las hormonas GLP-1 y GIP. Equilibra el azúcar, reduce el apetito y aumenta la saciedad. Comercializado bajo los nombres comerciales Mounjaro y Zepbound.', mechanism: 'Mecanismo de Acción: Es un fármaco de doble acción (Dual Agonist) que imita la acción de dos hormonas naturales (incretinas) liberadas en el intestino, conduciendo a un equilibrio de azúcar más eficiente y a una reducción significativa en la ingesta de alimentos.', uses: 'Usos Principales: • Diabetes Tipo 2: equilibrio de los niveles de azúcar en sangre. • Manejo de Peso: tratamiento de obesidad (IMC ≥ 30) o sobrepeso (IMC ≥ 27) con comorbilidades.', dosageProtocol: 'Protocolo de Dosificación Gradual: • Semanas 1-4: 2.5mg/semana (dosis inicial más baja) • Semanas 5-8: 5mg/semana • Semanas 9-12: 7.5mg/semana • Semanas 13-16: 10mg/semana • Semana 17+: hasta 12.5-15mg/semana (dosis máxima estudiada)', benefits: ['Control de apetito', 'Pérdida de peso significativa', 'Gestión de glucosa', 'Efectos metabólicos rápidos', 'Doble mecanismo (GLP-1 + GIP)'], dosages: ['2.5mg', '5mg', '7.5mg', '10mg', '12.5mg', '15mg'], specifications: {purity: '99.20%', assay: '30.6 mg/vial', water: '1.82%', endotoxins: 'Less than 5 EU/mg', lot: 'TR30-20260122-TR20260123', storage: 'Protected from Light, 0°C', certificateLink: 'COA_TR30_Tirzepatide_Certificate.jpg'}},
-            semaglutida: {name: 'S-Tide R-1', emoji: '💉', price: 12999, description: 'Semaglutida es un péptido inyectable semanal que imita la hormona GLP-1, secretada después de comer. Actúa sobre el cerebro para reducir la sensación de hambre, ralentiza el vaciado gástrico (sensación de saciedad prolongada) y aumenta la secreción de insulina. Conocido comercialmente como Ozempic y Wegovy.', mechanism: 'Mecanismo de Acción: La semaglutida imita la hormona natural GLP-1 que se libera del intestino después de comer. Actúa sobre el cerebro para reducir la sensación de hambre, ralentiza el vaciado del estómago (sensación de saciedad prolongada) y aumenta la secreción de insulina.', uses: 'Usos Principales: • Diabetes Tipo 2: control de glucemia • Pérdida de peso: tratamiento de obesidad y sobrepeso • Protección cardiovascular: reduce eventos cardiovasculares', dosageProtocol: 'Protocolo de Dosificación Gradual: • Semanas 1-4: 0.25mg/semana (dosis inicial) • Semanas 5-8: 0.5mg/semana • Semanas 9-12: 1mg/semana • Semanas 13-16: 1.7mg/semana • Semana 17+: hasta 2.4mg/semana (dosis de mantenimiento)', benefits: ['Reducción de peso significativa', 'Control de glucosa óptimo', 'Efecto duradero (semanal)', 'Soporte cardiovascular', 'Saciedad prolongada'], dosages: ['0.25mg', '0.5mg', '1mg', '2mg', '2.4mg'], specifications: {purity: '99.67%', assay: '31.2 mg/vial', water: '1.62%', endotoxins: 'Less than 5 EU/mg', lot: 'SM30-20260124-SM20260126', storage: 'Protected from Light, 0°C', certificateLink: 'COA_SM30_Semaglutide_Certificate.jpg'}},
-            rtide: {name: 'R-Tide R-3', emoji: '🎯', price: 16999, description: 'Retatrutida es un agonista TRIPLE de receptores - el más avanzado en su categoría. Activa simultáneamente tres vías hormonales diferentes en el cuerpo: GLP-1, GIP y Glucagón. Estas tres vías incluyen hormonas naturales que ayudan a regular el apetito, los niveles de azúcar en sangre y el metabolismo energético. Al actuar sobre los tres sistemas simultáneamente, Retatrutida ayuda a sentir saciedad después de comer, reduce los antojos de azúcar y apoya el uso de grasa almacenada como energía.', mechanism: 'Mecanismo de Acción: Es una terapia triple que habla los tres idiomas que tu cuerpo ya entiende. No fuerza al cuerpo a hacer algo antinatural - amplifica las señales que el cuerpo ya produce, ayudándote a sentir saciedad con cantidades menores de comida y manteniendo niveles de glucosa más estables. Esta acción triple es lo que diferencia a Retatrutida de otros medicamentos para el manejo del peso que actúan solo sobre uno o dos sistemas.', uses: 'Usos Principales: • Manejo de peso avanzado • Control metabólico integral • Regulación de glucosa • Reducción de grasa almacenada • Reducción de antojos de azúcar', dosageProtocol: 'Protocolo de Dosificación Gradual: • Semanas 1-4: 2mg/semana (dosis inicial más baja) • Semanas 5-8: 4mg/semana (si toleró bien) • Semanas 9-12: 6mg/semana (escalada gradual) • Semanas 13-16: 8mg/semana (para quienes progresan suavemente) • Semana 17+: hasta 12mg/semana (dosis máxima estudiada en ensayos clínicos)', benefits: ['Triple agonismo (GLP-1 + GIP + Glucagón)', 'Pérdida de peso superior', 'Control metabólico integral', 'Reduce antojos de azúcar', 'Aumenta uso de grasa almacenada como energía'], dosages: ['2mg', '4mg', '6mg', '8mg', '10mg', '12mg']},
+        const completeOrder = (status) => {
+            let msg = `✓ ORDEN CREADA CON ÉXITO\n\nNúmero: ${orderData.referenceNumber}\n\n`;
+            if (status === 'success') msg += `Recibirás un correo con los detalles.\n\n`;
+            else msg += `⚠️ Email no enviado, pero orden guardada.\n\n`;
+            msg += `📋 TRANSFERENCIA BANCARIA:\nCLABE: 684180253001000985\nBanco: OPM / TRANSFER\nBeneficiario: VITALIX MÉXICO\n\n💰 Total: $${orderData.total.toLocaleString('es-MX')} MXN\n\n⚠️ Usa la referencia ${orderData.referenceNumber} en tu transferencia.`;
             
-            aod9604: {name: 'AOD-9604', emoji: '🔥', price: 3451, description: 'Péptido para Quema de Grasa Corporal', benefits: ['Estimula lipólisis', 'Apoyo a pérdida de grasa', 'Mejora metabólica', 'Regeneración de cartílago']},
-            bpc157: {name: 'BPC-157', emoji: '🩹', price: 3104, description: 'Péptido de Reparación de Tejidos', benefits: ['Acelera reparación de tejidos', 'Recuperación muscular', 'Salud de tendones', 'Apoyo de cicatrización'], specifications: {purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: 'Less than 5 EU/mg', lot: '2026011303', storage: 'Protected from Light, 0°C', certificateLink: 'COA_BPC157_Certificate.jpg'}},
-            cjc1295: {name: 'CJC-1295', emoji: '💪', price: 3626, description: 'Soporte de Hormona de Crecimiento (SIN DAC)', benefits: ['Estimula liberación de GH', 'Crecimiento muscular', 'Apoyo a recuperación', 'Reducción de grasa']},
-            ghkcu: {name: 'GHK-CU', emoji: '✨', price: 3104, description: 'Regeneración de Piel y Anti-Envejecimiento', benefits: ['Estimula colágeno', 'Regeneración de piel', 'Reparación de tejidos', 'Soporte anti-envejecimiento']},
-            hghfrag: {name: 'HGH Fragment 176-191', emoji: '🔥', price: 3104, description: 'Péptido de Pérdida de Grasa Selectiva', benefits: ['Apoyo a quema de grasa', 'Reducción de grasa abdominal', 'Mejora metabólica', 'Recomposición corporal']},
-            igf1lr3: {name: 'IGF-1 LR3', emoji: '🦾', price: 3626, description: 'Factor de Crecimiento Insulínico', benefits: ['Crecimiento muscular', 'Síntesis proteica', 'Aceleración de recuperación', 'Recomposición corporal']},
-            ipamorelin: {name: 'Ipamorelin', emoji: '🚀', price: 3798, description: 'Secretagogo de Hormona de Crecimiento', benefits: ['Estimula liberación de GH', 'Músculo magro', 'Apoyo a recuperación', 'Calidad del sueño']},
-            motsc: {name: 'MOTS-C', emoji: '⚡', price: 3626, description: 'Activador Mitocondrial', benefits: ['Energía celular', 'Regulación metabólica', 'Soporte mitocondrial', 'Vías energéticas']},
-            nadpep: {name: 'NAD+ 1000', emoji: '🧬', price: 3798, description: 'Reparación de ADN y Longevidad Celular', benefits: ['Energía celular', 'Apoyo a reparación de ADN', 'Salud metabólica', 'Investigación de longevidad'], specifications: {purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: 'Less than 5 EU/mg', lot: '2026011901', storage: 'Protected from Light, 0°C', certificateLink: 'COA_NADplus_Certificate.jpg'}},
-            retatrutide: {name: 'Retatrutide', emoji: '🎯', price: 3275, description: 'Triple Agonista GLP-1/GIP/GCG', benefits: ['Reducción de apetito', 'Apoyo a pérdida de grasa', 'Control metabólico', 'Recomposición corporal'], specifications: {purity: '99.48%', assay: '21.7 mg/vial', water: '1.68%', endotoxins: 'Less than 5 EU/mg', lot: 'RT20-20260112-RT20260113', storage: 'Protected from Light, 0°C', certificateLink: 'COA_RT20_Retatrutide_Certificate.jpg'}},
-            tb500: {name: 'TB-500', emoji: '🩸', price: 3104, description: 'Péptido Regenerador de Tejidos', benefits: ['Regeneración de tejidos', 'Apoyo a recuperación', 'Salud de tendones', 'Mejora de movilidad']},
-            tesamorelin: {name: 'Tesamorelin', emoji: '🔥', price: 2585, description: 'Eliminador de Grasa Visceral', benefits: ['Reducción de grasa visceral', 'Estimula GH', 'Recomposición corporal', 'Salud metabólica']},
-            melanotan2: {name: 'Melanotan II', emoji: '🌞', price: 2780, description: 'Investigación de Bronceado y Pigmentación', benefits: ['Estimulación de melanina', 'Pigmentación de piel', 'Apoyo fotoprotección', 'Péptido de investigación']}
-        };
-
-        function showProductDetail(productKey) {
-            console.log('showProductDetail called with:', productKey);
-            const product = productDetails[productKey];
-            if (!product) {
-                console.error('Product not found:', productKey);
-                alert('Product not found');
-                return;
-            }
-            console.log('Product found:', product.name);
-            let dosageHtml = '';
-            let packageInfo = '';
-            
-            // For wellness products (first three), show 3-month package info
-            if (['tirzepatida', 'semaglutida', 'rtide'].includes(productKey)) {
-                packageInfo = `
-                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
-                        <p class="text-sm text-gray-700"><strong>📦 Paquete:</strong> 3 Meses</p>
-                        <p class="text-sm text-gray-700 mt-2"><strong>⏰ Precio:</strong> El precio mostrado es para el paquete completo de 3 meses</p>
-                    </div>
-                `;
-            }
-            
-            // Show dosage selector for all products that have dosages
-            if (product.dosages) {
-                dosageHtml = `
-                    <div class="mb-6">
-                        <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Selecciona Dosis:</h3>
-                        <select id="dosageSelect" class="w-full border-2 border-green-300 p-3 rounded-lg">
-                            <option value="">-- Elige tu dosis --</option>
-                            ${product.dosages.map(d => `<option value="${d}">${d}</option>`).join('')}
-                        </select>
-                    </div>
-                `;
-            }
-
-            const html = `
-                <h2 class="text-3xl font-bold mb-2" style="color: #1B6B3D;">${product.emoji} ${product.name}</h2>
-                <p class="text-gray-600 mb-4">${product.description}</p>
-                
-                <div class="bg-green-100 border-2 border-green-400 p-4 rounded-lg mb-6">
-                    <p class="text-3xl font-bold" style="color: #C41E3A;">$${product.price.toLocaleString('es-MX')} MXN</p>
-                </div>
-
-                ${packageInfo}
-
-                ${product.mechanism ? `
-                    <div class="mb-6 p-4 bg-purple-50 border-2 border-purple-300 rounded-lg">
-                        <h3 class="font-bold text-lg mb-2" style="color: #6B21A8;">🧬 Mecanismo de Acción</h3>
-                        <p class="text-gray-700 text-sm">${product.mechanism}</p>
-                    </div>
-                ` : ''}
-
-                ${product.uses ? `
-                    <div class="mb-6 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg">
-                        <h3 class="font-bold text-lg mb-2" style="color: #B45309;">🎯 Usos Principales</h3>
-                        <p class="text-gray-700 text-sm whitespace-pre-line">${product.uses}</p>
-                    </div>
-                ` : ''}
-
-                ${product.dosageProtocol ? `
-                    <div class="mb-6 p-4 bg-orange-50 border-2 border-orange-300 rounded-lg">
-                        <h3 class="font-bold text-lg mb-2" style="color: #C2410C;">💊 Protocolo de Dosificación</h3>
-                        <p class="text-gray-700 text-sm whitespace-pre-line">${product.dosageProtocol}</p>
-                        <p class="text-xs text-gray-500 mt-3 italic">⚠️ Recuerda que cada cuerpo necesita tiempo para adaptarse. Consulta a tu médico antes de cualquier ajuste.</p>
-                    </div>
-                ` : ''}
-
-                <div class="mb-6">
-                    <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Beneficios Principales:</h3>
-                    <ul class="space-y-2">
-                        ${product.benefits.map(b => `<li class="text-gray-700">✓ ${b}</li>`).join('')}
-                    </ul>
-                </div>
-
-                ${dosageHtml}
-
-                ${product.specifications ? `
-                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
-                        <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">📋 Especificaciones HPLC:</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span class="font-semibold">Pureza:</span><span>${product.specifications.purity}</span></div>
-                            <div class="flex justify-between"><span class="font-semibold">Ensayo:</span><span>${product.specifications.assay}</span></div>
-                            <div class="flex justify-between"><span class="font-semibold">Agua:</span><span>${product.specifications.water}</span></div>
-                            <div class="flex justify-between"><span class="font-semibold">Endotoxinas:</span><span>${product.specifications.endotoxins}</span></div>
-                            <div class="flex justify-between"><span class="font-semibold">Lote:</span><span style="font-size: 0.85rem;">${product.specifications.lot}</span></div>
-                            <div class="flex justify-between"><span class="font-semibold">Almacenamiento:</span><span>${product.specifications.storage}</span></div>
-                        </div>
-                        <div class="mt-4 pt-3 border-t">
-                            <a href="${product.specifications.certificateLink}" target="_blank" class="inline-block px-4 py-2 bg-green-600 text-white rounded font-bold hover:bg-green-700 text-sm">
-                                📄 Ver Reporte Completo
-                            </a>
-                        </div>
-                    </div>
-                ` : ''}
-
-                <div class="mb-6">
-                    <h3 class="font-bold text-lg mb-3" style="color: #1B6B3D;">Declaración de Investigación:</h3>
-                    <div class="space-y-3 bg-gray-50 p-4 rounded-lg">
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="research" class="w-5 h-5">
-                            <span class="text-sm">Esto es solo para propósitos de investigación</span>
-                        </label>
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="legal" class="w-5 h-5">
-                            <span class="text-sm">Entiendo los términos legales</span>
-                        </label>
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="responsibility" class="w-5 h-5">
-                            <span class="text-sm font-bold">Asumo responsabilidad total</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="bg-red-50 border-2 border-red-300 p-4 rounded-lg">
-                        <label class="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" id="disclaimerAccept" class="w-6 h-6 cursor-pointer">
-                            <span class="font-bold text-gray-900">Acepto el Descargo de Responsabilidad Legal</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="flex gap-3">
-                    <button onclick="addProductToCart('${productKey}')" class="flex-1 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D; cursor: pointer;">Agregar al Carrito</button>
-                    <button onclick="closeModal()" class="flex-1 py-3 bg-gray-400 text-white rounded-lg font-bold">Cancelar</button>
-                </div>
-            `;
-            
-            document.getElementById('modalBody').innerHTML = html;
-            document.getElementById('productModal').classList.add('show');
-        }
-
-        function addProductToCart(productKey) {
-            const product = productDetails[productKey];
-            
-            // Get dosage if the selector exists in DOM
-            const dosageSelectElement = document.getElementById('dosageSelect');
-            const dosage = dosageSelectElement ? dosageSelectElement.value : null;
-            
-            const research = document.getElementById('research').checked;
-            const legal = document.getElementById('legal').checked;
-            const responsibility = document.getElementById('responsibility').checked;
-            const disclaimerAccept = document.getElementById('disclaimerAccept').checked;
-
-            // Require dosage selection if product has dosages
-            if (product.dosages && !dosage) {
-                alert('Por favor selecciona una dosis');
-                return;
-            }
-
-            if (!research || !legal || !responsibility) {
-                alert('Por favor confirma todos los términos de investigación');
-                return;
-            }
-
-            if (!disclaimerAccept) {
-                alert('Debes aceptar el descargo de responsabilidad');
-                return;
-            }
-
-            const itemName = dosage ? `${product.name} (${dosage})` : product.name;
-            addToCart(itemName, product.price);
-            closeModal();
-        }
-
-        function closeModal() {
-            document.getElementById('productModal').classList.remove('show');
-        }
-
-        function addToCart(name, price) {
-            cart.push({name, price});
-            updateCart();
-            alert(`✓ ${name} agregado al carrito`);
-        }
-
-        function updateCart() {
-            document.getElementById('cartCount').textContent = cart.length;
-            
-            let html = '';
-            let subtotal = 0;
-            
-            cart.forEach((item, index) => {
-                html += `<div class="flex justify-between items-center py-2 border-b">
-                    <span class="text-sm">${item.name}</span>
-                    <div class="flex items-center gap-3">
-                        <span class="font-bold" style="color: #1B6B3D;">$${item.price.toLocaleString('es-MX')}</span>
-                        <button onclick="removeFromCart(${index})" class="text-red-600 font-bold">✕</button>
-                    </div>
-                </div>`;
-                subtotal += item.price;
-            });
-
-            if(cart.length === 0) {
-                html = '<p class="text-gray-500 text-center py-8">Tu carrito está vacío</p>';
-                document.getElementById('cartItems').innerHTML = html;
-                document.getElementById('subtotal').textContent = '$0';
-                let total = currentShipping;
-                document.getElementById('total').textContent = '$' + total.toLocaleString('es-MX');
-            } else {
-                document.getElementById('cartItems').innerHTML = html;
-                document.getElementById('subtotal').textContent = '$' + subtotal.toLocaleString('es-MX');
-                
-                let discount = Math.floor((subtotal * discountPercent) / 100);
-                let total = subtotal - discount + currentShipping;
-                
-                document.getElementById('total').textContent = '$' + total.toLocaleString('es-MX');
-                
-                if (discountPercent > 0) {
-                    document.getElementById('discountRow').classList.remove('hidden');
-                    document.getElementById('discountAmount').textContent = '-$' + discount.toLocaleString('es-MX');
-                } else {
-                    document.getElementById('discountRow').classList.add('hidden');
-                }
-            }
-        }
-
-        function updateShipping() {
-            const selected = document.querySelector('input[name="shipping"]:checked').value;
-            currentShipping = parseInt(selected);
-            document.getElementById('shippingCost').textContent = '$' + currentShipping.toLocaleString('es-MX');
-            updateCart();
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCart();
-        }
-
-        function toggleCart() {
-            document.getElementById('cartPanel').classList.toggle('hidden');
-        }
-
-        function goToCheckout() {
-            if(cart.length === 0) {
-                alert('Tu carrito está vacío');
-                return;
-            }
-            showCheckout();
-        }
-
-        function showCheckout() {
-            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            let discount = Math.floor((subtotal * discountPercent) / 100);
-            let total = subtotal - discount + currentShipping;
-
-            const html = `
-                <div>
-                    <h2 class="text-3xl font-bold mb-6" style="color: #1B6B3D;">Pago</h2>
-                    
-                    <div class="mb-8 p-4 bg-gray-50 rounded-lg">
-                        <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Resumen de Orden</h3>
-                        <div class="space-y-2 mb-4">
-                            ${cart.map(item => `<div class="flex justify-between"><span>${item.name}</span><span>$${item.price.toLocaleString('es-MX')}</span></div>`).join('')}
-                        </div>
-                        <div class="border-t-2 pt-2">
-                            <div class="flex justify-between mb-2"><span>Subtotal:</span><span>$${subtotal.toLocaleString('es-MX')}</span></div>
-                            <div class="flex justify-between mb-2"><span>Envío:</span><span>$${currentShipping.toLocaleString('es-MX')}</span></div>
-                            ${discountPercent > 0 ? `<div class="flex justify-between mb-2" style="color: green;"><span>Descuento (${discountPercent}%):</span><span id="checkoutDiscount">-$${discount.toLocaleString('es-MX')}</span></div>` : ''}
-                            <div class="flex justify-between text-xl font-bold" style="color: #C41E3A;">
-                                <span>Total:</span>
-                                <span id="checkoutTotal">$${total.toLocaleString('es-MX')}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mb-6 p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
-                        <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Aplicar Código Promocional</h3>
-                        <div class="flex gap-2">
-                            <input type="text" id="checkoutCoupon" placeholder="Ingresa código promocional" class="flex-1 border-2 border-gray-300 p-2 rounded text-sm">
-                            <button type="button" onclick="applyCouponCheckout()" class="px-4 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700">Aplicar</button>
-                        </div>
-                        <div id="couponMsg" class="text-xs mt-2"></div>
-                    </div>
-
-                    <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Información de Envío y Facturación</h3>
-                    
-                    <form id="checkoutForm">
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-bold mb-2">Nombre *</label>
-                                <input type="text" id="firstName" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Juan">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold mb-2">Apellido *</label>
-                                <input type="text" id="lastName" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Pérez">
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold mb-2">Correo Electrónico *</label>
-                            <input type="email" id="email" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="juan@ejemplo.com">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold mb-2">Teléfono *</label>
-                            <input type="tel" id="phone" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="+52 (55) 1234 5678">
-                        </div>
-
-                        <div class="mb-4">
-                            <label class="block text-sm font-bold mb-2">Dirección *</label>
-                            <input type="text" id="address" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Calle Principal 123">
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-bold mb-2">Ciudad *</label>
-                                <input type="text" id="city" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="Ciudad de México">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold mb-2">Estado/Provincia *</label>
-                                <input type="text" id="state" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="CDMX">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label class="block text-sm font-bold mb-2">Código Postal *</label>
-                                <input type="text" id="postal" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="01000">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold mb-2">País *</label>
-                                <input type="text" id="country" required class="w-full border-2 border-gray-300 p-2 rounded" placeholder="México">
-                            </div>
-                        </div>
-
-                        <div class="mb-6">
-                            <h3 class="font-bold text-lg mb-4" style="color: #1B6B3D;">Método de Pago</h3>
-                            <div class="space-y-3">
-                                <label class="flex items-center gap-3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-green-50" style="border-color: #1B6B3D;">
-                                    <input type="radio" name="paymentMethod" value="creditCard" checked onchange="updatePaymentDisplay()" class="w-5 h-5">
-                                    <span class="flex-1">
-                                        <span class="font-bold">💳 Tarjeta de Crédito/Débito</span>
-                                        <span class="block text-xs text-gray-600 mt-1">Visa, Mastercard, American Express</span>
-                                    </span>
-                                </label>
-                                <label class="flex items-center gap-3 p-4 border-2 border-gray-300 rounded-lg cursor-pointer hover:bg-blue-50">
-                                    <input type="radio" name="paymentMethod" value="bankTransfer" onchange="updatePaymentDisplay()" class="w-5 h-5">
-                                    <span class="flex-1">
-                                        <span class="font-bold">🏦 Transferencia Bancaria</span>
-                                        <span class="block text-xs text-gray-600 mt-1">Recibe los detalles por correo</span>
-                                    </span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div id="paymentDetails" class="mb-6"></div>
-
-                        <div class="mb-6">
-                            <label class="flex items-center gap-3 cursor-pointer">
-                                <input type="checkbox" id="agreeTerms" required class="w-5 h-5">
-                                <span class="text-sm">Acepto los Términos y Condiciones y la Política de Privacidad</span>
-                            </label>
-                        </div>
-
-                        <div class="flex gap-3">
-                            <button type="button" onclick="processPayment()" class="flex-1 py-3 text-white rounded-lg font-bold text-lg" style="background-color: #1B6B3D;">Proceder al Pago</button>
-                            <button type="button" onclick="closeCheckout()" class="flex-1 py-3 bg-gray-400 text-white rounded-lg font-bold">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
-            `;
-
-            document.getElementById('checkoutBody').innerHTML = html;
-            document.getElementById('checkoutModal').classList.add('show');
-            updatePaymentDisplay(); // Update payment display
-        }
-
-        function applyCouponCheckout() {
-            const couponCode = document.getElementById('checkoutCoupon').value.toUpperCase();
-            const messageDiv = document.getElementById('couponMsg');
-            
-            if (!couponCode) {
-                messageDiv.innerHTML = '<span style="color: red;">Por favor ingresa un código promocional</span>';
-                return;
-            }
-            
-            if (coupons[couponCode]) {
-                discountPercent = coupons[couponCode];
-                messageDiv.innerHTML = `<span style="color: green;">✓ ¡Código aplicado! ${discountPercent}% de descuento</span>`;
-                document.getElementById('checkoutCoupon').disabled = true;
-                document.getElementById('checkoutCoupon').style.opacity = '0.6';
-                updateCheckoutSummary();
-            } else {
-                messageDiv.innerHTML = '<span style="color: red;">Código inválido</span>';
-                discountPercent = 0;
-            }
-        }
-
-        function updateCheckoutSummary() {
-            let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-            let discount = Math.floor((subtotal * discountPercent) / 100);
-            let total = subtotal - discount + currentShipping;
-
-            if (discountPercent > 0) {
-                document.getElementById('checkoutDiscount').textContent = `-$${discount.toLocaleString('es-MX')}`;
-            }
-            
-            document.getElementById('checkoutTotal').textContent = `$${total.toLocaleString('es-MX')}`;
-        }
-
-        function updatePaymentDisplay() {
-            const method = document.querySelector('input[name="paymentMethod"]:checked').value;
-            const paymentDetails = document.getElementById('paymentDetails');
-            
-            if (method === 'bankTransfer') {
-                paymentDetails.innerHTML = `
-                    <div class="p-4 bg-blue-50 border-2 border-blue-300 rounded-lg">
-                        <h4 class="font-bold text-lg mb-4" style="color: #1B6B3D;">📋 Detalles de Transferencia Bancaria</h4>
-                        <div class="space-y-3 bg-white p-3 rounded border-l-4" style="border-color: #1B6B3D;">
-                            <div>
-                                <span class="text-sm text-gray-600 font-bold">Beneficiario:</span>
-                                <span class="block font-bold text-lg">VITALIX MEXICO</span>
-                            </div>
-                            <div>
-                                <span class="text-sm text-gray-600 font-bold">Cuenta CLABE:</span>
-                                <span class="block font-mono text-lg font-bold">684180253001000985</span>
-                            </div>
-                            <div>
-                                <span class="text-sm text-gray-600 font-bold">Banco:</span>
-                                <span class="block font-bold text-lg">OPM / TRANSFER</span>
-                            </div>
-                        </div>
-                        <div class="mt-4 p-3 bg-yellow-50 border-l-4 border-yellow-400 rounded">
-                            <p class="text-sm text-gray-700">
-                                <strong>⚠️ Importante:</strong> Recibirás un correo con estos detalles y tu número de referencia. Por favor, usa el número de referencia en la transferencia.
-                            </p>
-                        </div>
-                    </div>
-                `;
-            } else {
-                paymentDetails.innerHTML = `
-                    <div class="p-4 bg-green-50 border-2 border-green-300 rounded-lg">
-                        <h4 class="font-bold text-lg mb-4" style="color: #1B6B3D;">💳 Pago con Tarjeta</h4>
-                        <p class="text-sm text-gray-700 mb-4">Serás redirigido de forma segura al procesador de pagos de Stripe para completar tu pago.</p>
-                        <div class="flex gap-2 justify-start">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded">VISA</span>
-                            <span class="px-3 py-1 bg-red-100 text-red-800 text-xs font-bold rounded">MASTERCARD</span>
-                            <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-bold rounded">AMEX</span>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        function processPayment() {
-            console.log('processPayment called');
-            
-            try {
-                const form = document.getElementById('checkoutForm');
-                if (!form) {
-                    alert('Error: formulario no encontrado');
-                    return;
-                }
-                
-                if (!form.checkValidity()) {
-                    form.reportValidity(); // Show which fields are invalid
-                    return;
-                }
-
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const email = document.getElementById('email').value;
-                const phone = document.getElementById('phone').value;
-                const address = document.getElementById('address').value;
-                const city = document.getElementById('city').value;
-                const state = document.getElementById('state').value;
-                const postal = document.getElementById('postal').value;
-                const country = document.getElementById('country').value;
-                
-                const paymentMethodElement = document.querySelector('input[name="paymentMethod"]:checked');
-                if (!paymentMethodElement) {
-                    alert('Por favor selecciona un método de pago');
-                    return;
-                }
-                const paymentMethod = paymentMethodElement.value;
-                
-                console.log('Payment method:', paymentMethod);
-
-                let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-                let discount = Math.floor((subtotal * discountPercent) / 100);
-                let total = subtotal - discount + currentShipping;
-
-                const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
-
-                const orderData = {
-                    referenceNumber: referenceNumber,
-                    firstName: firstName,
-                    lastName: lastName,
-                    email: email,
-                    phone: phone,
-                    address: address,
-                    city: city,
-                    state: state,
-                    postal: postal,
-                    country: country,
-                    items: cart,
-                    subtotal: subtotal,
-                    discount: discount,
-                    discountPercent: discountPercent,
-                    shipping: currentShipping,
-                    total: total,
-                    paymentMethod: paymentMethod,
-                    orderDate: new Date().toLocaleString('es-MX')
-                };
-                
-                console.log('Order data prepared:', orderData);
-
-                if (paymentMethod === 'bankTransfer') {
-                    processBankTransfer(orderData);
-                } else {
-                    processStripePayment(orderData);
-                }
-            } catch (error) {
-                console.error('Error in processPayment:', error);
-                alert('Error procesando el pago: ' + error.message);
-            }
-        }
-
-        function processBankTransfer(orderData) {
-            console.log('processBankTransfer called');
-            
-            try {
-                // Prepare email data
-                const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
-                
-                const emailData = {
-                    to_email: orderData.email,
-                    firstName: orderData.firstName,
-                    lastName: orderData.lastName,
-                    referenceNumber: orderData.referenceNumber,
-                    orderDate: orderData.orderDate,
-                    items: itemsList,
-                    subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
-                    shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
-                    discount: orderData.discountPercent > 0 ? `-$${orderData.discount.toLocaleString('es-MX')} (${orderData.discountPercent}%)` : 'N/A',
-                    total: '$' + orderData.total.toLocaleString('es-MX'),
-                    address: orderData.address,
-                    city: orderData.city,
-                    state: orderData.state,
-                    postal: orderData.postal,
-                    country: orderData.country,
-                    phone: orderData.phone
-                };
-
-                // Function to complete the order (called after emails are tried)
-                const completeOrder = function(emailStatus) {
-                    console.log('Completing order, email status:', emailStatus);
-                    
-                    let message = `✓ ORDEN CREADA CON ÉXITO\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\n`;
-                    
-                    if (emailStatus === 'success') {
-                        message += `Recibiste un correo con los detalles de la transferencia bancaria.\n\n`;
-                    } else {
-                        message += `⚠️ El correo no pudo enviarse, pero tu orden está guardada.\n\n`;
-                    }
-                    
-                    message += `📋 DETALLES DE TRANSFERENCIA BANCARIA:\n`;
-                    message += `Cuenta CLABE: 684180253001000985\n`;
-                    message += `Banco: OPM / TRANSFER\n`;
-                    message += `Beneficiario: VITALIX MÉXICO\n\n`;
-                    message += `💰 Total a pagar: $${orderData.total.toLocaleString('es-MX')} MXN\n\n`;
-                    message += `⚠️ IMPORTANTE: Usa el número de referencia ${orderData.referenceNumber} en tu transferencia.`;
-                    
-                    alert(message);
-                    
-                    // Save and clean
-                    saveOrderToLocalStorage(orderData);
-                    cart = [];
-                    discountPercent = 0;
-                    currentShipping = 200;
-                    updateCart();
-                    closeCheckout();
-                };
-
-                // Try to send emails - but complete order regardless
-                if (typeof emailjs !== 'undefined' && emailjs.send) {
-                    console.log('=== Sending CUSTOMER email ===');
-                    console.log('Service ID:', EMAILJS_SERVICE_ID);
-                    console.log('Template ID:', EMAILJS_TEMPLATE_ID);
-                    console.log('Email data:', emailData);
-                    
-                    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
-                        .then(function(response) {
-                            console.log('✅ CUSTOMER email SENT:', response);
-                            // Try to send owner notification
-                            try {
-                                sendOwnerNotification(orderData);
-                            } catch(e) {
-                                console.error('Owner notification failed:', e);
-                            }
-                            completeOrder('success');
-                        })
-                        .catch(function(error) {
-                            console.error('❌ CUSTOMER email FAILED:', error);
-                            console.error('Error details:', JSON.stringify(error));
-                            // Still try owner notification
-                            try {
-                                sendOwnerNotification(orderData);
-                            } catch(e) {
-                                console.error('Owner notification failed:', e);
-                            }
-                            completeOrder('error');
-                        });
-                } else {
-                    console.warn('EmailJS not available - completing order without email');
-                    completeOrder('error');
-                }
-            } catch (error) {
-                console.error('processBankTransfer error:', error);
-                alert('Error procesando la orden: ' + error.message + '\n\nNúmero de Referencia: ' + orderData.referenceNumber);
-                saveOrderToLocalStorage(orderData);
-            }
-        }
-        
-        function sendOwnerNotification(orderData) {
-            console.log('=== sendOwnerNotification START ===');
-            console.log('Sending to OWNER_EMAIL:', OWNER_EMAIL);
-            
-            const ownerEmailData = {
-                to_email: OWNER_EMAIL,
-                firstName: orderData.firstName,
-                lastName: orderData.lastName,
-                referenceNumber: orderData.referenceNumber,
-                email: orderData.email,
-                phone: orderData.phone,
-                total: '$' + orderData.total.toLocaleString('es-MX'),
-                items: orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join(', '),
-                address: `${orderData.address}, ${orderData.city}, ${orderData.state} ${orderData.postal}, ${orderData.country}`,
-                paymentMethod: orderData.paymentMethod === 'bankTransfer' ? 'Transferencia Bancaria' : 'Tarjeta',
-                orderDate: orderData.orderDate
-            };
-            
-            console.log('Owner email data:', ownerEmailData);
-            
-            return emailjs.send(EMAILJS_SERVICE_ID, 'owner_notification', ownerEmailData)
-                .then(function(response) {
-                    console.log('✅ Owner notification SENT:', response);
-                    return response;
-                })
-                .catch(function(error) {
-                    console.error('❌ Owner notification FAILED:', error);
-                    console.error('Error details:', JSON.stringify(error));
-                    throw error;
-                });
-        }
-
-        function processStripePayment(orderData) {
-            // Para Stripe, necesitarías redirigir a tu servidor
-            // Este es un ejemplo de cómo sería
-            
-            const stripeForm = document.createElement('form');
-            stripeForm.method = 'POST';
-            stripeForm.action = '/api/create-payment-intent'; // Tu endpoint backend
-
-            const inputs = [
-                { name: 'referenceNumber', value: orderData.referenceNumber },
-                { name: 'email', value: orderData.email },
-                { name: 'total', value: orderData.total },
-                { name: 'cartData', value: JSON.stringify(orderData) }
-            ];
-
-            inputs.forEach(input => {
-                const field = document.createElement('input');
-                field.type = 'hidden';
-                field.name = input.name;
-                field.value = input.value;
-                stripeForm.appendChild(field);
-            });
-
-            // Por ahora, mostrar un alert indicando que se necesita integración con Stripe
-            alert(`✓ ORDEN CASI COMPLETADA\n\nNúmero de Referencia: ${orderData.referenceNumber}\n\nSerás redirigido al pago seguro con Stripe...\n\nTotal: $${orderData.total.toLocaleString('es-MX')}`);
-
-            // Guardar orden
+            alert(msg);
             saveOrderToLocalStorage(orderData);
-
-            // Limpiar carrito
             cart = [];
-            discountPercent = 0;
             currentShipping = 200;
             updateCart();
             closeCheckout();
-            toggleCart();
+        };
 
-            // Descomentar cuando Stripe esté configurado:
-            // document.body.appendChild(stripeForm);
-            // stripeForm.submit();
-        }
-
-        function saveOrderToLocalStorage(orderData) {
-            const existingOrders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
-            existingOrders.push(orderData);
-            localStorage.setItem('vitalixOrders', JSON.stringify(existingOrders));
-        }
-
-        function closeCheckout() {
-            document.getElementById('checkoutModal').classList.remove('show');
-        }
-
-        window.onclick = function(event) {
-            const modal = document.getElementById('productModal');
-            const checkout = document.getElementById('checkoutModal');
-            if (event.target == modal) {
-                modal.classList.remove('show');
-            }
-            if (event.target == checkout) {
-                checkout.classList.remove('show');
-            }
-        }
-        
-    
-        // Attach event listeners after DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM loaded, attaching click listeners...');
-            const cards = document.querySelectorAll('.product-card[data-product]');
-            console.log('Found ' + cards.length + ' product cards');
-            cards.forEach(function(card) {
-                card.addEventListener('click', function() {
-                    const productKey = card.getAttribute('data-product');
-                    console.log('Card clicked: ' + productKey);
-                    showProductDetail(productKey);
+        if (typeof emailjs !== 'undefined' && emailjs.send) {
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData)
+                .then(() => {
+                    sendOwnerNotification(orderData).catch(e => console.error(e));
+                    completeOrder('success');
+                })
+                .catch((err) => {
+                    console.error('Email error:', err);
+                    sendOwnerNotification(orderData).catch(e => console.error(e));
+                    completeOrder('error');
                 });
-            });
-            console.log('All click listeners attached');
-        });
+        } else {
+            completeOrder('error');
+        }
+    } catch (error) {
+        console.error('processBankTransfer error:', error);
+        alert('Error: ' + error.message);
+        saveOrderToLocalStorage(orderData);
+    }
+}
+
+function sendOwnerNotification(orderData) {
+    const ownerData = {
+        to_email: OWNER_EMAIL,
+        firstName: orderData.firstName,
+        lastName: orderData.lastName,
+        referenceNumber: orderData.referenceNumber,
+        email: orderData.email,
+        phone: orderData.phone,
+        total: '$' + orderData.total.toLocaleString('es-MX'),
+        items: orderData.items.map(i => `${i.name}: $${i.price.toLocaleString('es-MX')}`).join(', '),
+        address: `${orderData.address}, ${orderData.city}, ${orderData.state} ${orderData.postal}, ${orderData.country}`,
+        paymentMethod: 'Transferencia Bancaria',
+        orderDate: orderData.orderDate
+    };
+    
+    return emailjs.send(EMAILJS_SERVICE_ID, 'owner_notification', ownerData);
+}
+
+function saveOrderToLocalStorage(orderData) {
+    const orders = JSON.parse(localStorage.getItem('vitalixOrders') || '[]');
+    orders.push(orderData);
+    localStorage.setItem('vitalixOrders', JSON.stringify(orders));
+}
+
+// ========== Init ==========
+document.addEventListener('DOMContentLoaded', () => {
+    renderProducts();
+    updateCart();
+});
+
+renderProducts();
+updateCart();
 </script>
 
-    </body>
+</body>
 </html>
