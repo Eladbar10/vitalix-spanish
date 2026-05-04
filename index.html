@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <style>
     /* ============ DESIGN TOKENS ============ */
     :root {
@@ -441,27 +442,54 @@
     
     .product-image-area {
         position: relative;
-        height: 200px;
-        background: linear-gradient(135deg, #f0f0ff 0%, #e0e7ff 100%);
+        height: 260px;
+        background: 
+            radial-gradient(ellipse at top, rgba(167, 139, 250, 0.15) 0%, transparent 60%),
+            linear-gradient(135deg, #f8f7ff 0%, #e8e3ff 100%);
         display: flex;
         align-items: center;
         justify-content: center;
+        gap: 24px;
         overflow: hidden;
+        padding: 20px;
     }
     
     .product-card.premium .product-image-area {
-        background: linear-gradient(135deg, rgba(167, 139, 250, 0.2) 0%, rgba(34, 211, 238, 0.1) 100%);
+        background: 
+            radial-gradient(ellipse at top, rgba(34, 211, 238, 0.2) 0%, transparent 60%),
+            linear-gradient(135deg, rgba(167, 139, 250, 0.25) 0%, rgba(34, 211, 238, 0.1) 100%);
         border-bottom: 1px solid rgba(167, 139, 250, 0.2);
     }
     
     .product-emoji {
-        font-size: 80px;
-        filter: drop-shadow(0 4px 20px rgba(124, 58, 237, 0.3));
+        font-size: 48px;
+        filter: drop-shadow(0 4px 20px rgba(124, 58, 237, 0.4));
         transition: transform 0.5s;
+        opacity: 0.9;
     }
     
     .product-card:hover .product-emoji {
         transform: scale(1.1) rotate(-5deg);
+    }
+    
+    /* ============ REALISTIC VIAL ============ */
+    .vial-realistic {
+        position: relative;
+        width: 110px;
+        height: 220px;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        filter: drop-shadow(0 15px 25px rgba(59, 29, 142, 0.4));
+    }
+    
+    .product-card:hover .vial-realistic {
+        transform: translateY(-8px) rotate(2deg);
+        filter: drop-shadow(0 20px 35px rgba(59, 29, 142, 0.5));
+    }
+    
+    .vial-realistic svg {
+        width: 100%;
+        height: 100%;
+        display: block;
     }
     
     .product-badge {
@@ -518,6 +546,42 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
+    }
+    
+    .monthly-qty {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        color: #92400e;
+        padding: 4px 12px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 700;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        border: 1px solid #fbbf24;
+    }
+    
+    .product-card.premium .monthly-qty {
+        background: rgba(251, 191, 36, 0.15);
+        color: #fde68a;
+        border-color: rgba(251, 191, 36, 0.4);
+    }
+    
+    .price-note {
+        font-size: 10px;
+        color: #9ca3af;
+        font-weight: 500;
+        margin-top: 4px;
+        font-family: 'JetBrains Mono', monospace;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+    
+    .product-card.premium .price-note {
+        color: var(--mist);
     }
     
     .product-footer {
@@ -1463,6 +1527,22 @@ const EMAILJS_SERVICE_ID = 'service_34xgp3y';
 const EMAILJS_TEMPLATE_ID = 'template_2lh7rgn';
 const OWNER_EMAIL = 'Eladbarkan10@gmail.com';
 
+// ========== Mercado Pago Configuration ==========
+// Use TEST key for testing, PROD key for live payments
+const MP_TEST_PUBLIC_KEY = 'APP_USR-11df0e2a-b430-4533-bacc-186a0ac1dd0a';
+const MP_PROD_PUBLIC_KEY = 'APP_USR-3444a0d9-239d-4ccc-b672-ce73198bd7a2';
+const MP_PUBLIC_KEY = MP_PROD_PUBLIC_KEY; // Switch to TEST for testing
+
+let mpInstance = null;
+try {
+    if (typeof MercadoPago !== 'undefined') {
+        mpInstance = new MercadoPago(MP_PUBLIC_KEY, { locale: 'es-MX' });
+        console.log('✓ Mercado Pago initialized');
+    }
+} catch (e) {
+    console.error('MP init error:', e);
+}
+
 // ========== State ==========
 let cart = [];
 let currentShipping = 200;
@@ -1471,11 +1551,13 @@ let discountPercent = 0;
 // ========== Product Data ==========
 const productDetails = {
     tirzepatida: {
-        name: 'T-Tide R-2',
+        name: 'T-Tide R-2', monthlySupply: 'Paquete para 3 meses de tratamiento',
         scientificName: 'Tirzepatide • Dual GLP-1/GIP Agonist',
         category: 'wellness',
         emoji: '💉',
         price: 14999,
+        monthlyQuantity: '60 mg',
+        priceNote: 'Paquete de 3 meses (180mg total)',
         description: 'Tirzepatida es un péptido innovador de doble agonismo destinado al tratamiento de la diabetes tipo 2 y la pérdida de peso. Comercializado bajo los nombres comerciales Mounjaro y Zepbound.',
         mechanism: 'Es un fármaco de doble acción (Dual Agonist) que imita la acción de dos hormonas naturales (incretinas) liberadas en el intestino, conduciendo a un equilibrio de azúcar más eficiente y reducción significativa en la ingesta de alimentos.',
         dosageProtocol: 'Semanas 1-4: 2.5mg/semana | Semanas 5-8: 5mg/semana | Semanas 9-12: 7.5mg/semana | Semanas 13-16: 10mg/semana | Semana 17+: hasta 12.5-15mg/semana',
@@ -1485,11 +1567,13 @@ const productDetails = {
         specs: { purity: '99.20%', assay: '30.6 mg/vial', water: '1.82%', endotoxins: '<5 EU/mg', lot: 'TR30-20260122', storage: '0°C' }
     },
     semaglutida: {
-        name: 'S-Tide R-1',
+        name: 'S-Tide R-1', monthlySupply: 'Paquete para 3 meses de tratamiento',
         scientificName: 'Semaglutide • GLP-1 Receptor Agonist',
         category: 'wellness',
         emoji: '💉',
         price: 12999,
+        monthlyQuantity: '10 mg',
+        priceNote: 'Paquete de 3 meses (30mg total)',
         description: 'Semaglutida es un péptido inyectable semanal que imita la hormona GLP-1. Conocido comercialmente como Ozempic y Wegovy. Reduce el hambre y aumenta la saciedad.',
         mechanism: 'Imita la hormona natural GLP-1 que se libera del intestino después de comer. Actúa sobre el cerebro para reducir la sensación de hambre, ralentiza el vaciado del estómago y aumenta la secreción de insulina.',
         dosageProtocol: 'Semanas 1-4: 0.25mg/semana | Semanas 5-8: 0.5mg/semana | Semanas 9-12: 1mg/semana | Semanas 13-16: 1.7mg/semana | Semana 17+: hasta 2.4mg/semana',
@@ -1499,11 +1583,13 @@ const productDetails = {
         specs: { purity: '99.67%', assay: '31.2 mg/vial', water: '1.62%', endotoxins: '<5 EU/mg', lot: 'SM30-20260124', storage: '0°C' }
     },
     rtide: {
-        name: 'R-Tide R-3',
+        name: 'R-Tide R-3', monthlySupply: 'Paquete para 3 meses de tratamiento',
         scientificName: 'Retatrutide • Triple Agonist GLP-1/GIP/Glucagon',
         category: 'wellness',
         emoji: '🎯',
         price: 16999,
+        monthlyQuantity: '50 mg',
+        priceNote: 'Paquete de 3 meses (150mg total)',
         description: 'Retatrutida es un agonista TRIPLE de receptores - el más avanzado en su categoría. Activa simultáneamente GLP-1, GIP y Glucagón para resultados sin precedentes.',
         mechanism: 'Triple agonismo: GLP-1 (reduce apetito), GIP (mejora sensibilidad a insulina), Glucagón (aumenta gasto energético). Esta combinación única produce resultados sinérgicos.',
         dosageProtocol: 'Semanas 1-4: 2mg/semana | Semanas 5-8: 4mg/semana | Semanas 9-12: 6mg/semana | Semanas 13-16: 8mg/semana | Semana 17+: hasta 12mg/semana',
@@ -1512,11 +1598,13 @@ const productDetails = {
         dosages: ['2mg', '4mg', '6mg', '8mg', '10mg', '12mg']
     },
     aod9604: {
-        name: 'AOD-9604',
+        name: 'AOD-9604', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Anti-Obesity Drug 9604 • Lipolytic Peptide',
         category: 'research',
         emoji: '🔥',
         price: 3451,
+        monthlyQuantity: '10 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'AOD-9604 es un fragmento modificado de la hormona del crecimiento (HGH 177-191), diseñado específicamente para potenciar la lipólisis sin afectar el crecimiento o el azúcar en sangre.',
         mechanism: 'Estimula la lipólisis (descomposición de grasa) e inhibe la lipogénesis. Actúa sobre los receptores beta-3 adrenérgicos en el tejido adiposo.',
         dosageProtocol: 'Dosis estándar: 300 mcg/día | Frecuencia: 1 inyección diaria | Ciclo: 12 semanas | Mejor momento: Mañana en ayunas',
@@ -1524,11 +1612,13 @@ const productDetails = {
         benefits: ['Estimula quema de grasa', 'Reduce grasa abdominal', 'No afecta glucosa', 'Regeneración de cartílago', 'Mejora metabolismo', 'Sin efectos sobre IGF-1']
     },
     bpc157: {
-        name: 'BPC-157',
+        name: 'BPC-157', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Body Protection Compound 157',
         category: 'research',
         emoji: '🩹',
         price: 3104,
+        monthlyQuantity: '15 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'BPC-157 es un péptido de 15 aminoácidos derivado de una proteína protectora del jugo gástrico. Ampliamente conocido por sus extraordinarias propiedades regenerativas y curativas.',
         mechanism: 'Promueve la angiogénesis (formación de vasos sanguíneos), aumenta el óxido nítrico, modula receptores de serotonina y dopamina, acelera la migración de fibroblastos.',
         dosageProtocol: 'Dosis estándar: 250-500 mcg/día | Frecuencia: 1-2 inyecciones diarias | Ciclo: 4-6 semanas | Lesiones agudas: 500 mcg en 2 dosis',
@@ -1537,11 +1627,13 @@ const productDetails = {
         specs: { purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: '<5 EU/mg', lot: '2026011303', storage: '0°C' }
     },
     cjc1295: {
-        name: 'CJC-1295',
+        name: 'CJC-1295', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'CJC-1295 No DAC • Modified GHRH',
         category: 'research',
         emoji: '💪',
         price: 3626,
+        monthlyQuantity: '10 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'CJC-1295 (sin DAC) es un análogo modificado del GHRH. Estimula la liberación natural de hormona del crecimiento manteniendo el ritmo natural del cuerpo.',
         mechanism: 'Se une a los receptores GHRH en la pituitaria, estimulando la liberación pulsátil de hormona del crecimiento. La versión "No DAC" tiene vida media corta (~30 min).',
         dosageProtocol: 'Dosis estándar: 100-200 mcg por inyección | Frecuencia: 2-3 veces al día | Ciclo: 12 semanas | Combinar: con Ipamorelin',
@@ -1549,11 +1641,13 @@ const productDetails = {
         benefits: ['Aumento natural de GH', 'Crecimiento muscular magro', 'Quema de grasa acelerada', 'Mejora calidad del sueño', 'Recuperación post-entrenamiento', 'Aumento de IGF-1']
     },
     ghkcu: {
-        name: 'GHK-CU',
+        name: 'GHK-CU', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Glycyl-Histidyl-Lysine Copper Peptide',
         category: 'research',
         emoji: '✨',
         price: 3104,
+        monthlyQuantity: '45 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'GHK-Cu es un péptido natural de cobre presente en el cuerpo humano. Famoso por sus propiedades anti-envejecimiento y regeneración de la piel.',
         mechanism: 'Estimula producción de colágeno y elastina, activa receptores antioxidantes, modula expresión de genes relacionados con regeneración tisular.',
         dosageProtocol: 'Inyección: 1-2 mg/día | Tópico: 2-3 veces/día | Ciclo: 8-12 semanas | Mantenimiento: Uso continuo seguro',
@@ -1561,11 +1655,13 @@ const productDetails = {
         benefits: ['Estimula producción de colágeno', 'Reduce arrugas', 'Mejora firmeza', 'Acelera curación de heridas', 'Estimula crecimiento del cabello', 'Antioxidante potente']
     },
     hghfrag: {
-        name: 'HGH Fragment 176-191',
+        name: 'HGH Fragment 176-191', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Human Growth Hormone Fragment',
         category: 'research',
         emoji: '🔥',
         price: 3104,
+        monthlyQuantity: '25 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'Fragmento de la HGH específicamente diseñado para potenciar la pérdida de grasa. Es 12.5 veces más efectivo que la HGH completa para quema de grasa.',
         mechanism: 'Imita el efecto regulador de la HGH sobre las grasas sin afectar el crecimiento o la sensibilidad a la insulina. Estimula lipólisis e inhibe lipogénesis.',
         dosageProtocol: 'Dosis estándar: 250-500 mcg/día | Frecuencia: 2 inyecciones diarias | Ciclo: 8-12 semanas | Mejor momento: Mañana en ayunas + antes de dormir',
@@ -1573,11 +1669,13 @@ const productDetails = {
         benefits: ['Quema de grasa altamente eficiente', 'Pérdida de grasa abdominal', 'No afecta glucosa', 'No afecta crecimiento', 'Recomposición corporal', 'Aumento metabolismo basal']
     },
     igf1lr3: {
-        name: 'IGF-1 LR3',
+        name: 'IGF-1 LR3', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Long R3 Insulin-like Growth Factor 1',
         category: 'research',
         emoji: '🦾',
         price: 3626,
+        monthlyQuantity: '5 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'IGF-1 LR3 es una versión sintética del Factor de Crecimiento Insulínico Tipo 1 con vida media extendida. Uno de los péptidos más potentes para crecimiento muscular.',
         mechanism: 'Activa los receptores IGF-1 en el músculo esquelético, estimula síntesis proteica, promueve hiperplasia (creación de nuevas células musculares).',
         dosageProtocol: 'Dosis estándar: 20-50 mcg/día | Frecuencia: 1 inyección diaria | Ciclo: 4 semanas (descanso 4 semanas) | Mejor momento: Post-entrenamiento',
@@ -1585,11 +1683,13 @@ const productDetails = {
         benefits: ['Crecimiento muscular significativo', 'Síntesis proteica acelerada', 'Hiperplasia muscular', 'Recuperación mejorada', 'Pérdida de grasa', 'Aumento de fuerza']
     },
     ipamorelin: {
-        name: 'Ipamorelin',
+        name: 'Ipamorelin', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'GH Secretagogue Pentapeptide',
         category: 'research',
         emoji: '🚀',
         price: 3798,
+        monthlyQuantity: '15 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'Ipamorelin es uno de los secretagogos de hormona del crecimiento más selectivos y limpios. No afecta cortisol o prolactina, lo que lo hace muy seguro.',
         mechanism: 'Se une selectivamente a receptores de ghrelina en la pituitaria, estimulando liberación pulsátil de GH sin afectar cortisol, prolactina o aldosterona.',
         dosageProtocol: 'Dosis estándar: 200-300 mcg por inyección | Frecuencia: 2-3 veces al día | Ciclo: 8-12 semanas | Combinar: con CJC-1295 No DAC',
@@ -1597,11 +1697,13 @@ const productDetails = {
         benefits: ['Aumento natural de GH', 'Crecimiento muscular magro', 'Mejora calidad del sueño', 'Anti-envejecimiento', 'Recuperación acelerada', 'Sin efectos sobre cortisol']
     },
     motsc: {
-        name: 'MOTS-C',
+        name: 'MOTS-C', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Mitochondrial Open Reading Frame',
         category: 'research',
         emoji: '⚡',
         price: 3626,
+        monthlyQuantity: '20 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'MOTS-c es un péptido único codificado por el ADN mitocondrial. Conocido como el "péptido del ejercicio" porque imita los efectos del ejercicio físico a nivel celular.',
         mechanism: 'Activa la AMPK, mejora sensibilidad a la insulina, regula metabolismo de glucosa y lípidos, aumenta biogénesis mitocondrial.',
         dosageProtocol: 'Dosis estándar: 5-10 mg/semana | Frecuencia: 2-3 veces por semana | Ciclo: 8-12 semanas | Mejor momento: Antes del ejercicio',
@@ -1609,11 +1711,13 @@ const productDetails = {
         benefits: ['Mejora energía celular', 'Regulación metabólica', 'Mejora sensibilidad a insulina', 'Aumenta resistencia física', 'Quema de grasa metabólica', 'Anti-envejecimiento celular']
     },
     nadpep: {
-        name: 'NAD+ 1000',
+        name: 'NAD+ 1000', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Nicotinamide Adenine Dinucleotide',
         category: 'research',
         emoji: '🧬',
         price: 3798,
+        monthlyQuantity: '3000 mg',
+        priceNote: 'Cantidad mensual recomendada (3 viales)',
         description: 'NAD+ es una coenzima esencial para la producción de energía celular y la reparación del ADN. Su suplementación es una de las terapias anti-envejecimiento más prometedoras.',
         mechanism: 'Activa las sirtuinas (proteínas de longevidad), repara ADN dañado, mejora función mitocondrial, regula metabolismo celular.',
         dosageProtocol: 'Dosis estándar: 100-300 mg/día | Frecuencia: Diario o cada 2 días | Ciclo: 4-8 semanas | Iniciar: Con dosis baja (50mg) y aumentar gradualmente',
@@ -1621,25 +1725,14 @@ const productDetails = {
         benefits: ['Energía celular aumentada', 'Reparación del ADN', 'Anti-envejecimiento profundo', 'Mejora claridad mental', 'Aumenta longevidad celular', 'Apoyo a procesos detox'],
         specs: { purity: '99.6%', assay: '100.2%', water: '3.5%', endotoxins: '<5 EU/mg', lot: '2026011901', storage: '0°C' }
     },
-    retatrutide: {
-        name: 'Retatrutide',
-        scientificName: 'Triple Agonist GLP-1/GIP/Glucagon',
-        category: 'research',
-        emoji: '🎯',
-        price: 3275,
-        description: 'Retatrutide es un péptido revolucionario de TRIPLE acción que activa simultáneamente tres receptores hormonales. El más avanzado para manejo de peso.',
-        mechanism: 'Triple agonismo: GLP-1 (reduce apetito), GIP (mejora sensibilidad a insulina), Glucagón (aumenta gasto energético). Resultados sinérgicos sin precedentes.',
-        dosageProtocol: 'Semanas 1-4: 2mg/semana | Semanas 5-8: 4mg | Semanas 9-12: 6mg | Semanas 13-16: 8mg | Semana 17+: hasta 12mg/semana',
-        usage: 'Inyección subcutánea semanal en abdomen, muslo o brazo. Rotar sitios. Mismo día cada semana.',
-        benefits: ['Pérdida de peso superior (24%)', 'Triple mecanismo de acción', 'Reduce antojos', 'Aumenta gasto energético', 'Mejora control glucémico', 'Reducción de grasa visceral'],
-        specs: { purity: '99.48%', assay: '21.7 mg/vial', water: '1.68%', endotoxins: '<5 EU/mg', lot: 'RT20-20260112', storage: '0°C' }
-    },
     tb500: {
-        name: 'TB-500',
+        name: 'TB-500', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'Thymosin Beta-4 Fragment',
         category: 'research',
         emoji: '🩸',
         price: 3104,
+        monthlyQuantity: '20 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'TB-500 es un péptido sintético basado en la Timosina Beta-4. Famoso por sus extraordinarias propiedades regenerativas y curación sistémica.',
         mechanism: 'Promueve migración celular (especialmente células madre y fibroblastos) hacia sitios de lesión. Estimula angiogénesis y aumenta flexibilidad de tejidos.',
         dosageProtocol: 'Carga (4-6 semanas): 5-10 mg/semana | Mantenimiento: 2-5 mg/semana | Frecuencia: 2 inyecciones por semana | Combinar: con BPC-157',
@@ -1647,11 +1740,13 @@ const productDetails = {
         benefits: ['Regeneración de tejidos sistémica', 'Recuperación acelerada', 'Salud de tendones', 'Mejora movilidad articular', 'Reducción de inflamación', 'Recuperación cardíaca']
     },
     tesamorelin: {
-        name: 'Tesamorelin',
+        name: 'Tesamorelin', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'GHRH Analog',
         category: 'research',
         emoji: '🔥',
         price: 2585,
+        monthlyQuantity: '45 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'Tesamorelin es un análogo sintético de la GHRH, aprobado por la FDA específicamente para reducir grasa visceral. Uno de los péptidos más efectivos para grasa abdominal profunda.',
         mechanism: 'Estimula liberación natural de hormona del crecimiento desde la pituitaria, aumentando IGF-1 y promoviendo lipólisis específicamente en grasa visceral.',
         dosageProtocol: 'Dosis estándar: 1-2 mg/día | Frecuencia: 1 inyección diaria | Ciclo: 12-26 semanas | Mejor momento: Antes de dormir',
@@ -1659,11 +1754,13 @@ const productDetails = {
         benefits: ['Reducción específica grasa visceral', 'Aumento natural de GH', 'Mejora composición corporal', 'Aumento masa muscular magra', 'Mejor perfil lipídico', 'Mejora función cognitiva']
     },
     melanotan2: {
-        name: 'Melanotan II',
+        name: 'Melanotan II', monthlySupply: 'Suministro mensual recomendado',
         scientificName: 'α-MSH Synthetic Analog',
         category: 'research',
         emoji: '🌞',
         price: 2780,
+        monthlyQuantity: '15 mg',
+        priceNote: 'Cantidad mensual recomendada',
         description: 'Melanotan II es un análogo sintético de la hormona α-MSH. Estimula la producción de melanina produciendo bronceado natural y duradero.',
         mechanism: 'Activa receptores de melanocortina (MC1R-MC5R), estimulando producción de melanina (eumelanina) en los melanocitos de la piel.',
         dosageProtocol: 'Carga: 0.25-0.5 mg/día (1-2 semanas) | Mantenimiento: 1-2 mg/semana | Iniciar: Con 0.1 mg para evaluar tolerancia | Combinar: con exposición solar moderada',
@@ -1673,6 +1770,224 @@ const productDetails = {
 };
 
 // ========== Render Products ==========
+
+// Create realistic vial SVG with brand label
+function createRealisticVial(productName, dosage, nameFontSize, productKey) {
+    const uniqueId = 'v_' + (productKey || Math.random().toString(36).substr(2, 5));
+    return `
+    <svg viewBox="0 0 110 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- Cap gradient -->
+            <linearGradient id="cap_${uniqueId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a4a4a"/>
+                <stop offset="20%" stop-color="#9a9a9a"/>
+                <stop offset="50%" stop-color="#e8e8e8"/>
+                <stop offset="80%" stop-color="#9a9a9a"/>
+                <stop offset="100%" stop-color="#3a3a3a"/>
+            </linearGradient>
+            <linearGradient id="capTop_${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#1a4d8a"/>
+                <stop offset="50%" stop-color="#2d6bb8"/>
+                <stop offset="100%" stop-color="#0f3460"/>
+            </linearGradient>
+            
+            <!-- Glass body gradient - realistic clear glass -->
+            <linearGradient id="glass_${uniqueId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(167, 139, 250, 0.35)"/>
+                <stop offset="15%" stop-color="rgba(255, 255, 255, 0.8)"/>
+                <stop offset="35%" stop-color="rgba(255, 255, 255, 0.55)"/>
+                <stop offset="65%" stop-color="rgba(255, 255, 255, 0.3)"/>
+                <stop offset="85%" stop-color="rgba(167, 139, 250, 0.25)"/>
+                <stop offset="100%" stop-color="rgba(124, 58, 237, 0.4)"/>
+            </linearGradient>
+            
+            <!-- Liquid inside vial -->
+            <linearGradient id="liquid_${uniqueId}" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="rgba(196, 181, 253, 0.85)"/>
+                <stop offset="50%" stop-color="rgba(167, 139, 250, 0.7)"/>
+                <stop offset="100%" stop-color="rgba(124, 58, 237, 0.85)"/>
+            </linearGradient>
+            
+            <!-- Liquid surface (meniscus) -->
+            <linearGradient id="meniscus_${uniqueId}" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="rgba(196, 181, 253, 0.9)"/>
+                <stop offset="50%" stop-color="rgba(255, 255, 255, 0.9)"/>
+                <stop offset="100%" stop-color="rgba(196, 181, 253, 0.9)"/>
+            </linearGradient>
+            
+            <!-- Label gradient (VITALIX brand) -->
+            <linearGradient id="label_${uniqueId}" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#050514"/>
+                <stop offset="25%" stop-color="#1a1454"/>
+                <stop offset="55%" stop-color="#3b1d8e"/>
+                <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+            
+            <!-- DNA helix decoration on label -->
+            <linearGradient id="dna1_${uniqueId}">
+                <stop offset="0%" stop-color="#22d3ee"/>
+                <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+            <linearGradient id="dna2_${uniqueId}">
+                <stop offset="0%" stop-color="#a78bfa"/>
+                <stop offset="100%" stop-color="#7c3aed"/>
+            </linearGradient>
+            
+            <!-- Drop shadow filter -->
+            <filter id="shadow_${uniqueId}" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                <feOffset dx="2" dy="6" result="offsetblur"/>
+                <feComponentTransfer><feFuncA type="linear" slope="0.4"/></feComponentTransfer>
+                <feMerge>
+                    <feMergeNode/>
+                    <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+            </filter>
+            
+            <!-- Glow for highlights -->
+            <radialGradient id="highlight_${uniqueId}" cx="50%" cy="50%">
+                <stop offset="0%" stop-color="rgba(255,255,255,0.9)"/>
+                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </radialGradient>
+        </defs>
+        
+        <!-- ==== SHADOW UNDER VIAL ==== -->
+        <ellipse cx="55" cy="215" rx="32" ry="3" fill="rgba(0,0,0,0.2)" filter="url(#shadow_${uniqueId})"/>
+        
+        <!-- ==== VIAL CAP (Aluminum crimp) ==== -->
+        <!-- Top of cap -->
+        <rect x="38" y="2" width="34" height="6" rx="2" fill="url(#capTop_${uniqueId})"/>
+        <!-- Cap body with metallic gradient -->
+        <rect x="35" y="6" width="40" height="14" fill="url(#cap_${uniqueId})"/>
+        <!-- Cap ridges (realistic crimped aluminum) -->
+        <line x1="37" y1="9" x2="73" y2="9" stroke="rgba(0,0,0,0.3)" stroke-width="0.3"/>
+        <line x1="37" y1="11" x2="73" y2="11" stroke="rgba(0,0,0,0.3)" stroke-width="0.3"/>
+        <line x1="37" y1="13" x2="73" y2="13" stroke="rgba(0,0,0,0.3)" stroke-width="0.3"/>
+        <line x1="37" y1="15" x2="73" y2="15" stroke="rgba(0,0,0,0.3)" stroke-width="0.3"/>
+        <line x1="37" y1="17" x2="73" y2="17" stroke="rgba(0,0,0,0.3)" stroke-width="0.3"/>
+        <!-- Cap edge -->
+        <rect x="35" y="6" width="40" height="14" fill="none" stroke="rgba(0,0,0,0.4)" stroke-width="0.5"/>
+        <!-- Cap highlight -->
+        <rect x="38" y="7" width="2" height="11" fill="rgba(255,255,255,0.6)"/>
+        <rect x="68" y="7" width="2" height="11" fill="rgba(255,255,255,0.3)"/>
+        
+        <!-- ==== NECK ==== -->
+        <path d="M 35 20 Q 35 24 38 26 L 72 26 Q 75 24 75 20 Z" fill="rgba(255,255,255,0.5)" stroke="rgba(167,139,250,0.4)" stroke-width="0.5"/>
+        
+        <!-- ==== VIAL BODY (Glass) ==== -->
+        <path d="M 25 28 L 25 200 Q 25 210 35 210 L 75 210 Q 85 210 85 200 L 85 28 Z" 
+              fill="url(#glass_${uniqueId})" 
+              stroke="rgba(124, 58, 237, 0.5)" 
+              stroke-width="1"/>
+        
+        <!-- ==== LIQUID INSIDE ==== -->
+        <path d="M 27 100 L 27 198 Q 27 208 35 208 L 75 208 Q 83 208 83 198 L 83 100 Z" 
+              fill="url(#liquid_${uniqueId})"/>
+        
+        <!-- Liquid surface (meniscus) - curved top -->
+        <ellipse cx="55" cy="100" rx="28" ry="2.5" fill="url(#meniscus_${uniqueId})"/>
+        
+        <!-- ==== LABEL (VITALIX BRAND) ==== -->
+        <rect x="29" y="55" width="52" height="100" 
+              fill="url(#label_${uniqueId})" 
+              stroke="rgba(167,139,250,0.5)" 
+              stroke-width="0.3"
+              rx="2"/>
+        
+        <!-- DNA helix on label (left side) -->
+        <g transform="translate(33, 65)" opacity="0.9">
+            <line x1="0" y1="3" x2="6" y2="3" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <line x1="0" y1="9" x2="6" y2="9" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <line x1="0" y1="15" x2="6" y2="15" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <line x1="0" y1="21" x2="6" y2="21" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <line x1="0" y1="27" x2="6" y2="27" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <line x1="0" y1="33" x2="6" y2="33" stroke="#a78bfa" stroke-width="0.4" opacity="0.6"/>
+            <path d="M 0 0 Q 3 3 6 6 Q 3 9 0 12 Q 3 15 6 18 Q 3 21 0 24 Q 3 27 6 30 Q 3 33 0 36" 
+                  stroke="url(#dna1_${uniqueId})" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+            <path d="M 6 0 Q 3 3 0 6 Q 3 9 6 12 Q 3 15 0 18 Q 3 21 6 24 Q 3 27 0 30 Q 3 33 6 36" 
+                  stroke="url(#dna2_${uniqueId})" stroke-width="0.7" fill="none" stroke-linecap="round"/>
+            <circle cx="0" cy="3" r="0.6" fill="#22d3ee"/>
+            <circle cx="6" cy="3" r="0.6" fill="#a78bfa"/>
+            <circle cx="0" cy="15" r="0.6" fill="#22d3ee"/>
+            <circle cx="6" cy="15" r="0.6" fill="#a78bfa"/>
+            <circle cx="0" cy="27" r="0.6" fill="#22d3ee"/>
+            <circle cx="6" cy="27" r="0.6" fill="#a78bfa"/>
+        </g>
+        
+        <!-- VITALIX brand text -->
+        <text x="63" y="68" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="6" 
+              font-weight="900" 
+              fill="white"
+              letter-spacing="1.5">VITALIX</text>
+        
+        <text x="63" y="74" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="2.8" 
+              fill="#c7d2fe"
+              letter-spacing="1">PEPTIDE LABS</text>
+        
+        <!-- Decorative line -->
+        <line x1="44" y1="78" x2="78" y2="78" stroke="rgba(167,139,250,0.5)" stroke-width="0.3"/>
+        <circle cx="44" cy="78" r="0.6" fill="#22d3ee"/>
+        <circle cx="78" cy="78" r="0.6" fill="#22d3ee"/>
+        
+        <!-- Product name -->
+        <text x="55" y="98" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="${nameFontSize}" 
+              font-weight="900" 
+              fill="white"
+              letter-spacing="0.3">${productName}</text>
+        
+        <!-- Dose box -->
+        <rect x="38" y="108" width="34" height="14" fill="white" rx="2"/>
+        <text x="55" y="118" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="8" 
+              font-weight="900" 
+              fill="#3b1d8e"
+              letter-spacing="0.5">${dosage}</text>
+        
+        <!-- Bottom info -->
+        <line x1="38" y1="132" x2="78" y2="132" stroke="rgba(167,139,250,0.4)" stroke-width="0.3"/>
+        <text x="55" y="140" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="2.8" 
+              fill="white"
+              font-weight="600"
+              letter-spacing="0.3">Ready to Use Solution</text>
+        <text x="55" y="146" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="2.5" 
+              fill="#a78bfa"
+              letter-spacing="0.5">RESEARCH USE ONLY</text>
+        <text x="55" y="151" text-anchor="middle" 
+              font-family="Outfit, Arial, sans-serif" 
+              font-size="2.2" 
+              fill="#c7d2fe"
+              letter-spacing="0.5">99%+ PURITY • HPLC</text>
+        
+        <!-- ==== GLASS REFLECTIONS (3D effect) ==== -->
+        <!-- Main highlight -->
+        <ellipse cx="35" cy="100" rx="3" ry="50" fill="rgba(255,255,255,0.4)" opacity="0.7"/>
+        <!-- Secondary highlight -->
+        <ellipse cx="78" cy="160" rx="2" ry="30" fill="rgba(255,255,255,0.25)" opacity="0.6"/>
+        <!-- Top reflection -->
+        <ellipse cx="55" cy="35" rx="20" ry="2" fill="rgba(255,255,255,0.5)" opacity="0.5"/>
+        <!-- Bottom reflection -->
+        <ellipse cx="55" cy="205" rx="22" ry="2" fill="rgba(255,255,255,0.3)" opacity="0.4"/>
+        
+        <!-- ==== BOTTOM CURVE (vial bottom) ==== -->
+        <path d="M 25 198 Q 25 208 35 210 L 75 210 Q 85 208 85 198" 
+              fill="none" 
+              stroke="rgba(124, 58, 237, 0.4)" 
+              stroke-width="0.5"/>
+    </svg>
+    `;
+}
+
 function renderProducts() {
     const wellness = document.getElementById('wellnessGrid');
     const research = document.getElementById('researchGrid');
@@ -1687,21 +2002,37 @@ function renderProducts() {
         const badgeClass = isPremium ? 'product-badge' : 'product-badge purity';
         const badgeText = isPremium ? '3 MESES' : '99%+';
         
+        // Determine label name display - shorter for long names
+        let labelName = p.name.toUpperCase();
+        if (labelName === 'HGH FRAGMENT 176-191') labelName = 'HGH FRAGMENT';
+        if (labelName === 'MELANOTAN II') labelName = 'MELANOTAN II';
+        
+        // Calculate font size based on name length
+        let nameFontSize = '9';
+        if (labelName.length > 8) nameFontSize = '8';
+        if (labelName.length > 10) nameFontSize = '7';
+        if (labelName.length > 12) nameFontSize = '6.5';
+        
+        const vialSvg = createRealisticVial(labelName, p.monthlyQuantity || '', nameFontSize, key);
+        
         const card = `
             <div class="${cardClass}" onclick="showProductDetail('${key}')">
                 <div class="product-image-area">
                     <span class="product-emoji">${p.emoji}</span>
+                    <div class="vial-realistic">${vialSvg}</div>
                     <div class="${badgeClass}">${badgeText}</div>
                 </div>
                 <div class="product-info">
                     <div class="product-id">${p.scientificName}</div>
                     <h3 class="product-name">${p.name}</h3>
+                    ${p.monthlyQuantity ? `<div class="monthly-qty">📦 ${p.monthlyQuantity}</div>` : ''}
                     <p class="product-description">${p.description}</p>
                     <div class="product-footer">
                         <div class="product-price">
                             <span class="currency">$</span>
                             <span class="amount">${p.price.toLocaleString('es-MX')}</span>
                             <span class="mxn">MXN</span>
+                            ${p.priceNote ? `<div class="price-note">${p.priceNote}</div>` : ''}
                         </div>
                         <button class="view-btn">Ver Detalles</button>
                     </div>
@@ -1723,12 +2054,33 @@ function showProductDetail(key) {
     if (!p) return;
     
     document.getElementById('modalName').textContent = p.name;
-    document.getElementById('modalSubtitle').textContent = p.scientificName;
+    document.getElementById('modalSubtitle').textContent = p.monthlyQuantity 
+        ? `${p.scientificName} • 📦 ${p.monthlyQuantity}` 
+        : p.scientificName;
+    
+    // Determine label name display
+    let modalLabelName = p.name.toUpperCase();
+    if (modalLabelName === 'HGH FRAGMENT 176-191') modalLabelName = 'HGH FRAGMENT';
+    
+    let modalNameFontSize = '9';
+    if (modalLabelName.length > 8) modalNameFontSize = '8';
+    if (modalLabelName.length > 10) modalNameFontSize = '7';
+    if (modalLabelName.length > 12) modalNameFontSize = '6.5';
+    
+    const modalVialSvg = createRealisticVial(modalLabelName, p.monthlyQuantity || '', modalNameFontSize, 'm_' + key);
     
     let html = `
-        <div class="price-banner">
-            <div class="price-label">Precio</div>
-            <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
+        <div style="display: flex; gap: 24px; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap;">
+            <div class="vial-realistic" style="width: 140px; height: 280px; flex-shrink: 0;">
+                ${modalVialSvg}
+            </div>
+            <div style="flex: 1; min-width: 240px;">
+                <div class="price-banner" style="margin-bottom: 0;">
+                    <div class="price-label">${p.priceNote || 'Precio'}</div>
+                    <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
+                    ${p.monthlyQuantity ? `<div style="margin-top: 12px; color: #92400e; font-weight: 600; font-size: 14px;">📦 Cantidad: ${p.monthlyQuantity}</div>` : ''}
+                </div>
+            </div>
         </div>
         
         <div class="info-block">
@@ -1986,8 +2338,16 @@ function showCheckout() {
                     <div class="info-block-title-icon">💳</div>
                     Método de Pago
                 </div>
-                <label style="display: flex; align-items: center; padding: 16px; background: var(--pearl); border: 2px solid var(--violet); border-radius: 12px; margin-bottom: 12px; cursor: pointer;">
-                    <input type="radio" name="paymentMethod" value="bankTransfer" checked style="margin-right: 12px; width: 20px; height: 20px; accent-color: var(--violet);">
+                <label style="display: flex; align-items: center; padding: 16px; background: linear-gradient(135deg, #fef9c3, #fef08a); border: 2px solid #facc15; border-radius: 12px; margin-bottom: 12px; cursor: pointer;">
+                    <input type="radio" name="paymentMethod" value="mercadopago" checked style="margin-right: 12px; width: 20px; height: 20px; accent-color: #facc15;">
+                    <div style="flex: 1;">
+                        <strong style="color: #713f12;">💳 Mercado Pago</strong>
+                        <div style="font-size: 13px; color: #713f12; margin-top: 4px;">Tarjeta de crédito/débito, OXXO, SPEI</div>
+                    </div>
+                    <div style="background: white; padding: 4px 10px; border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #713f12; font-weight: 700;">MERCADO PAGO</div>
+                </label>
+                <label style="display: flex; align-items: center; padding: 16px; background: var(--pearl); border: 2px solid var(--frost); border-radius: 12px; margin-bottom: 12px; cursor: pointer;">
+                    <input type="radio" name="paymentMethod" value="bankTransfer" style="margin-right: 12px; width: 20px; height: 20px; accent-color: var(--violet);">
                     <div>
                         <strong>🏦 Transferencia Bancaria (SPEI)</strong>
                         <div style="font-size: 13px; color: #6b7280; margin-top: 4px;">Recibirás los datos de transferencia por correo</div>
@@ -2023,6 +2383,8 @@ function processPayment() {
         const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
         const total = subtotal + currentShipping;
         const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        
+        const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
         const orderData = {
             referenceNumber,
@@ -2039,15 +2401,58 @@ function processPayment() {
             subtotal,
             shipping: currentShipping,
             total,
-            paymentMethod: 'bankTransfer',
+            paymentMethod: paymentMethod,
             orderDate: new Date().toLocaleString('es-MX')
         };
         
-        processBankTransfer(orderData);
+        if (paymentMethod === 'mercadopago') {
+            processMercadoPagoPayment(orderData);
+        } else {
+            processBankTransfer(orderData);
+        }
     } catch (error) {
         console.error('Error:', error);
         alert('Error: ' + error.message);
     }
+}
+
+// ========== Mercado Pago Payment ==========
+function processMercadoPagoPayment(orderData) {
+    // Save order to localStorage first
+    saveOrderToLocalStorage(orderData);
+    
+    // Send email notification
+    const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
+    const emailData = {
+        to_email: orderData.email,
+        firstName: orderData.firstName,
+        lastName: orderData.lastName,
+        referenceNumber: orderData.referenceNumber,
+        orderDate: orderData.orderDate,
+        items: itemsList,
+        subtotal: '$' + orderData.subtotal.toLocaleString('es-MX'),
+        shipping: '$' + orderData.shipping.toLocaleString('es-MX'),
+        total: '$' + orderData.total.toLocaleString('es-MX'),
+        address: orderData.address,
+        city: orderData.city,
+        state: orderData.state,
+        postal: orderData.postal,
+        country: orderData.country,
+        phone: orderData.phone
+    };
+    
+    if (typeof emailjs !== 'undefined' && emailjs.send) {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailData).catch(e => console.error(e));
+        sendOwnerNotification(orderData).catch(e => console.error(e));
+    }
+    
+    // Show MP info
+    alert(`✓ ORDEN CREADA: ${orderData.referenceNumber}\n\n💳 MERCADO PAGO\n\n⚠️ NOTA IMPORTANTE:\nLa integración completa de Mercado Pago requiere un servidor backend para crear preferencias de pago de forma segura.\n\nPor ahora:\n1. Tu orden está GUARDADA\n2. Recibimos email automático\n3. Te contactaremos para finalizar el pago via:\n   • Mercado Pago Link de Pago\n   • Transferencia bancaria\n\n💰 Total: $${orderData.total.toLocaleString('es-MX')} MXN`);
+    
+    cart = [];
+    currentShipping = 200;
+    updateCart();
+    closeCheckout();
 }
 
 function processBankTransfer(orderData) {
