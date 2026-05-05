@@ -584,6 +584,45 @@
         color: var(--mist);
     }
     
+    /* ============ DISCOUNT STYLES ============ */
+    .discount-badge {
+        position: absolute;
+        top: 16px;
+        left: 16px;
+        background: linear-gradient(135deg, #dc2626, #b91c1c);
+        color: white;
+        font-family: 'Outfit', sans-serif;
+        font-size: 12px;
+        font-weight: 900;
+        padding: 6px 14px;
+        border-radius: 100px;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        animation: pulse-glow 2s infinite;
+        z-index: 5;
+    }
+    
+    .regular-price-strike {
+        text-decoration: line-through;
+        color: #9ca3af;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 2px;
+        opacity: 0.8;
+    }
+    
+    .product-card.premium .regular-price-strike {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .currency-strike {
+        font-size: 11px;
+    }
+    
+    .amount-strike {
+        font-size: 14px;
+    }
+    
     .product-footer {
         display: flex;
         align-items: center;
@@ -1555,7 +1594,9 @@ const productDetails = {
         scientificName: 'Tirzepatide • Dual GLP-1/GIP Agonist',
         category: 'wellness',
         emoji: '💉',
-        price: 14999,
+        price: 16500,
+        regularPrice: 16500,
+        hasDiscount: false,
         monthlyQuantity: '60 mg',
         priceNote: 'Paquete de 3 meses (180mg total)',
         description: 'Tirzepatida es un péptido innovador de doble agonismo destinado al tratamiento de la diabetes tipo 2 y la pérdida de peso. Comercializado bajo los nombres comerciales Mounjaro y Zepbound.',
@@ -1571,7 +1612,9 @@ const productDetails = {
         scientificName: 'Semaglutide • GLP-1 Receptor Agonist',
         category: 'wellness',
         emoji: '💉',
-        price: 12999,
+        price: 14300,
+        regularPrice: 14300,
+        hasDiscount: false,
         monthlyQuantity: '10 mg',
         priceNote: 'Paquete de 3 meses (30mg total)',
         description: 'Semaglutida es un péptido inyectable semanal que imita la hormona GLP-1. Conocido comercialmente como Ozempic y Wegovy. Reduce el hambre y aumenta la saciedad.',
@@ -1587,7 +1630,9 @@ const productDetails = {
         scientificName: 'Retatrutide • Triple Agonist GLP-1/GIP/Glucagon',
         category: 'wellness',
         emoji: '🎯',
-        price: 16999,
+        price: 18700,
+        regularPrice: 18700,
+        hasDiscount: false,
         monthlyQuantity: '50 mg',
         priceNote: 'Paquete de 3 meses (150mg total)',
         description: 'Retatrutida es un agonista TRIPLE de receptores - el más avanzado en su categoría. Activa simultáneamente GLP-1, GIP y Glucagón para resultados sin precedentes.',
@@ -1602,7 +1647,9 @@ const productDetails = {
         scientificName: 'Anti-Obesity Drug 9604 • Lipolytic Peptide',
         category: 'research',
         emoji: '🔥',
-        price: 3451,
+        price: 3960,
+        regularPrice: 4400,
+        hasDiscount: true,
         monthlyQuantity: '10 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'AOD-9604 es un fragmento modificado de la hormona del crecimiento (HGH 177-191), diseñado específicamente para potenciar la lipólisis sin afectar el crecimiento o el azúcar en sangre.',
@@ -1616,7 +1663,9 @@ const productDetails = {
         scientificName: 'Body Protection Compound 157',
         category: 'research',
         emoji: '🩹',
-        price: 3104,
+        price: 4850,
+        regularPrice: 5390,
+        hasDiscount: true,
         monthlyQuantity: '15 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'BPC-157 es un péptido de 15 aminoácidos derivado de una proteína protectora del jugo gástrico. Ampliamente conocido por sus extraordinarias propiedades regenerativas y curativas.',
@@ -1631,7 +1680,9 @@ const productDetails = {
         scientificName: 'CJC-1295 No DAC • Modified GHRH',
         category: 'research',
         emoji: '💪',
-        price: 3626,
+        price: 4550,
+        regularPrice: 5060,
+        hasDiscount: true,
         monthlyQuantity: '10 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'CJC-1295 (sin DAC) es un análogo modificado del GHRH. Estimula la liberación natural de hormona del crecimiento manteniendo el ritmo natural del cuerpo.',
@@ -1645,7 +1696,9 @@ const productDetails = {
         scientificName: 'Glycyl-Histidyl-Lysine Copper Peptide',
         category: 'research',
         emoji: '✨',
-        price: 3104,
+        price: 3070,
+        regularPrice: 3410,
+        hasDiscount: true,
         monthlyQuantity: '45 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'GHK-Cu es un péptido natural de cobre presente en el cuerpo humano. Famoso por sus propiedades anti-envejecimiento y regeneración de la piel.',
@@ -1659,7 +1712,9 @@ const productDetails = {
         scientificName: 'Human Growth Hormone Fragment',
         category: 'research',
         emoji: '🔥',
-        price: 3104,
+        price: 7620,
+        regularPrice: 8470,
+        hasDiscount: true,
         monthlyQuantity: '25 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'Fragmento de la HGH específicamente diseñado para potenciar la pérdida de grasa. Es 12.5 veces más efectivo que la HGH completa para quema de grasa.',
@@ -1673,7 +1728,9 @@ const productDetails = {
         scientificName: 'Long R3 Insulin-like Growth Factor 1',
         category: 'research',
         emoji: '🦾',
-        price: 3626,
+        price: 10300,
+        regularPrice: 11440,
+        hasDiscount: true,
         monthlyQuantity: '5 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'IGF-1 LR3 es una versión sintética del Factor de Crecimiento Insulínico Tipo 1 con vida media extendida. Uno de los péptidos más potentes para crecimiento muscular.',
@@ -1687,7 +1744,9 @@ const productDetails = {
         scientificName: 'GH Secretagogue Pentapeptide',
         category: 'research',
         emoji: '🚀',
-        price: 3798,
+        price: 4950,
+        regularPrice: 5500,
+        hasDiscount: true,
         monthlyQuantity: '15 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'Ipamorelin es uno de los secretagogos de hormona del crecimiento más selectivos y limpios. No afecta cortisol o prolactina, lo que lo hace muy seguro.',
@@ -1701,7 +1760,9 @@ const productDetails = {
         scientificName: 'Mitochondrial Open Reading Frame',
         category: 'research',
         emoji: '⚡',
-        price: 3626,
+        price: 3590,
+        regularPrice: 3990,
+        hasDiscount: true,
         monthlyQuantity: '20 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'MOTS-c es un péptido único codificado por el ADN mitocondrial. Conocido como el "péptido del ejercicio" porque imita los efectos del ejercicio físico a nivel celular.',
@@ -1715,7 +1776,9 @@ const productDetails = {
         scientificName: 'Nicotinamide Adenine Dinucleotide',
         category: 'research',
         emoji: '🧬',
-        price: 3798,
+        price: 4260,
+        regularPrice: 4730,
+        hasDiscount: true,
         monthlyQuantity: '3000 mg',
         priceNote: 'Cantidad mensual recomendada (3 viales)',
         description: 'NAD+ es una coenzima esencial para la producción de energía celular y la reparación del ADN. Su suplementación es una de las terapias anti-envejecimiento más prometedoras.',
@@ -1730,7 +1793,9 @@ const productDetails = {
         scientificName: 'Thymosin Beta-4 Fragment',
         category: 'research',
         emoji: '🩸',
-        price: 3104,
+        price: 4260,
+        regularPrice: 4730,
+        hasDiscount: true,
         monthlyQuantity: '20 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'TB-500 es un péptido sintético basado en la Timosina Beta-4. Famoso por sus extraordinarias propiedades regenerativas y curación sistémica.',
@@ -1744,7 +1809,9 @@ const productDetails = {
         scientificName: 'GHRH Analog',
         category: 'research',
         emoji: '🔥',
-        price: 2585,
+        price: 9900,
+        regularPrice: 11000,
+        hasDiscount: true,
         monthlyQuantity: '45 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'Tesamorelin es un análogo sintético de la GHRH, aprobado por la FDA específicamente para reducir grasa visceral. Uno de los péptidos más efectivos para grasa abdominal profunda.',
@@ -1758,7 +1825,9 @@ const productDetails = {
         scientificName: 'α-MSH Synthetic Analog',
         category: 'research',
         emoji: '🌞',
-        price: 2780,
+        price: 2750,
+        regularPrice: 3060,
+        hasDiscount: true,
         monthlyQuantity: '15 mg',
         priceNote: 'Cantidad mensual recomendada',
         description: 'Melanotan II es un análogo sintético de la hormona α-MSH. Estimula la producción de melanina produciendo bronceado natural y duradero.',
@@ -2021,6 +2090,7 @@ function renderProducts() {
                     <span class="product-emoji">${p.emoji}</span>
                     <div class="vial-realistic">${vialSvg}</div>
                     <div class="${badgeClass}">${badgeText}</div>
+                    ${p.hasDiscount ? '<div class="discount-badge">-10% OFF</div>' : ''}
                 </div>
                 <div class="product-info">
                     <div class="product-id">${p.scientificName}</div>
@@ -2029,6 +2099,7 @@ function renderProducts() {
                     <p class="product-description">${p.description}</p>
                     <div class="product-footer">
                         <div class="product-price">
+                            ${p.hasDiscount ? `<div class="regular-price-strike"><span class="currency-strike">$</span><span class="amount-strike">${p.regularPrice.toLocaleString('es-MX')}</span></div>` : ''}
                             <span class="currency">$</span>
                             <span class="amount">${p.price.toLocaleString('es-MX')}</span>
                             <span class="mxn">MXN</span>
@@ -2077,6 +2148,12 @@ function showProductDetail(key) {
             <div style="flex: 1; min-width: 240px;">
                 <div class="price-banner" style="margin-bottom: 0;">
                     <div class="price-label">${p.priceNote || 'Precio'}</div>
+                    ${p.hasDiscount ? `
+                        <div style="display: flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 8px;">
+                            <span style="text-decoration: line-through; color: #9ca3af; font-size: 22px; font-weight: 500;">$${p.regularPrice.toLocaleString('es-MX')}</span>
+                            <span style="background: #dc2626; color: white; padding: 4px 12px; border-radius: 100px; font-size: 12px; font-weight: 800; letter-spacing: 1px;">-10% OFF</span>
+                        </div>
+                    ` : ''}
                     <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
                     ${p.monthlyQuantity ? `<div style="margin-top: 12px; color: #92400e; font-weight: 600; font-size: 14px;">📦 Cantidad: ${p.monthlyQuantity}</div>` : ''}
                 </div>
