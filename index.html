@@ -1613,7 +1613,7 @@ const OWNER_EMAIL = 'Eladbarkan10@gmail.com';
 // ========== Mercado Pago Configuration ==========
 // Use TEST key for testing, PROD key for live payments
 const MP_TEST_PUBLIC_KEY = 'APP_USR-11df0e2a-b430-4533-bacc-186a0ac1dd0a';
-const MP_PROD_PUBLIC_KEY = 'APP_USR-3444a0d9-239d-4ccc-b672-ce73198bd7a2';
+const MP_PROD_PUBLIC_KEY = 'APP_USR-760ce2a8-a604-4c69-93d6-2b7918e0171b';
 const MP_PUBLIC_KEY = MP_PROD_PUBLIC_KEY; // Switch to TEST for testing
 
 let mpInstance = null;
@@ -2424,9 +2424,77 @@ function goToCheckout() {
     showCheckout();
 }
 
+// ========== Coupon System ==========
+const COUPONS = {
+    'ARIELLA10': { discount: 10, type: 'percent', description: '10% de descuento' },
+    'SERGIO5':   { discount: 5,  type: 'percent', description: '5% de descuento' },
+    'BIENVENIDO10': { discount: 10, type: 'percent', description: '10% bienvenida' },
+    'VITALIX15': { discount: 15, type: 'percent', description: '15% de descuento' },
+    'VIP20':     { discount: 20, type: 'percent', description: '20% VIP' },
+    'PROMO50':   { discount: 50, type: 'fixed', description: '$50 MXN de descuento' },
+    'PROMO100':  { discount: 100, type: 'fixed', description: '$100 MXN de descuento' },
+};
+
+let appliedCoupon = null;
+
+function applyCoupon() {
+    const code = document.getElementById('couponInput').value.trim().toUpperCase();
+    const messageEl = document.getElementById('couponMessage');
+    
+    if (!code) {
+        messageEl.innerHTML = '<span style="color: #dc2626;">⚠️ Ingresa un código</span>';
+        return;
+    }
+    
+    const coupon = COUPONS[code];
+    
+    if (!coupon) {
+        messageEl.innerHTML = '<span style="color: #dc2626;">❌ Código inválido</span>';
+        appliedCoupon = null;
+        discountPercent = 0;
+        showCheckout(); // Refresh
+        return;
+    }
+    
+    appliedCoupon = { code, ...coupon };
+    
+    if (coupon.type === 'percent') {
+        discountPercent = coupon.discount;
+        messageEl.innerHTML = `<span style="color: #059669; font-weight: 700;">✓ Cupón aplicado: ${coupon.description}</span>`;
+    } else {
+        discountPercent = 0; // Fixed amount
+        messageEl.innerHTML = `<span style="color: #059669; font-weight: 700;">✓ Cupón aplicado: ${coupon.description}</span>`;
+    }
+    
+    showCheckout(); // Refresh to show new total
+}
+
+function removeCoupon() {
+    appliedCoupon = null;
+    discountPercent = 0;
+    showCheckout();
+}
+
+function calculateTotals() {
+    const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
+    let discountAmount = 0;
+    
+    if (appliedCoupon) {
+        if (appliedCoupon.type === 'percent') {
+            discountAmount = Math.round(subtotal * (appliedCoupon.discount / 100));
+        } else {
+            discountAmount = Math.min(appliedCoupon.discount, subtotal);
+        }
+    }
+    
+    const subtotalAfterDiscount = subtotal - discountAmount;
+    const total = subtotalAfterDiscount + currentShipping;
+    
+    return { subtotal, discountAmount, subtotalAfterDiscount, total };
+}
+
 function showCheckout() {
-    let subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-    let total = subtotal + currentShipping;
+    const { subtotal, discountAmount, subtotalAfterDiscount, total } = calculateTotals();
 
     const html = `
         <form id="checkoutForm" onsubmit="event.preventDefault(); processPayment();">
@@ -2442,11 +2510,58 @@ function showCheckout() {
                             <strong>$${item.price.toLocaleString('es-MX')}</strong>
                         </div>
                     `).join('')}
-                    <div style="display:flex; justify-content:space-between; padding-top: 12px; margin-top: 12px; border-top: 2px solid var(--frost); font-size: 18px; font-weight: 700; color: var(--crimson);">
+                    
+                    <div style="display:flex; justify-content:space-between; padding-top: 12px; margin-top: 12px; border-top: 1px dashed var(--frost); color: #6b7280;">
+                        <span>Subtotal:</span>
+                        <span>$${subtotal.toLocaleString('es-MX')} MXN</span>
+                    </div>
+                    
+                    ${appliedCoupon ? `
+                        <div style="display:flex; justify-content:space-between; padding: 6px 0; color: #059669; font-weight: 700;">
+                            <span>🎟️ Cupón ${appliedCoupon.code} (${appliedCoupon.description})</span>
+                            <span>-$${discountAmount.toLocaleString('es-MX')} MXN</span>
+                        </div>
+                    ` : ''}
+                    
+                    <div style="display:flex; justify-content:space-between; padding: 6px 0; color: #6b7280;">
+                        <span>Envío:</span>
+                        <span>$${currentShipping.toLocaleString('es-MX')} MXN</span>
+                    </div>
+                    
+                    <div style="display:flex; justify-content:space-between; padding-top: 12px; margin-top: 12px; border-top: 2px solid var(--frost); font-size: 20px; font-weight: 800; color: var(--crimson);">
                         <span>Total:</span>
                         <span>$${total.toLocaleString('es-MX')} MXN</span>
                     </div>
                 </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">🎟️</div>
+                    Código de Descuento
+                </div>
+                ${appliedCoupon ? `
+                    <div style="background: linear-gradient(135deg, #d1fae5, #a7f3d0); border: 2px solid #10b981; border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 800; color: #065f46; font-size: 16px;">✓ ${appliedCoupon.code}</div>
+                            <div style="font-size: 13px; color: #047857; margin-top: 4px;">${appliedCoupon.description} aplicado</div>
+                        </div>
+                        <button type="button" onclick="removeCoupon()" style="background: white; color: #dc2626; border: 2px solid #dc2626; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px;">
+                            ✕ Quitar
+                        </button>
+                    </div>
+                ` : `
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="couponInput" placeholder="Ingresa tu código (ej: ARIELLA10)" 
+                               style="flex: 1; padding: 14px 16px; border: 2px solid var(--frost); border-radius: 12px; font-size: 15px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 1px;"
+                               onkeypress="if(event.key==='Enter'){event.preventDefault(); applyCoupon();}">
+                        <button type="button" onclick="applyCoupon()" 
+                                style="background: linear-gradient(135deg, var(--violet), var(--royal)); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">
+                            Aplicar
+                        </button>
+                    </div>
+                    <div id="couponMessage" style="margin-top: 8px; font-size: 13px; min-height: 20px;"></div>
+                `}
             </div>
 
             <div class="info-block">
@@ -2523,8 +2638,7 @@ function processPayment() {
             return;
         }
 
-        const subtotal = cart.reduce((sum, item) => sum + item.price, 0);
-        const total = subtotal + currentShipping;
+        const { subtotal, discountAmount, subtotalAfterDiscount, total } = calculateTotals();
         const referenceNumber = 'VIT-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
         
         const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
@@ -2542,6 +2656,10 @@ function processPayment() {
             country: document.getElementById('country').value,
             items: [...cart],
             subtotal,
+            discountAmount,
+            couponCode: appliedCoupon ? appliedCoupon.code : null,
+            couponDescription: appliedCoupon ? appliedCoupon.description : null,
+            subtotalAfterDiscount,
             shipping: currentShipping,
             total,
             paymentMethod: paymentMethod,
@@ -2560,11 +2678,14 @@ function processPayment() {
 }
 
 // ========== Mercado Pago Payment ==========
-function processMercadoPagoPayment(orderData) {
+// Cloudflare Worker URL for Mercado Pago integration
+const MP_WORKER_URL = 'https://vitalix-payments.eladbarkan10.workers.dev';
+
+async function processMercadoPagoPayment(orderData) {
     // Save order to localStorage first
     saveOrderToLocalStorage(orderData);
     
-    // Send email notification
+    // Send email notification (in background)
     const itemsList = orderData.items.map(item => `${item.name}: $${item.price.toLocaleString('es-MX')}`).join('\n');
     const emailData = {
         to_email: orderData.email,
@@ -2589,13 +2710,70 @@ function processMercadoPagoPayment(orderData) {
         sendOwnerNotification(orderData).catch(e => console.error(e));
     }
     
-    // Show MP info
-    alert(`✓ ORDEN CREADA: ${orderData.referenceNumber}\n\n💳 MERCADO PAGO\n\n⚠️ NOTA IMPORTANTE:\nLa integración completa de Mercado Pago requiere un servidor backend para crear preferencias de pago de forma segura.\n\nPor ahora:\n1. Tu orden está GUARDADA\n2. Recibimos email automático\n3. Te contactaremos para finalizar el pago via:\n   • Mercado Pago Link de Pago\n   • Transferencia bancaria\n\n💰 Total: $${orderData.total.toLocaleString('es-MX')} MXN`);
+    // Show loading
+    const loadingMsg = document.createElement('div');
+    loadingMsg.id = 'mp-loading';
+    loadingMsg.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(5, 5, 20, 0.9); backdrop-filter: blur(10px);
+        z-index: 10000; display: flex; align-items: center; justify-content: center;
+        flex-direction: column; gap: 20px; color: white;
+    `;
+    loadingMsg.innerHTML = `
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600;">
+            Procesando pago...
+        </div>
+        <div style="width: 60px; height: 60px; border: 4px solid rgba(167, 139, 250, 0.3); border-top-color: #a78bfa; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        <div style="font-size: 14px; color: #c7d2fe;">Conectando con Mercado Pago...</div>
+        <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    `;
+    document.body.appendChild(loadingMsg);
     
-    cart = [];
-    currentShipping = 200;
-    updateCart();
-    closeCheckout();
+    try {
+        // Call Cloudflare Worker to create MP preference
+        const response = await fetch(MP_WORKER_URL + '/create-preference', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok || !data.success) {
+            throw new Error(data.error || 'Error creating payment');
+        }
+        
+        // Redirect to Mercado Pago checkout
+        // Use init_point for production, sandbox_init_point for testing
+        const checkoutUrl = data.init_point || data.sandbox_init_point;
+        
+        if (!checkoutUrl) {
+            throw new Error('No checkout URL received');
+        }
+        
+        // Clear cart before redirect
+        cart = [];
+        currentShipping = 200;
+        updateCart();
+        
+        // Redirect to MP
+        window.location.href = checkoutUrl;
+        
+    } catch (error) {
+        console.error('MP Payment error:', error);
+        
+        // Remove loading
+        const loading = document.getElementById('mp-loading');
+        if (loading) loading.remove();
+        
+        // Show error and fallback
+        alert(`⚠️ Error al procesar el pago con Mercado Pago.\n\nTu orden FUE GUARDADA: ${orderData.referenceNumber}\n\nEnviamos los detalles por email.\n\nPuedes pagar también por transferencia bancaria:\nCLABE: 684180253001000985\nBeneficiario: VITALIX MEXICO\n\nMonto: $${orderData.total.toLocaleString('es-MX')} MXN\n\nUsa la referencia: ${orderData.referenceNumber}`);
+        
+        cart = [];
+        currentShipping = 200;
+        updateCart();
+        closeCheckout();
+    }
 }
 
 function processBankTransfer(orderData) {
@@ -2679,14 +2857,38 @@ function saveOrderToLocalStorage(orderData) {
     localStorage.setItem('vitalixOrders', JSON.stringify(orders));
 }
 
+// ========== MP Payment Return Handler ==========
+function handleMPReturn() {
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    const ref = params.get('ref');
+    
+    if (!payment) return;
+    
+    // Remove params from URL
+    window.history.replaceState({}, document.title, window.location.pathname);
+    
+    setTimeout(() => {
+        if (payment === 'success') {
+            alert(`✅ ¡PAGO EXITOSO!\n\nNúmero de referencia: ${ref || 'N/A'}\n\nTu pedido fue procesado correctamente.\nRecibirás un correo de confirmación con los detalles.\n\n¡Gracias por tu compra! 🎉`);
+        } else if (payment === 'failure') {
+            alert(`❌ Pago no completado\n\nReferencia: ${ref || 'N/A'}\n\nTu pago no pudo ser procesado.\nPor favor intenta de nuevo o usa transferencia bancaria.\n\nCLABE: 684180253001000985\nBeneficiario: VITALIX MEXICO`);
+        } else if (payment === 'pending') {
+            alert(`⏳ Pago pendiente\n\nReferencia: ${ref || 'N/A'}\n\nTu pago está siendo procesado.\nRecibirás una confirmación por correo cuando se complete.`);
+        }
+    }, 500);
+}
+
 // ========== Init ==========
 document.addEventListener('DOMContentLoaded', () => {
     renderProducts();
     updateCart();
+    handleMPReturn();
 });
 
 renderProducts();
 updateCart();
+handleMPReturn();
 </script>
 
 </body>
