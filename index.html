@@ -2668,7 +2668,7 @@ function renderProducts() {
         const isPremium = p.category === 'wellness';
         const cardClass = isPremium ? 'product-card premium' : 'product-card';
         const badgeClass = isPremium ? 'product-badge' : 'product-badge purity';
-        const badgeText = isPremium ? (p.oneMonth ? '1 MES' : '3 MESES') : '99%+';
+        const badgeText = isPremium ? (p.oneMonth ? '1 VIAL' : '3 VIALS') : '99%+';
         
         // Determine label name display - shorter for long names
         let labelName = p.name.toUpperCase();
