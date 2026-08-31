@@ -3,13 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITALIX | Péptidos Premium de Investigación México</title>
-    <meta name="description" content="VITALIX - Péptidos de investigación de alta pureza. Productos certificados HPLC para investigación médica.">
+    <title>VITALIX | Kits de Microinfusión y Péptidos de Investigación en México</title>
+    <meta name="description" content="Kits cosméticos de microinfusión con péptidos, GHK-Cu y PDRN desde $2,999 MXN, y péptidos de investigación con certificado HPLC. Envío a todo México en 24-48 h.">
+    <link rel="canonical" href="https://vitalix.fit/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <meta name="theme-color" content="#0a0a2e">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="alternate" hreflang="es-mx" href="https://vitalix.fit/">
+    <link rel="alternate" hreflang="x-default" href="https://vitalix.fit/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="VITALIX">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:url" content="https://vitalix.fit/">
+    <meta property="og:title" content="VITALIX | Kits de Microinfusión y Péptidos de Investigación en México">
+    <meta property="og:description" content="Kits cosméticos de microinfusión con péptidos, GHK-Cu y PDRN desde $2,999 MXN. Envío a todo México en 24-48 h.">
+    <meta property="og:image" content="https://vitalix.fit/img/og-vitalix.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Kits de microinfusión VITALIX">
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VITALIX | Kits de Microinfusión y Péptidos en México">
+    <meta name="twitter:description" content="Kits cosméticos de microinfusión con péptidos, GHK-Cu y PDRN desde $2,999 MXN. Envío a todo México.">
+    <meta name="twitter:image" content="https://vitalix.fit/img/og-vitalix.jpg">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/index.min.js"></script>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
+
+    <!-- ========== DATOS ESTRUCTURADOS ========== -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://vitalix.fit/#organizacion",
+          "name": "VITALIX",
+          "alternateName": "VITALIX Peptide Labs México",
+          "url": "https://vitalix.fit/",
+          "logo": "https://vitalix.fit/img/og-vitalix.jpg",
+          "areaServed": { "@type": "Country", "name": "México" },
+          "knowsLanguage": "es-MX"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://vitalix.fit/#sitio",
+          "url": "https://vitalix.fit/",
+          "name": "VITALIX",
+          "inLanguage": "es-MX",
+          "publisher": { "@id": "https://vitalix.fit/#organizacion" }
+        },
+        {
+          "@type": "Product",
+          "@id": "https://vitalix.fit/#kit-peptidos",
+          "name": "Kit de Microinfusión Antiedad con Péptidos",
+          "image": "https://vitalix.fit/img/kit-peptidos.jpg",
+          "description": "Kit cosmético de microinfusión con péptidos, Replexium PW BC10082 y hialuronato de sodio. Trabaja la elasticidad y la firmeza del rostro. Incluye viales de sérum y aplicador de microagujas.",
+          "category": "Cosmética facial",
+          "brand": { "@id": "https://vitalix.fit/#organizacion" },
+          "offers": {
+            "@type": "Offer",
+            "url": "https://vitalix.fit/#cosmetica",
+            "price": "2999",
+            "priceCurrency": "MXN",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "areaServed": { "@type": "Country", "name": "México" }
+          }
+        },
+        {
+          "@type": "Product",
+          "@id": "https://vitalix.fit/#kit-ghkcu",
+          "name": "Kit de Microinfusión Capilar GHK-Cu",
+          "image": "https://vitalix.fit/img/kit-ghkcu.jpg",
+          "description": "Kit cosmético de microinfusión para cuero cabelludo con GHK-Cu, cafeína, adenosina y péptidos reparadores. Incluye viales de sérum y aplicador de microagujas.",
+          "category": "Cuidado capilar",
+          "brand": { "@id": "https://vitalix.fit/#organizacion" },
+          "offers": {
+            "@type": "Offer",
+            "url": "https://vitalix.fit/#cosmetica",
+            "price": "2999",
+            "priceCurrency": "MXN",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "areaServed": { "@type": "Country", "name": "México" }
+          }
+        },
+        {
+          "@type": "Product",
+          "@id": "https://vitalix.fit/#kit-pdrn",
+          "name": "Kit de Microinfusión con PDRN",
+          "image": "https://vitalix.fit/img/kit-pdrn.jpg",
+          "description": "Kit cosmético de microinfusión con PDRN encapsulado en ciclodextrina y sistema potenciador con arginina. Textura ligera, apta para piel sensible. Incluye viales de sérum y aplicador de microagujas.",
+          "category": "Cosmética facial",
+          "brand": { "@id": "https://vitalix.fit/#organizacion" },
+          "offers": {
+            "@type": "Offer",
+            "url": "https://vitalix.fit/#cosmetica",
+            "price": "2999",
+            "priceCurrency": "MXN",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "areaServed": { "@type": "Country", "name": "México" }
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://vitalix.fit/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "¿Qué incluye cada kit de microinfusión?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cada set incluye los viales de sérum y el aplicador de microagujas, listos para usar. No requiere reconstitución ni preparación previa."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto cuesta un kit de microinfusión VITALIX?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Los tres kits cosméticos (péptidos antiedad, GHK-Cu capilar y PDRN) cuestan $2,999 MXN por set completo."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Con qué frecuencia se usan los kits?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "La frecuencia sugerida es de 1 a 2 veces por semana, por la noche, sobre piel o cuero cabelludo limpio y seco."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tarda el envío en México?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El envío es a todo el territorio mexicano con entrega estimada de 24 a 48 horas, con seguimiento y empaquetado discreto."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
     <style>
     /* ============ DESIGN TOKENS ============ */
     :root {
@@ -1384,6 +1530,141 @@
         .product-image-area { height: 160px; }
         .product-emoji { font-size: 60px; }
     }
+
+    /* ========== COSMÉTICA ========== */
+    .product-image-area picture {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+    }
+    .cosmetic-photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+        z-index: 1;
+    }
+    .cosmetic-photo-fallback {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        color: rgba(255,255,255,0.75);
+        text-align: center;
+        padding: 16px;
+        z-index: 1;
+    }
+    .cosmetic-photo-fallback span { font-size: 40px; }
+    .product-badge.cosmetic {
+        background: linear-gradient(135deg, #0ea5e9, #6366f1);
+        color: #fff;
+        z-index: 3;
+    }
+    .zone-tag {
+        display: inline-block;
+        background: rgba(99,102,241,0.12);
+        color: #4338ca;
+        border: 1px solid rgba(99,102,241,0.25);
+        border-radius: 100px;
+        padding: 4px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.4px;
+        margin-bottom: 10px;
+    }
+    .ingredient-list { display: grid; gap: 14px; }
+    .ingredient-item {
+        border-left: 3px solid #6366f1;
+        padding: 2px 0 2px 14px;
+    }
+    .ingredient-name {
+        font-weight: 800;
+        color: #312e81;
+        font-size: 15px;
+        margin-bottom: 3px;
+    }
+    .ingredient-text {
+        color: #4b5563;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+    .cosmetic-modal-photo {
+        width: 220px;
+        flex-shrink: 0;
+        aspect-ratio: 4 / 3;
+        border-radius: 14px;
+        overflow: hidden;
+        background: linear-gradient(160deg, #1e3a8a, #082f49);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.7);
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        padding: 12px;
+    }
+    .cosmetic-modal-photo picture { width: 100%; height: 100%; display: block; }
+    .cosmetic-modal-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .care-box {
+        background: rgba(14,165,233,0.07);
+        border-left: 3px solid #0ea5e9;
+        border-radius: 0 10px 10px 0;
+        padding: 14px 16px;
+        color: #0c4a6e;
+        font-size: 14px;
+        line-height: 1.65;
+    }
+    @media (max-width: 640px) {
+        .cosmetic-modal-photo { width: 100%; }
+    }
+
+    /* ========== SEO / A11Y ========== */
+    .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--royal);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 0 0 8px 0;
+        font-weight: 700;
+        z-index: 9999;
+    }
+    .skip-link:focus { left: 0; }
+    :focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+    .nav-links {
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        margin-right: 18px;
+    }
+    .nav-links a {
+        color: rgba(255,255,255,0.85);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        transition: color .2s;
+        white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    @media (max-width: 720px) { .nav-links { display: none; } }
+    .visually-hidden {
+        position: absolute;
+        width: 1px; height: 1px;
+        margin: -1px; padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap; border: 0;
+    }
     </style>
 </head>
 <body>
@@ -1397,7 +1678,8 @@
 </div>
 
 <!-- ========== NAVIGATION ========== -->
-<nav>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<nav aria-label="Principal">
     <div class="nav-container">
         <div class="nav-logo">
             <svg class="nav-dna" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
@@ -1419,8 +1701,13 @@
                 <div class="nav-tagline">PEPTIDE LABS MÉXICO</div>
             </div>
         </div>
+        <div class="nav-links">
+            <a href="#cosmetica">Cosmética</a>
+            <a href="#investigacion">Péptidos</a>
+            <a href="#confianza">Calidad</a>
+        </div>
         <div class="nav-actions">
-            <button class="cart-btn" onclick="toggleCart()">
+            <button class="cart-btn" onclick="toggleCart()" aria-label="Abrir carrito de compras">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
                 <span>Carrito</span>
                 <span class="cart-count" id="cartCount">0</span>
@@ -1430,7 +1717,7 @@
 </nav>
 
 <!-- ========== HERO ========== -->
-<section class="hero">
+<section class="hero" aria-label="Presentación">
     <div class="hero-grid"></div>
     <div class="hero-content">
         <div class="hero-badge">
@@ -1461,11 +1748,11 @@
 </section>
 
 <!-- ========== MAIN CONTENT ========== -->
-<main>
+<main id="contenido">
     <!-- ========== WELLNESS CATEGORY ========== -->
-    <div class="category-section">
+    <div class="category-section" id="bienestar">
         <div class="category-header">
-            <div class="category-icon">⭐</div>
+            <div class="category-icon" aria-hidden="true">⭐</div>
             <div class="category-info">
                 <h2>Productos Premium de Bienestar</h2>
                 <p>PAQUETES DE 3 MESES // ENTREGA INMEDIATA</p>
@@ -1475,9 +1762,9 @@
     </div>
 
     <!-- ========== RESEARCH PEPTIDES CATEGORY ========== -->
-    <div class="category-section">
+    <div class="category-section" id="investigacion">
         <div class="category-header">
-            <div class="category-icon">🧬</div>
+            <div class="category-icon" aria-hidden="true">🧬</div>
             <div class="category-info">
                 <h2>Péptidos de Investigación</h2>
                 <p>SOLUCIONES INDIVIDUALES // ALTA PUREZA</p>
@@ -1485,28 +1772,41 @@
         </div>
         <div class="products-grid" id="researchGrid"></div>
     </div>
+
+    <!-- ========== COSMÉTICA CATEGORY ========== -->
+    <div class="category-section" id="cosmetica">
+        <div class="category-header">
+            <div class="category-icon" aria-hidden="true">🧴</div>
+            <div class="category-info">
+                <h2>Cosmética de Microinfusión</h2>
+                <p>USO TÓPICO // KITS COMPLETOS LISTOS PARA USAR</p>
+            </div>
+        </div>
+        <div class="products-grid featured" id="cosmeticaGrid"></div>
+    </div>
 </main>
 
 <!-- ========== TRUST SECTION ========== -->
-<section class="trust-section">
+<section class="trust-section" id="confianza" aria-labelledby="confianza-titulo">
+    <h2 class="visually-hidden" id="confianza-titulo">Por qué comprar en VITALIX</h2>
     <div class="trust-grid">
         <div class="trust-item">
-            <div class="trust-icon">🧪</div>
+            <div class="trust-icon" aria-hidden="true">🧪</div>
             <h3 class="trust-title">Certificado HPLC</h3>
             <p class="trust-desc">Cada lote es analizado por cromatografía de alta presión para garantizar pureza superior al 99%.</p>
         </div>
         <div class="trust-item">
-            <div class="trust-icon">💧</div>
+            <div class="trust-icon" aria-hidden="true">💧</div>
             <h3 class="trust-title">Solución Lista</h3>
             <p class="trust-desc">Productos en formato líquido ready-to-use. Sin necesidad de reconstitución.</p>
         </div>
         <div class="trust-item">
-            <div class="trust-icon">📦</div>
+            <div class="trust-icon" aria-hidden="true">📦</div>
             <h3 class="trust-title">Envío Discreto</h3>
             <p class="trust-desc">Empaquetado en frío con seguimiento. Entrega en 24-48 horas en territorio mexicano.</p>
         </div>
         <div class="trust-item">
-            <div class="trust-icon">🔬</div>
+            <div class="trust-icon" aria-hidden="true">🔬</div>
             <h3 class="trust-title">Solo para Investigación</h3>
             <p class="trust-desc">Productos destinados exclusivamente a investigación científica y de laboratorio.</p>
         </div>
@@ -1514,7 +1814,7 @@
 </section>
 
 <!-- ========== FOOTER ========== -->
-<footer>
+<footer aria-label="Pie de página">
     <div class="footer-content">
         <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
             <svg width="32" height="80" viewBox="0 0 60 160" xmlns="http://www.w3.org/2000/svg">
@@ -1641,6 +1941,76 @@ let discountPercent = 0;
 
 // ========== Product Data ==========
 const productDetails = {
+    kitPeptidos: {
+        name: 'Kit Antiedad Péptidos',
+        monthlySupply: 'Set completo listo para usar',
+        scientificName: 'Peptide Anti-Aging Micro Infusion Kit',
+        category: 'cosmetica',
+        zone: 'Rostro',
+        emoji: '✨',
+        image: 'img/kit-peptidos.jpg',
+        imageWebp: 'img/kit-peptidos.webp',
+        price: 2999,
+        regularPrice: 2999,
+        hasDiscount: false,
+        priceNote: 'Precio por set completo',
+        description: 'Kit de microinfusión formulado para piel que empieza a perder firmeza. Los péptidos trabajan sobre la red de colágeno mientras el hialuronato de sodio retiene agua en las capas superficiales, de modo que la piel se ve más llena y elástica desde las primeras aplicaciones. Incluye los viales de sérum y el aplicador de microagujas.',
+        benefits: ['Efecto antiedad sobre líneas finas', 'Mayor elasticidad y densidad', 'Piel más rellena y firme', 'Tono más uniforme y luminoso', 'Hidratación de larga duración', 'Textura ligera, sin residuo graso'],
+        ingredients: [
+            { n: 'Péptidos', t: 'Concentración alta de activo para trabajar la elasticidad y reforzar la red de colágeno, que es lo que sostiene la firmeza de la piel.' },
+            { n: 'Aceite de flor de Citrus Aurantium Amara', t: 'Aceite de flor de naranja amarga. Aporta luminosidad al tono y tiene acción calmante y antiséptica sobre la piel.' },
+            { n: 'Replexium™ PW BC10082', t: 'Complejo peptídico que estimula la producción de colágeno para contrarrestar los signos visibles de la edad.' },
+            { n: 'Hialuronato de sodio', t: 'Suaviza y alisa la superficie, mejora la elasticidad y mantiene la piel hidratada durante horas.' }
+        ],
+        usage: 'Sobre piel limpia y seca. Aplica el sérum con el cabezal de microagujas en movimientos suaves y uniformes, sin presionar de más. Deja absorber unos minutos antes de continuar con tu rutina. Frecuencia sugerida: 1 a 2 veces por semana, por la noche.',
+        care: 'Producto cosmético de uso tópico externo. Haz una prueba en una zona pequeña 24 horas antes de la primera aplicación completa. No apliques sobre piel lesionada, irritada o con infección activa. Usa protector solar durante el día. Si tienes una condición dermatológica diagnosticada o estás en tratamiento, consulta a tu dermatólogo antes de usarlo.'
+    },
+    kitGhkCu: {
+        name: 'Kit Capilar GHK-Cu',
+        monthlySupply: 'Set completo listo para usar',
+        scientificName: 'GHK-Cu Hair Growth Microneedle Infusion Kit',
+        category: 'cosmetica',
+        zone: 'Cuero cabelludo',
+        emoji: '🧬',
+        image: 'img/kit-ghkcu.jpg',
+        imageWebp: 'img/kit-ghkcu.webp',
+        price: 2999,
+        regularPrice: 2999,
+        hasDiscount: false,
+        priceNote: 'Precio por set completo',
+        description: 'Kit de microinfusión pensado para cuero cabelludo con densidad a la baja. Combina el péptido de cobre GHK-Cu con estimulantes y péptidos reparadores, atacando a la vez el folículo dormido, la fibra debilitada y la irritación del cuero cabelludo. Incluye los viales de sérum y el aplicador de microagujas.',
+        benefits: ['Reactiva folículos en reposo', 'Alarga la fase de crecimiento', 'Fibra capilar más resistente', 'Menos caída y quiebre', 'Calma la irritación del cuero cabelludo', 'Refuerza la barrera del cuero cabelludo'],
+        ingredients: [
+            { n: 'GHK-Cu', t: 'Activa el folículo y alarga la fase de crecimiento. Estimula la proliferación de las células de la papila dérmica para despertar folículos dormidos.' },
+            { n: 'Cafeína y adenosina', t: 'Estimulantes del crecimiento. Revitalizan el folículo, refuerzan la fibra capilar y reducen la caída y el quiebre.' },
+            { n: 'Biotinoyl Tripeptide-1 y Acetyl Tetrapeptide-3', t: 'Péptidos reparadores. Calman el cuero cabelludo y fortalecen su barrera, lo que ayuda con la caída provocada por irritación.' }
+        ],
+        usage: 'Sobre cuero cabelludo limpio y seco, con el cabello separado en secciones. Aplica el sérum con el cabezal de microagujas recorriendo cada sección con presión ligera. No enjuagues después. Frecuencia sugerida: 1 a 2 veces por semana, por la noche.',
+        care: 'Producto cosmético de uso tópico externo. Haz una prueba en una zona pequeña 24 horas antes de la primera aplicación completa. No apliques sobre cuero cabelludo lesionado, irritado o con infección activa. Si la caída es repentina, en parches o viene acompañada de otros síntomas, acude con un dermatólogo: puede tener una causa médica que este kit no atiende.'
+    },
+    kitPdrn: {
+        name: 'Kit PDRN',
+        monthlySupply: 'Set completo listo para usar',
+        scientificName: 'PDRN Microneedle Infusion Kit',
+        category: 'cosmetica',
+        zone: 'Piel sensible',
+        emoji: '💧',
+        image: 'img/kit-pdrn.jpg',
+        imageWebp: 'img/kit-pdrn.webp',
+        price: 2999,
+        regularPrice: 2999,
+        hasDiscount: false,
+        priceNote: 'Precio por set completo',
+        description: 'El más ligero de los tres kits. Toda la fórmula está construida alrededor de la penetración: encapsulación con ciclodextrina, arginina como vehículo y una base de alcoholes de bajo peso molecular. Textura fresca, sin sensación pesada, y apta para piel sensible. Incluye los viales de sérum y el aplicador de microagujas.',
+        benefits: ['Penetración transdérmica +50%', 'Doble aprovechamiento de los activos', 'Textura fresca y ligera', 'Apta para piel sensible', 'Sensación calmante al aplicar', 'Absorción rápida sin residuo'],
+        ingredients: [
+            { n: 'Encapsulación con ciclodextrina', t: 'Protege el PDRN y los péptidos de la degradación y eleva la penetración transdérmica un 50%.' },
+            { n: 'Sistema potenciador con arginina', t: 'Abre las vías de absorción de la piel y duplica el aprovechamiento de los activos de la fórmula.' },
+            { n: 'Complejo de alcoholes de bajo peso molecular', t: 'Butanodiol, pentilenglicol y hexilenglicol: triple acción para facilitar la entrada del sérum.' }
+        ],
+        usage: 'Sobre piel limpia y seca. Aplica el sérum con el cabezal de microagujas en movimientos suaves y uniformes. Deja absorber unos minutos antes de continuar con tu rutina. Frecuencia sugerida: 1 a 2 veces por semana, por la noche.',
+        care: 'Producto cosmético de uso tópico externo. Aunque la fórmula es apta para piel sensible, haz una prueba en una zona pequeña 24 horas antes de la primera aplicación completa. No apliques sobre piel lesionada, irritada o con infección activa. Usa protector solar durante el día.'
+    },
     tirzepatida: {
         name: 'T-Tide R-2', monthlySupply: 'Paquete para 3 meses de tratamiento',
         scientificName: 'Tirzepatide • Dual GLP-1/GIP Agonist',
@@ -2253,12 +2623,48 @@ function createRealisticVial(productName, dosage, nameFontSize, productKey) {
 function renderProducts() {
     const wellness = document.getElementById('wellnessGrid');
     const research = document.getElementById('researchGrid');
+    const cosmetica = document.getElementById('cosmeticaGrid');
     
     let wellnessHtml = '';
     let researchHtml = '';
+    let cosmeticaHtml = '';
     
     Object.keys(productDetails).forEach(key => {
         const p = productDetails[key];
+        const isCosmetic = p.category === 'cosmetica';
+
+        // ----- tarjeta de cosmética (foto en vez de vial) -----
+        if (isCosmetic) {
+            cosmeticaHtml += `
+                <div class="product-card premium" onclick="showProductDetail('${key}')">
+                    <div class="product-image-area">
+                        <picture>
+                            <source srcset="${p.imageWebp}" type="image/webp">
+                            <img class="cosmetic-photo" src="${p.image}" alt="${p.name} — kit de microinfusión VITALIX" width="800" height="600" loading="lazy" decoding="async"
+                                 onerror="this.closest('picture').insertAdjacentHTML('afterend','<div class=\\'cosmetic-photo-fallback\\'><span>${p.emoji}</span>${p.image}</div>'); this.closest('picture').remove();">
+                        </picture>
+                        <div class="product-badge cosmetic">SET COMPLETO</div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-id">${p.scientificName}</div>
+                        <h3 class="product-name">${p.name}</h3>
+                        <div class="zone-tag">${p.zone}</div>
+                        <p class="product-description">${p.description}</p>
+                        <div class="product-footer">
+                            <div class="product-price">
+                                <span class="currency">$</span>
+                                <span class="amount">${p.price.toLocaleString('es-MX')}</span>
+                                <span class="mxn">MXN</span>
+                                <div class="price-note">${p.priceNote}</div>
+                            </div>
+                            <button class="view-btn">Ver Detalles</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
         const isPremium = p.category === 'wellness';
         const cardClass = isPremium ? 'product-card premium' : 'product-card';
         const badgeClass = isPremium ? 'product-badge' : 'product-badge purity';
@@ -2313,12 +2719,118 @@ function renderProducts() {
     
     wellness.innerHTML = wellnessHtml;
     research.innerHTML = researchHtml;
+    if (cosmetica) cosmetica.innerHTML = cosmeticaHtml;
+    revealCards();
+}
+
+// ========== Entrada escalonada de tarjetas ==========
+function revealCards() {
+    if (!('IntersectionObserver' in window)) return;
+    const cards = document.querySelectorAll('#cosmeticaGrid .product-card');
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            const i = Array.prototype.indexOf.call(cards, e.target);
+            e.target.style.animation = `fadeInUp .6s ease ${i * 110}ms both`;
+            io.unobserve(e.target);
+        });
+    }, { threshold: 0.15 });
+    cards.forEach((c) => { c.style.opacity = '0'; io.observe(c); });
 }
 
 // ========== Show Product Modal ==========
 function showProductDetail(key) {
     const p = productDetails[key];
     if (!p) return;
+    
+    // ----- modal de cosmética -----
+    if (p.category === 'cosmetica') {
+        document.getElementById('modalName').textContent = p.name;
+        document.getElementById('modalSubtitle').textContent = `${p.scientificName} • ${p.zone}`;
+        document.getElementById('modalBody').innerHTML = `
+            <div style="display:flex; gap:24px; align-items:flex-start; margin-bottom:24px; flex-wrap:wrap;">
+                <div class="cosmetic-modal-photo">
+                    <picture>
+                        <source srcset="${p.imageWebp}" type="image/webp">
+                        <img src="${p.image}" alt="${p.name} — kit de microinfusión VITALIX" width="800" height="600" decoding="async"
+                             onerror="this.closest('.cosmetic-modal-photo').textContent='${p.image}'">
+                    </picture>
+                </div>
+                <div style="flex:1; min-width:240px;">
+                    <div class="price-banner" style="margin-bottom:0;">
+                        <div class="price-label">${p.priceNote}</div>
+                        <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
+                        <div style="margin-top:12px; color:#065f46; font-weight:700; font-size:14px; background:rgba(16,185,129,0.1); padding:8px 12px; border-radius:8px; display:inline-block;">🧴 Viales de sérum + aplicador incluidos</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">📖</div>
+                    Descripción
+                </div>
+                <div class="info-block-content">${p.description}</div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">✨</div>
+                    Beneficios
+                </div>
+                <div class="benefits-grid">
+                    ${p.benefits.map(b => `<div class="benefit-item"><span class="benefit-check">✓</span><span>${b}</span></div>`).join('')}
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">🧪</div>
+                    Ingredientes activos
+                </div>
+                <div class="ingredient-list">
+                    ${p.ingredients.map(i => `
+                        <div class="ingredient-item">
+                            <div class="ingredient-name">${i.n}</div>
+                            <div class="ingredient-text">${i.t}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">💧</div>
+                    Modo de uso
+                </div>
+                <div class="usage-box">${p.usage}</div>
+            </div>
+
+            <div class="info-block">
+                <div class="info-block-title">
+                    <div class="info-block-title-icon">⚠️</div>
+                    Precauciones
+                </div>
+                <div class="care-box">${p.care}</div>
+            </div>
+
+            <div class="checkbox-group">
+                <h4>Antes de agregar</h4>
+                <label class="checkbox-item">
+                    <input type="checkbox" id="cosmeticAccept" required>
+                    <span>Entiendo que es un producto cosmético de uso tópico externo y haré una prueba en una zona pequeña antes de la primera aplicación completa.</span>
+                </label>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-add-cart" onclick="addProductToCart('${key}')">🛒 Agregar al Carrito</button>
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            </div>
+        `;
+        document.getElementById('productModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+        return;
+    }
     
     document.getElementById('modalName').textContent = p.name;
     const isPremiumModal = p.category === 'wellness';
@@ -2472,6 +2984,22 @@ function closeModal() {
 // ========== Cart Functions ==========
 function addProductToCart(key) {
     const p = productDetails[key];
+    
+    // ----- cosmética: confirmación simple -----
+    if (p.category === 'cosmetica') {
+        if (!document.getElementById('cosmeticAccept')?.checked) {
+            alert('Por favor confirma la nota de uso antes de continuar');
+            return;
+        }
+        cart.push({ name: p.name, price: p.price });
+        updateCart();
+        closeModal();
+        const cc = document.getElementById('cartCount');
+        cc.style.animation = 'pulse-glow 0.5s';
+        setTimeout(() => cc.style.animation = '', 500);
+        alert('✓ Producto agregado al carrito');
+        return;
+    }
     
     const dosageSelect = document.getElementById('dosageSelect');
     const dosage = dosageSelect ? dosageSelect.value : null;
