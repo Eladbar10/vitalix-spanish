@@ -2021,7 +2021,7 @@ const productDetails = {
         hasDiscount: false,
         discountPercent: 21,
         monthlyQuantity: '20 mg',
-        priceNote: 'Precio para todas las dosis: desde inicial hasta máxima (paquete 3 Vials)',
+        priceNote: 'Precio para paquete 3 Vials',
         description: 'Tirzepatida es un péptido innovador de doble agonismo destinado al tratamiento de la diabetes tipo 2 y la pérdida de peso. Comercializado bajo los nombres comerciales Mounjaro y Zepbound.',
         mechanism: 'Es un fármaco de doble acción (Dual Agonist) que imita la acción de dos hormonas naturales (incretinas) liberadas en el intestino, conduciendo a un equilibrio de azúcar más eficiente y reducción significativa en la ingesta de alimentos.',
         dosageProtocol: 'Semanas 1-4: 2.5mg/semana | Semanas 5-8: 5mg/semana | Semanas 9-12: 7.5mg/semana | Semanas 13-16: 10mg/semana | Semana 17+: hasta 12.5-15mg/semana',
@@ -2040,7 +2040,7 @@ const productDetails = {
         hasDiscount: false,
         discountPercent: 24,
         monthlyQuantity: '10 mg',
-        priceNote: 'Precio para todas las dosis: desde inicial hasta máxima (paquete 3 Vials)',
+        priceNote: 'Precio para paquete 3 Vials',
         description: 'Semaglutida es un péptido inyectable semanal que imita la hormona GLP-1. Conocido comercialmente como Ozempic y Wegovy. Reduce el hambre y aumenta la saciedad.',
         mechanism: 'Imita la hormona natural GLP-1 que se libera del intestino después de comer. Actúa sobre el cerebro para reducir la sensación de hambre, ralentiza el vaciado del estómago y aumenta la secreción de insulina.',
         dosageProtocol: 'Semanas 1-4: 0.25mg/semana | Semanas 5-8: 0.5mg/semana | Semanas 9-12: 1mg/semana | Semanas 13-16: 1.7mg/semana | Semana 17+: hasta 2.4mg/semana',
@@ -2059,7 +2059,7 @@ const productDetails = {
         hasDiscount: false,
         discountPercent: 25,
         monthlyQuantity: '20 mg',
-        priceNote: 'Precio para todas las dosis: desde inicial hasta máxima (paquete 3 Vials)',
+        priceNote: 'Precio para paquete 3 Vials',
         description: 'Retatrutida es un agonista TRIPLE de receptores - el más avanzado en su categoría. Activa simultáneamente GLP-1, GIP y Glucagón para resultados sin precedentes.',
         mechanism: 'Triple agonismo: GLP-1 (reduce apetito), GIP (mejora sensibilidad a insulina), Glucagón (aumenta gasto energético). Esta combinación única produce resultados sinérgicos.',
         dosageProtocol: 'Semanas 1-4: 2mg/semana | Semanas 5-8: 4mg/semana | Semanas 9-12: 6mg/semana | Semanas 13-16: 8mg/semana | Semana 17+: hasta 12mg/semana',
@@ -2695,7 +2695,7 @@ function renderProducts() {
                     <div class="product-id">${p.scientificName}</div>
                     <h3 class="product-name">${p.name}</h3>
                     ${(isPremium && !p.oneMonth) 
-                        ? `<div class="dose-range">💊 Todas las dosis incluidas</div>` 
+                        ? `<div class="dose-range">💊 3 vials incluidas</div>` 
                         : (p.monthlyQuantity ? `<div class="monthly-qty">📦 ${p.monthlyQuantity}</div>` : '')
                     }
                     <p class="product-description">${p.description}</p>
@@ -2835,7 +2835,7 @@ function showProductDetail(key) {
     document.getElementById('modalName').textContent = p.name;
     const isPremiumModal = p.category === 'wellness';
     document.getElementById('modalSubtitle').textContent = (isPremiumModal && !p.oneMonth)
-        ? `${p.scientificName} • 💊 Todas las dosis incluidas`
+        ? `${p.scientificName} • 💊 3 vials incluidas`
         : (p.monthlyQuantity ? `${p.scientificName} • 📦 ${p.monthlyQuantity}` : p.scientificName);
     
     // Determine label name display
@@ -2865,7 +2865,7 @@ function showProductDetail(key) {
                     ` : ''}
                     <div class="price-value"><span class="currency">$</span>${p.price.toLocaleString('es-MX')}<span class="mxn"> MXN</span></div>
                     ${(isPremiumModal && !p.oneMonth) 
-                        ? `<div style="margin-top: 12px; color: #065f46; font-weight: 700; font-size: 14px; background: rgba(16,185,129,0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">💊 Todas las dosis: desde inicial hasta máxima</div>`
+                        ? `<div style="margin-top: 12px; color: #065f46; font-weight: 700; font-size: 14px; background: rgba(16,185,129,0.1); padding: 8px 12px; border-radius: 8px; display: inline-block;">💊 3 vial paquete</div>`
                         : (p.monthlyQuantity ? `<div style="margin-top: 12px; color: #92400e; font-weight: 600; font-size: 14px;">📦 Cantidad: ${p.monthlyQuantity}</div>` : '')
                     }
                 </div>
